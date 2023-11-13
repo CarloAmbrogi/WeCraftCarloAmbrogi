@@ -9,17 +9,17 @@
       <p><?= $GLOBALS['$L']["Welcome to WeCraft"] ?></p>
     </div>
     <div class="row mb-3">
-      <p>Log in:</p>
+      <p><?= $GLOBALS['$L']["Log in:"] ?></p>
       <form>
         <div class="mb-3">
           <label for="exampleInputEmail1" class="form-label"><?= $GLOBALS['$L']["Email address"] ?></label>
           <input class="form-control" id="insertedEmal" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <label for="exampleInputPassword1" class="form-label"><?= $GLOBALS['$L']["Password"] ?></label>
           <input type="password" class="form-control" id="insertedPassword">
         </div>
-        <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+        <button id="submit" type="submit" class="btn btn-primary"><?= $GLOBALS['$L']["Submit"] ?></button>
       </form>
     </div>
     <div class="row">
@@ -38,7 +38,7 @@
       <p><?= $GLOBALS['$L']["Create an account:"] ?></p>
     </div>
     <div class="row">
-      <button type="button" onclick="window.location='LINKTOCREATEANACCOUNT';" class="btn btn-primary"
+      <button type="button" onclick="window.location='./createNewAccountAsCustomer.php';" class="btn btn-primary"
         style="margin:10px;">
         <?= $GLOBALS['$L']["New customer"] ?>
       </button>
@@ -55,8 +55,9 @@
         <?= $GLOBALS['$L']["New designer"] ?>
       </button>
     </div>
+    <a href="./createNewAccountAsCustomer.php">Visit AAAAA!</a>
   <?php
-  lowerPartOfThePage([["ee","rr"]]);
+  lowerPartOfThePage([]);
   ?>
     <script>
       //form inserted parameters
@@ -73,13 +74,13 @@
       form.onsubmit = function(e){
         if(insertedEmal.value === ""){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["misseddEmailAddress"] ?>");
+          alert("<?= $GLOBALS['$L']["You have missed to insert the email address"] ?>");
         } else if(!isValidEmail(insertedEmal.value)){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["emailAddressNotValid"] ?>");
+          alert("<?= $GLOBALS['$L']["Email address not valid"] ?>");
         } else if(insertedPassword.value === ""){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["missedInsertPassword"] ?>");
+          alert("<?= $GLOBALS['$L']["You have missed to insert the password"] ?>");
         }
       }
     </script>

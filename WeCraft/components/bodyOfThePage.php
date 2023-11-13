@@ -83,7 +83,7 @@
           }
         ?>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <a class="navbar-brand" href="./"><!-- Image of WeCraft to return to home page -->
+          <a class="navbar-brand" href="./index.php"><!-- Image of WeCraft to return to home page -->
             <img src="./Icons/faviconIcon.png" alt="faviconIcon" width="72" height="72"
               class="d-inline-block align-text-center">
           </a>
@@ -210,6 +210,10 @@
         width: 10px;
       }
       </style>
+
+      <!-- TODO -->
+      <!-- Prevent links in standalone web apps opening Mobile Safari -->
+
     <?php
   }
 
