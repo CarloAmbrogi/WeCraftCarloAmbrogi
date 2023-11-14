@@ -2,57 +2,61 @@
   include "components/bodyOfThePage.php";
   include "components/miniComponents.php";
   include "functions/functions.php";
+  include "database/access.php";
 
   //Home page of WeCraft
   doInitialScripts();
-  upperPartOfThePage($GLOBALS['$L']["Welcome to WeCraft"],"");
+  upperPartOfThePage(translate("Welcome to WeCraft"),"");
   ?>
-    <?php addParagraph($GLOBALS['$L']["Welcome to WeCraft"]); ?>
+    <!-- Title Welcome to WeCraft -->
+    <?php addTitle(translate("Welcome to WeCraft")); ?>
+    <!-- Log in -->
     <div class="row mb-3">
-      <p><?= $GLOBALS['$L']["Log in:"] ?></p>
+      <p><?= translate("Log in:") ?></p>
       <form>
         <div class="mb-3">
-          <label for="exampleInputEmail1" class="form-label"><?= $GLOBALS['$L']["Email address"] ?></label>
+          <label for="insertedEmal" class="form-label"><?= translate("Email address") ?></label>
           <input class="form-control" id="insertedEmal" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-          <label for="exampleInputPassword1" class="form-label"><?= $GLOBALS['$L']["Password"] ?></label>
+          <label for="insertedPassword" class="form-label"><?= translate("Password") ?></label>
           <input type="password" class="form-control" id="insertedPassword">
         </div>
-        <button id="submit" type="submit" class="btn btn-primary"><?= $GLOBALS['$L']["Submit"] ?></button>
+        <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
       </form>
     </div>
+    <!-- Alternative options to log in -->
     <div class="row">
       <p><?= $GLOBALS['$L']["...or..."] ?></p>
     </div>
     <div class="row">
       <button type="button" onclick="window.location='LINKTOCONTINUEASGUEST';" class="btn btn-primary"
         style="margin:10px;">
-        <?= $GLOBALS['$L']["Continue as guest"] ?>
+        <?= translate("Continue as guest") ?>
       </button>
     </div>
     <div class="row">
-      <p><?= $GLOBALS['$L']["...or..."] ?></p>
+      <p><?= translate("...or...") ?></p>
     </div>
     <div class="row">
-      <p><?= $GLOBALS['$L']["Create an account:"] ?></p>
+      <p><?= translate("Create an account:") ?></p>
     </div>
     <div class="row">
       <button type="button" onclick="window.location='./createNewAccountAsCustomer.php';" class="btn btn-primary"
         style="margin:10px;">
-        <?= $GLOBALS['$L']["New customer"] ?>
+        <?= translate("New customer") ?>
       </button>
     </div>
     <div class="row">
       <button type="button" onclick="window.location='LINKTOCREATEANACCOUNT';" class="btn btn-primary"
         style="margin:10px;">
-        <?= $GLOBALS['$L']["New artisan"] ?>
+        <?= translate("New artisan") ?>
       </button>
     </div>
     <div class="row">
       <button type="button" onclick="window.location='LINKTOCREATEANACCOUNT';" class="btn btn-primary"
         style="margin:10px;">
-        <?= $GLOBALS['$L']["New designer"] ?>
+        <?= translate("New designer") ?>
       </button>
     </div>
   <?php
@@ -73,15 +77,16 @@
       form.onsubmit = function(e){
         if(insertedEmal.value === ""){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["You have missed to insert the email address"] ?>");
+          alert("<?= translate("You have missed to insert the email address") ?>");
         } else if(!isValidEmail(insertedEmal.value)){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["Email address not valid"] ?>");
+          alert("<?= translate("Email address not valid") ?>");
         } else if(insertedPassword.value === ""){
           e.preventDefault();
-          alert("<?= $GLOBALS['$L']["You have missed to insert the password"] ?>");
+          alert("<?= translate("You have missed to insert the password") ?>");
         }
       }
     </script>
   <?php
+    include "database/closeConnectionDB.php";
 ?>

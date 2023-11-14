@@ -10,6 +10,8 @@
 
   //This function is to do the initial scripts such as load the strings
   function doInitialScripts(){
+    //Start the sessions vars
+    session_start();
     //Load the language of the site
     if (isset($_GET["language"])) {
       $lang = $_GET["language"];
@@ -72,7 +74,7 @@
             ?>
               <button type="button" onclick="window.location='<?= $backButtonLink ?>';" class="btn btn-primary"
                 style="margin:10px;">⬅️
-                <?= $GLOBALS['$L']["Back"] ?>
+                <?= translate("Back") ?>
               </button>
             <?php
           } else {

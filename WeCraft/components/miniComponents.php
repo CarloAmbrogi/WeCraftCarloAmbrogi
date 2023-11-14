@@ -1,5 +1,6 @@
 <?php
-  //This function is to do the initial scripts such as load the strings
+
+  //This function is to add a p paragraph
   function addParagraph($written){
     ?>
       <div class="row mb-3">
@@ -7,4 +8,14 @@
       </div>
     <?php
   }
+
+  //This function is to add an h1 title
+  function addTitle($written){
+    ?>
+      <div class="row mb-3">
+        <h1><?= $written ?></h1>
+      </div>
+    <?php
+  }
+
 ?>
