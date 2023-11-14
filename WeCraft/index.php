@@ -1,13 +1,13 @@
 <?php
   include "components/bodyOfThePage.php";
+  include "components/miniComponents.php";
+  include "functions/functions.php";
 
   //Home page of WeCraft
   doInitialScripts();
   upperPartOfThePage($GLOBALS['$L']["Welcome to WeCraft"],"");
   ?>
-    <div class="row mb-3">
-      <p><?= $GLOBALS['$L']["Welcome to WeCraft"] ?></p>
-    </div>
+    <?php addParagraph($GLOBALS['$L']["Welcome to WeCraft"]); ?>
     <div class="row mb-3">
       <p><?= $GLOBALS['$L']["Log in:"] ?></p>
       <form>
@@ -55,7 +55,6 @@
         <?= $GLOBALS['$L']["New designer"] ?>
       </button>
     </div>
-    <a href="./createNewAccountAsCustomer.php">Visit AAAAA!</a>
   <?php
   lowerPartOfThePage([]);
   ?>
