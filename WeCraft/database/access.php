@@ -1,4 +1,7 @@
 <?php
+  //At the begin of a php page include this file and at the end include closeConnectionDB.php
+
+  //Open the connection with the database
 
   $connectionDB = new mysqli("localhost","carloambrogipolimi","","my_carloambrogipolimi");
 

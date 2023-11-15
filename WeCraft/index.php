@@ -3,6 +3,7 @@
   include "components/miniComponents.php";
   include "functions/functions.php";
   include "database/access.php";
+  include "database/functions.php";
 
   //Home page of WeCraft
   doInitialScripts();

@@ -3,6 +3,7 @@
   include "components/miniComponents.php";
   include "functions/functions.php";
   include "database/access.php";
+  include "database/functions.php";
 
   //Create new account as customer page
   doInitialScripts();
@@ -20,6 +21,8 @@
       addParagraph(translate("Error of the csrf token"));
     } else if($insertedEmal == ""){
       addParagraph(translate("You have missed to insert the email address"));
+    } else if(strlen($insertedEmal) > 49){
+      addParagraph(translate("The email address is too long"));
     } else if(!isValidEmail($insertedEmal)){
       addParagraph(translate("Email address not valid"));
     } else if($insertedPassword == ""){
@@ -28,21 +31,19 @@
       addParagraph(translate("You have missed to insert the confirmed password"));
     } else if($insertedName == ""){
       addParagraph(translate("You have missed to insert the name"));
+    } else if(strlen($insertedName) > 24){
+      addParagraph(translate("The name is too long"));
     } else if($insertedSurname == ""){
       addParagraph(translate("You have missed to insert the surname"));
+    } else if(strlen($insertedSurname) > 24){
+      addParagraph(translate("The surname is too long"));
     } else if($insertedPassword != $insertedConfirmedPassword){
       addParagraph(translate("Password and confirmed password doesnt match"));
     } else {
-      $sql = "INSERT INTO `Customer` (`id`, `email`, `password`, `name`, `surname`, `icon`) VALUES (NULL, ?, ?, ?, ?, NULL);";
-      if($statement = $connectionDB->prepare($sql)){
-        //Add the new account to the database
-        $statement->bind_param("ssss",$insertedEmal,$passwordHash,$insertedName,$insertedSurname);
-        $statement->execute();
-        addParagraph(translate("DOMAILVERIFICATION"));
+      //add check if mail was used
+      addANewCustomer($connectionDB,$insertedEmal,$passwordHash,$insertedName,$insertedSurname);
+      addParagraph(translate("DOMAILVERIFICATION"));
 
-      } else {
-        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
-      }
     }
   } else {
     $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
@@ -55,7 +56,7 @@
         <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
           <div class="mb-3">
             <label for="insertedEmal" class="form-label"><?= translate("Email address") ?></label>
-            <input class="form-control" id="insertedEmal" aria-describedby="emailHelp" type="text" name="insertedEmal">
+            <input class="form-control" id="insertedEmal" aria-describedby="emailHelp" type="text" name="insertedEmal" maxlength="49">
           </div>
           <div class="mb-3">
             <label for="insertedPassword" class="form-label"><?= translate("Password") ?></label>
@@ -67,11 +68,11 @@
           </div>
           <div class="mb-3">
             <label for="insertedName" class="form-label"><?= translate("Name") ?></label>
-            <input class="form-control" id="insertedName" type="text" name="insertedName">
+            <input class="form-control" id="insertedName" type="text" name="insertedName" maxlength="24">
           </div>
           <div class="mb-3">
             <label for="insertedSurname" class="form-label"><?= translate("Surname") ?></label>
-            <input class="form-control" id="insertedSurname" type="text" name="insertedSurname">
+            <input class="form-control" id="insertedSurname" type="text" name="insertedSurname" maxlength="24">
           </div>
           <div class="mb-3">
             <label for="formFile" class="form-label"><?= translate("Icon") ?></label>
