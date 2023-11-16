@@ -1,6 +1,7 @@
 <?php
   include "components/bodyOfThePage.php";
   include "components/miniComponents.php";
+  include "functions/costants.php";
   include "functions/functions.php";
   include "database/access.php";
   include "database/functions.php";
@@ -16,8 +17,8 @@
       <p><?= translate("Log in:") ?></p>
       <form>
         <div class="mb-3">
-          <label for="insertedEmal" class="form-label"><?= translate("Email address") ?></label>
-          <input class="form-control" id="insertedEmal" aria-describedby="emailHelp">
+          <label for="insertedEmail" class="form-label"><?= translate("Email address") ?></label>
+          <input class="form-control" id="insertedEmail" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
           <label for="insertedPassword" class="form-label"><?= translate("Password") ?></label>
@@ -66,7 +67,7 @@
     <script>
       //form inserted parameters
       const form = document.querySelector('form');
-      const insertedEmal = document.getElementById('insertedEmal');
+      const insertedEmail = document.getElementById('insertedEmail');
       const insertedPassword = document.getElementById('insertedPassword');
 
       function isValidEmail(email) {
@@ -76,10 +77,10 @@
 
       //prevent sending form with errors
       form.onsubmit = function(e){
-        if(insertedEmal.value === ""){
+        if(insertedEmail.value === ""){
           e.preventDefault();
           alert("<?= translate("You have missed to insert the email address") ?>");
-        } else if(!isValidEmail(insertedEmal.value)){
+        } else if(!isValidEmail(insertedEmail.value)){
           e.preventDefault();
           alert("<?= translate("Email address not valid") ?>");
         } else if(insertedPassword.value === ""){

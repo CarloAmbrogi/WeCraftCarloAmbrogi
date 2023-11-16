@@ -11,4 +11,6 @@
 
   $connectionDB->set_charset('utf8mb4');
 
+  $GLOBALS['$connectionDB'] = $connectionDB;
+
 ?>
