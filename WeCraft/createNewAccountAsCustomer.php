@@ -43,7 +43,8 @@
       addParagraph(translate("Password and confirmed password doesnt match"));
     } else if(hasThisEmailAddressBeenUsed($insertedEmail)){
       addParagraph(translate("This email address has been used"));
-    } else {      
+    } else {     
+      $verificationCode = generateAVerificationCode();
       //Check on the file icon
       if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
         //You have chosen to send the file icon
@@ -51,33 +52,39 @@
         $fileType = $_FILES["insertedIcon"]["type"];
         $fileSize = $_FILES['insertedIcon']['size'];
         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-        if($fileSize < maxSizeForAFile){
-          if(array_key_exists($fileExtension, permittedExtensions)){
-            if(in_array($fileType, permittedExtensions)){
-              //add new account with file icon
-              $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-              addANewCustomerWithIcon($insertedEmail,$passwordHash,$insertedName,$fileExtension,$imgData);
-              addParagraph(translate("Your account has been created correctly AAAAAAAAAAAAAAAAAA TODO mail verification"));
-            } else {
-              addParagraph(translate("The file is not an image"));
-              addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname);
-              addParagraph(translate("Your account has been created anyway AAAAAAAAAAAAAAAAAA TODO mail verification"));
-            }
-          } else {
-            addParagraph(translate("The extension of the file is not an image"));
-            addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname);
-            addParagraph(translate("Your account has been created anyway AAAAAAAAAAAAAAAAAA TODO mail verification"));
-          }
-        } else {
+        $insertCorrectlyTheIcon = false;
+        if($fileSize > maxSizeForAFile){
           addParagraph(translate("The file is too big"));
-          addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname);
-          addParagraph(translate("Your account has been created anyway AAAAAAAAAAAAAAAAAA TODO mail verification"));
+        } else if(!array_key_exists($fileExtension, permittedExtensions)){
+          addParagraph(translate("The extension of the file is not an image"));
+        } else if(!in_array($fileType, permittedExtensions)){
+          addParagraph(translate("The file is not an image"));
+        } else {
+          $insertCorrectlyTheIcon = true;
+          //add new account with file icon
+          $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
+          addANewCustomerWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode);
+          addParagraph(translate("Your data has been loaded correctly"));
+          addParagraph(translate("Now to confirm your account you have to click on the link we have sent you via email"));
+        }
+        if($insertCorrectlyTheIcon == false){
+          //create account without file icon (because of error in the icon)
+          addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode);
+          addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change your icon later"));
+          addParagraph(translate("Now to confirm your account you have to click on the link we have sent you via email"));
         }
       } else {
         //create account without file icon
-        addParagraph(translate("Your account has been created correctly AAAAAAAAAAAAAAAAAA TODO mail verification"));
-        addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname);
+        addParagraph(translate("Your data has been loaded correctly"));
+        addParagraph(translate("Now to confirm your account you have to click on the link we have sent you via email"));
+        addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode);
       }
+      //send an email to verify the email address
+      $userId = idUserWithThisEmail($insertedEmail);
+      $generatedLink = WeCraftBaseUrl."verifyEmail.php?userid=".$userId."&verificationCode=".$verificationCode;
+      $msg = translate("Click on this link only if it has been requested by you");
+      $msg = $msg.": ".$generatedLink;
+      mail($insertedEmail,"WeCraft - ".translate("Verify email"),$msg);
     }
   } else {
     $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));

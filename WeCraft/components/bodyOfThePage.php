@@ -13,19 +13,19 @@
     //Start the sessions vars
     session_start();
     //Load the language of the site
-    if (isset($_GET["language"])) {
+    if(isset($_GET["language"])){
       $lang = $_GET["language"];
       setcookie("language", $lang, time() + (86400 * 30), "/");
     }
     $acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-    if (!isset($_COOKIE['language'])) {
+    if(!isset($_COOKIE['language'])) {
       $lang = $acceptLanguage;
       setcookie("language", $acceptLanguage, time() + (86400 * 30), "/");
     }
-    if (!isset($lang) && isset($_COOKIE['language'])) {
+    if(!isset($lang) && isset($_COOKIE['language'])){
       $lang = $_COOKIE['language'];
     }
-    if (!isset($lang) || $lang != "it") {
+    if(!isset($lang) || $lang != "it"){
       $lang = "en";
     }
     $GLOBALS['$L'] = parse_ini_file("strings/$lang.ini"); //set global variable to read language strings
@@ -99,10 +99,10 @@
                 <?= $GLOBALS['$L']["SLanguage"] ?>
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="?language=en">
+                <li><a class="dropdown-item" onclick="addUrlParameter('language', 'en')">
                     🇬🇧English
                   </a></li>
-                <li><a class="dropdown-item" href="?language=it">
+                <li><a class="dropdown-item" onclick="addUrlParameter('language', 'it')">
                     🇮🇹Italiano
                   </a></li>
               </ul>
@@ -152,6 +152,15 @@
       </body>
 
       </html>
+
+      <script>
+        //function to add url parameters (useful to change language)
+        function addUrlParameter(name, value) {
+          var searchParams = new URLSearchParams(window.location.search)
+          searchParams.set(name, value)
+          window.location.search = searchParams.toString()
+        }
+      </script>
 
       <style>
       html {

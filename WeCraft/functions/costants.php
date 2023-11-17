@@ -2,6 +2,9 @@
 
   //Useful costants
 
+  //WeCraft base url
+  define('WeCraftBaseUrl', "http://carloambrogipolimi.altervista.org/WeCraft/");
+
   //Max size for an uploaded file
   define('maxSizeForAFile', 5 * 1024 * 1024);
 

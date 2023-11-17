@@ -20,4 +20,14 @@
     return true;
   }
 
+  //Generate a casual verification code, useful to verify a email in an account
+  function generateAVerificationCode(){
+    $result = "";
+    for($i = 0; $i < 6; $i++){
+      $adj = rand(0,9);
+      $result = $result.$adj;
+    }
+    return $result;
+  }
+
 ?>
