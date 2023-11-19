@@ -30,4 +30,12 @@
     return $result;
   }
 
+  //convert a blob image to a file to incorporate with html
+  function blobToFile($imageExtension,$image){
+    mkdir("temp");
+    $fileName = "temp/".hash('sha1', $image).".".$imageExtension;
+    file_put_contents($fileName, $image);
+    return $fileName;
+  }
+
 ?>

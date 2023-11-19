@@ -86,7 +86,7 @@
   function checkVerificationCode($userId,$verificationCode){
     $connectionDB = $GLOBALS['$connectionDB'];
     //Max time to verify the email is 1000 seconds
-    $sql = "select count(*) as checkVerificationCode from (select * from `User` where `id` = ? and `emailVerified` = false and `verificationCode` = ? and (TIMESTAMPDIFF(SECOND, CURRENT_TIMESTAMP(), `timeVerificationCode`) < 1000)) as t;";
+    $sql = "select count(*) as checkVerificationCode from (select * from `User` where `id` = ? and `emailVerified` = false and `verificationCode` = ? and (TIMESTAMPDIFF(SECOND, `timeVerificationCode`, CURRENT_TIMESTAMP()) < 1000)) as t;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$userId,$verificationCode);
@@ -102,5 +102,38 @@
 
     return $elements[0]["checkVerificationCode"];
   }
+
+  //register emailVerified for an user (call this function after checkVerificationCode is ok)
+  function registerEmailVerified($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `emailVerified` = true where `id` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+    //Obtain infos (except password) of an user
+    function obtainUserInfos($userId){
+      $connectionDB = $GLOBALS['$connectionDB'];
+      $sql = "select `id`,`email`,`name`,`surname`,`iconExtension`,`icon`,`emailVerified` from `User` where `id` = ?;";
+      if($statement = $connectionDB->prepare($sql)){
+        $statement->bind_param("s",$userId);
+        $statement->execute();
+      } else {
+        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+      }
+  
+      $results = $statement->get_result();
+      while($element = $results->fetch_assoc()){
+        $elements[] = $element;
+      }
+  
+      //return an associative array with the infos of this user
+      return $elements[0];
+    }
 
 ?>

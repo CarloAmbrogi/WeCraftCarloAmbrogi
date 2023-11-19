@@ -90,10 +90,10 @@
     $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
     ?>
       <!-- Title Create new account as customer -->
-      <?php addTitle($GLOBALS['$L']["Create new account as customer"]); ?>
+      <?php addTitle(translate("Create new account as customer")); ?>
       <!-- Form to insert data to create a new account as customer -->
       <div class="row mb-3">
-        <p><?= $GLOBALS['$L']["Insert your data:"] ?></p>
+        <p><?= translate("Insert your data:") ?></p>
         <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="insertedEmail" class="form-label"><?= translate("Email address") ?></label>

@@ -28,7 +28,7 @@
     if(!isset($lang) || $lang != "it"){
       $lang = "en";
     }
-    $GLOBALS['$L'] = parse_ini_file("strings/$lang.ini"); //set global variable to read language strings
+    $GLOBALS['$L'] = parse_ini_file(dirname(__FILE__)."/../strings/$lang.ini"); //set global variable to read language strings
   }
 
   //This function is to load the upper part of the page

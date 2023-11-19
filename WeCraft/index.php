@@ -29,7 +29,7 @@
     </div>
     <!-- Alternative options to log in -->
     <div class="row">
-      <p><?= $GLOBALS['$L']["...or..."] ?></p>
+      <p><?= translate("...or...") ?></p>
     </div>
     <div class="row">
       <button type="button" onclick="window.location='LINKTOCONTINUEASGUEST';" class="btn btn-primary"
