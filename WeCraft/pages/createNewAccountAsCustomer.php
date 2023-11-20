@@ -1,10 +1,8 @@
 <?php
-  include "components/bodyOfThePage.php";
-  include "components/miniComponents.php";
-  include "functions/costants.php";
-  include "functions/functions.php";
-  include "database/access.php";
-  include "database/functions.php";
+  include "./../components/includes.php";
+  include "./../functions/includes.php";
+  include "./../database/access.php";
+  include "./../database/functions.php";
 
   //Create new account as customer page
   doInitialScripts();
@@ -81,7 +79,7 @@
       }
       //send an email to verify the email address
       $userId = idUserWithThisEmail($insertedEmail);
-      $generatedLink = WeCraftBaseUrl."verifyEmail.php?userid=".$userId."&verificationCode=".$verificationCode;
+      $generatedLink = WeCraftBaseUrl."pages/verifyEmail.php?userid=".$userId."&verificationCode=".$verificationCode;
       $msg = translate("Click on this link only if it has been requested by you");
       $msg = $msg.": ".$generatedLink;
       mail($insertedEmail,"WeCraft - ".translate("Verify email"),$msg);
@@ -170,7 +168,7 @@
           } else if(!emailAddressBeenUsedCheck) {
             //prevent sending form if the email address has been used
             e.preventDefault();
-            let requestUrl = "./api/hasThisEmailAddressBeenUsed.php?thisEmailAddress=" + insertedEmail.value;
+            let requestUrl = "<?= WeCraftBaseUrl ?>api/hasThisEmailAddressBeenUsed.php?thisEmailAddress=" + insertedEmail.value;
             let request = new XMLHttpRequest();
             request.open("GET", requestUrl);
             request.responseType = "json";
@@ -203,5 +201,5 @@
     <?php
   }
   lowerPartOfThePage([]);
-  include "database/closeConnectionDB.php";
+  include "./../database/closeConnectionDB.php";
 ?>

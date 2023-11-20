@@ -1,0 +1,62 @@
+html {
+  font-size: 2rem;
+}
+
+nav {
+  height: 128px;
+}
+
+.dropdown {
+  background-color: #F8F9FA;
+}
+
+.navbar-brand {
+  background-color: #F8F9FA;
+}
+
+.btn-outline-primary {
+  background-color: #FFFFFF;
+}
+
+#finalSpaceBeforeTheFooter {
+  height: 250px;
+}
+
+.btn-group {
+  position: fixed;
+  bottom: 0px;
+  padding: 20px;
+  padding-bottom: 40px;
+  transform: translateX(24px);
+  height: 128px;
+}
+
+#spaceAfterNavBar {
+  position: relative;
+  top: 150px;
+}
+
+@media (min-aspect-ratio: 1/1) {
+
+  .btn-group {
+    padding-bottom: 0px;
+    height: 88px;
+  }
+
+  html {
+    font-size: 1rem;
+  }
+
+  nav {
+    height: 90px;
+  }
+
+  #spaceAfterNavBar {
+    top: 100px;
+  }
+
+}
+
+#mySpacer {
+  width: 10px;
+}

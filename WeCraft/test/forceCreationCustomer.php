@@ -1,10 +1,10 @@
 <?php
-  include "../components/bodyOfThePage.php";
-  include "../components/miniComponents.php";
-  include "../functions/costants.php";
-  include "../functions/functions.php";
-  include "../database/access.php";
-  include "../database/functions.php";
+  include dirname(__FILE__)."/../components/bodyOfThePage.php";
+  include dirname(__FILE__)."/../components/miniComponents.php";
+  include dirname(__FILE__)."/../functions/costants.php";
+  include dirname(__FILE__)."/../functions/functions.php";
+  include dirname(__FILE__)."/../database/access.php";
+  include dirname(__FILE__)."/../database/functions.php";
 
   //Page to force a creation of an account as customer
   //if you don't insert the password, it is set automatically to a
@@ -32,7 +32,7 @@
     $userId = idUserWithThisEmail($insertedEmail);
     registerEmailVerified($userId);
   }
-  include "../database/closeConnectionDB.php";
+  include dirname(__FILE__)."/../database/closeConnectionDB.php";
 ?>
 
 <div class="row mb-3">

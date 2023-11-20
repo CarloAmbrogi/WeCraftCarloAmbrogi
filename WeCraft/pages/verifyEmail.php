@@ -1,10 +1,10 @@
 <?php
-  include "components/bodyOfThePage.php";
-  include "components/miniComponents.php";
-  include "functions/costants.php";
-  include "functions/functions.php";
-  include "database/access.php";
-  include "database/functions.php";
+  include "./../components/includes.php";
+  include "./../functions/includes.php";
+  include "./../database/access.php";
+  include "./../database/functions.php";
+
+  //Page to verify your email address (you reach this page by clicking on the link you receive via email)
   doInitialScripts();
   upperPartOfThePage(translate("Verify email"),"./index.php");
   //Verify email by clicking on the link received via email
@@ -18,15 +18,17 @@
       $userInfos = obtainUserInfos($userId);
       $nameAndSurname = $userInfos["name"]." ".$userInfos["surname"];
       //Show image
-      $fileImageToVisualize = blobToFile($userInfos["iconExtension"],$userInfos['icon']);
-      ?>
-        <div class="card" style="width: 18rem;">
-          <img src="<?= $fileImageToVisualize ?>" class="card-img-top" alt=<?= $nameAndSurname ?>>
-          <div class="card-body">
-            <h5 class="card-title"><?= $nameAndSurname ?></h5>
+      if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
+        $fileImageToVisualize = blobToFile($userInfos["iconExtension"],$userInfos['icon']);
+        ?>
+          <div class="card" style="width: 18rem;">
+            <img src="<?= $fileImageToVisualize ?>" class="card-img-top" alt=<?= $nameAndSurname ?>>
+            <div class="card-body">
+              <h5 class="card-title"><?= $nameAndSurname ?></h5>
+            </div>
           </div>
-        </div>
-      <?php
+        <?php
+      }
       //Welcome
       addParagraph(translate("Welcome")." ".$nameAndSurname);
       addParagraph(translate("Your email address is verified and now you can return to home and do the log in"));
@@ -45,5 +47,5 @@
     </div>
   <?php
   lowerPartOfThePage([]);
-  include "database/closeConnectionDB.php";
+  include "./../database/closeConnectionDB.php";
   ?>

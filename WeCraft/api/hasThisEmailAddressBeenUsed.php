@@ -1,5 +1,5 @@
 <?php
-  include "../database/access.php";
+  include dirname(__FILE__)."/../database/access.php";
 
   //Show if this email address has been used (or not) (if an email address is not verified is as it hasn't been used)
   //GET param: thisEmailAddress

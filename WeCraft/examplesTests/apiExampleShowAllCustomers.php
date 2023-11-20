@@ -1,5 +1,5 @@
 <?php
-  include "../database/access.php";
+  include dirname(__FILE__)."/../database/access.php";
 
   //Show all customers
 
@@ -13,5 +13,5 @@
 
   print($encodedData);
 
-  include "../database/closeConnectionDB.php";
+  include dirname(__FILE__)."/../database/closeConnectionDB.php";
 ?>

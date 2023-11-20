@@ -1,4 +1,8 @@
 <?php
+  include "./../components/bodyOfThePage.php";
+  include "./../functions/costants.php";
+  doInitialScripts();
+
   //Load the language of the site
   if(isset($_GET["language"])){
     $lang = $_GET["language"];
@@ -15,7 +19,7 @@
   if(!isset($lang) || $lang != "it"){
     $lang = "en";
   }
-  $L = parse_ini_file("strings/$lang.ini");//variable to read language strings
+  $L = parse_ini_file(dirname(__FILE__)."/../strings/$lang.ini");//variable to read language strings
 ?>
 
 <!DOCTYPE html>
@@ -52,7 +56,7 @@
       style="margin:10px;">⬅️<?=$L["Back"]?></button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <a class="navbar-brand" href="./"><!-- Image of WeCraft to return to home page -->
-        <img src="./Icons/faviconIcon.png" alt="faviconIcon" width="72" height="72"
+        <img src="<?= WeCraftBaseUrl ?>Icons/faviconIcon.png" alt="faviconIcon" width="72" height="72"
           class="d-inline-block align-text-center">
       </a>
       <a class="navbar-brand" href="#" onclick="window.location.reload(true);"><!-- Title of the page to reload the page -->
