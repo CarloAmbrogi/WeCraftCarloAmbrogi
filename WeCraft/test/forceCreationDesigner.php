@@ -6,7 +6,7 @@
   include dirname(__FILE__)."/../database/access.php";
   include dirname(__FILE__)."/../database/functions.php";
 
-  //Page to force a creation of an account as customer
+  //Page to force a creation of an account as designer
   //if you don't insert the password, it is set automatically to a
   //automatically with email address verified
   doInitialScripts();
@@ -19,15 +19,16 @@
     $passwordHash = password_hash($insertedPassword, PASSWORD_DEFAULT);
     $insertedName = $_POST['insertedName'];
     $insertedSurname = $_POST['insertedSurname'];
+    $insertedDescription = $_POST['insertedDescription'];
     $verificationCode = generateAVerificationCode();
     if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
       //You have chosen to send the file icon
       $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
       $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-      addANewCustomerWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode);
+      addANewDesignerWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedDescription);
     } else {
       //create account without file icon
-      addANewCustomerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode);
+      addANewDesignerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedDescription);
     }
     $userId = idUserWithThisEmail($insertedEmail);
     registerEmailVerified($userId);
@@ -52,6 +53,10 @@
     <div class="mb-3">
       <label for="insertedSurname" class="form-label"><?= translate("Surname") ?></label>
       <input class="form-control" id="insertedSurname" type="text" name="insertedSurname" maxlength="24">
+    </div>
+    <div class="mb-3">
+      <label for="insertedDescription" class="form-label"><?= translate("Description") ?></label>
+      <input class="form-control" id="insertedDescription" type="text" name="insertedDescription" maxlength="2046">
     </div>
     <div class="mb-3">
       <label for="formFile" class="form-label"><?= translate("Icon optional") ?></label>

@@ -48,13 +48,13 @@
       </button>
     </div>
     <div class="row">
-      <button type="button" onclick="window.location='LINKTOCREATEANACCOUNT';" class="btn btn-primary"
+      <button type="button" onclick="window.location='./createNewAccountAsArtisanAAAAAAAAAAA.php';" class="btn btn-primary"
         style="margin:10px;">
         <?= translate("New artisan") ?>
       </button>
     </div>
     <div class="row">
-      <button type="button" onclick="window.location='LINKTOCREATEANACCOUNT';" class="btn btn-primary"
+      <button type="button" onclick="window.location='./createNewAccountAsDesigner.php';" class="btn btn-primary"
         style="margin:10px;">
         <?= translate("New designer") ?>
       </button>

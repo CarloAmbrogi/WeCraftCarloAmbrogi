@@ -3,29 +3,82 @@
 
   //Add a new account for a new customer (without specifying an icon image)
   function addANewCustomerWithoutIcon($email,$passwordHash,$name,$surname,$verificationCode){
-    $connectionDB = $GLOBALS['$connectionDB'];
     deleteThisNonVerifiedAccountIfExists($email);
+    insertIntoUserWithoutIcon($email,$passwordHash,$name,$surname,$verificationCode);
+    insertIntoCustomer($email);
+  }
+
+  //Add a new account for a new customer (specifying an icon)
+  function addANewCustomerWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode){
+    deleteThisNonVerifiedAccountIfExists($email);
+    insertIntoUserWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode);
+    insertIntoCustomer($email);
+  }
+
+  //insert on User (general data of an user indipendently if it is a customer, artisan or designer) (without specifying an icon image)
+  function insertIntoUserWithoutIcon($email,$passwordHash,$name,$surname,$verificationCode){
+    //insert on User
+    $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "INSERT INTO `User` (`id`, `email`, `password`, `name`, `surname`, `iconExtension`, `icon`, `emailVerified`, `verificationCode`, `timeVerificationCode`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, false, ?, CURRENT_TIMESTAMP());";
     if($statement = $connectionDB->prepare($sql)){
       //Add the new account to the database
       $statement->bind_param("sssss",$email,$passwordHash,$name,$surname,$verificationCode);
       $statement->execute();
-      return;
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
     }
   }
 
-  //Add a new account for a new customer (without specifying an icon)
-  function addANewCustomerWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode){
+  //insert on User (general data of an user indipendently if it is a customer, artisan or designer) (specifying an icon image)
+  function insertIntoUserWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode){
     $connectionDB = $GLOBALS['$connectionDB'];
-    deleteThisNonVerifiedAccountIfExists($email);
     $sql = "INSERT INTO `User` (`id`, `email`, `password`, `name`, `surname`, `iconExtension`, `icon`, `emailVerified`, `verificationCode`, `timeVerificationCode`) VALUES (NULL, ?, ?, ?, ?, ?, ?, false, ?, CURRENT_TIMESTAMP());";
     if($statement = $connectionDB->prepare($sql)){
       //Add the new account to the database
       $statement->bind_param("sssssss",$email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode);
       $statement->execute();
-      return;
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //insert on Customer table (immediatly after you add a customer in the User table)
+  function insertIntoCustomer($email){
+    //insert on Customer
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Customer` (`id`) VALUES (?);";
+    if($statement = $connectionDB->prepare($sql)){
+      //Add the new account as customer to the database
+      $statement->bind_param("i",idUserWithThisEmail($email));
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Add a new account for a new designer (without specifying an icon image)
+  function addANewDesignerWithoutIcon($email,$passwordHash,$name,$surname,$verificationCode,$description){
+    deleteThisNonVerifiedAccountIfExists($email);
+    insertIntoUserWithoutIcon($email,$passwordHash,$name,$surname,$verificationCode);
+    insertIntoDesigner($email,$description);
+  }
+
+  //Add a new account for a new designer (without specifying an icon)
+  function addANewDesignerWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode,$description){
+    deleteThisNonVerifiedAccountIfExists($email);
+    insertIntoUserWithIcon($email,$passwordHash,$name,$surname,$imgExtension,$imgData,$verificationCode);
+    insertIntoDesigner($email,$description);
+  }
+
+  //insert on customer table (immediatly after you add a customer in the User table)
+  function insertIntoDesigner($email,$description){
+    //insert on Customer
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Designer` (`id`,`description`) VALUES (?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      //Add the new account as customer to the database
+      $statement->bind_param("is",idUserWithThisEmail($email),$description);
+      $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
     }
@@ -38,7 +91,6 @@
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("s",$email);
       $statement->execute();
-      return;
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
     }
