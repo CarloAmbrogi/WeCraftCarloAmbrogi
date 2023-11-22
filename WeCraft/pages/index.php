@@ -48,7 +48,7 @@
       </button>
     </div>
     <div class="row">
-      <button type="button" onclick="window.location='./createNewAccountAsArtisanAAAAAAAAAAA.php';" class="btn btn-primary"
+      <button type="button" onclick="window.location='./createNewAccountAsArtisan.php';" class="btn btn-primary"
         style="margin:10px;">
         <?= translate("New artisan") ?>
       </button>

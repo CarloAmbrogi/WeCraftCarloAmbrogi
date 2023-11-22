@@ -20,6 +20,24 @@
     return true;
   }
 
+  //Check if this phone number is valid
+  function isValidPhoneNumber($phoneNumber){
+    $regex = "/^(\+?)[0-9\ \( \)]+$/";
+    if(!preg_match($regex, $phoneNumber)){
+      return false;
+    }
+    return true;
+  }
+
+  //Check if this coordinate is valid
+  function isValidCoordinate($coordinate){
+    $regex = "/^[0-9]+\.[0-9]+$/";
+    if(!preg_match($regex, $coordinate)){
+      return false;
+    }
+    return true;
+  }
+
   //Generate a casual verification code, useful to verify a email in an account
   function generateAVerificationCode(){
     $result = "";
@@ -30,13 +48,168 @@
     return $result;
   }
 
-  //convert a blob image to a file to incorporate with html
+  //Convert a blob image to a file to incorporate with html
   function blobToFile($imageExtension,$image){
     mkdir(dirname(__FILE__)."/../temp");
     $fileName = hash('sha1', $image).".".$imageExtension;
     $filePath = WeCraftBaseUrl."temp/".$fileName;
     file_put_contents(dirname(__FILE__)."/../temp/".$fileName, $image);
     return $filePath;
+  }
+
+  //Returns if this string represents a digit
+  function isADigit($c){
+    $digits = ["0","1","2","3","4","5","6","7","8","9"];//possible digits
+    if(!in_array($c,$digits)){
+      return false;
+    }
+    return true;
+  }
+
+  //Returns if this string represents a time
+  function isThisStringIsATime($str){
+    if(strlen($str) != 5){
+      return false;
+    }
+    $c1 = substr($str,0,1);
+    $c2 = substr($str,1,1);
+    $c3 = substr($str,2,1);
+    $c4 = substr($str,3,1);
+    $c5 = substr($str,4,1);
+    if($c3 != ":"){
+      return false;
+    }
+    if(!isADigit($c1) || !isADigit($c2) || !isADigit($c4) || !isADigit($c5)){
+      return false;
+    }
+    $first = substr($str,0,2);
+    $second = substr($str,3,2);
+    if($first >= 24){
+      return false;
+    }
+    if($second >= 60){
+      return false;
+    }
+    return true;
+  }
+
+  //Returns if these times are in the correct order
+  //if $t = true then is ok if the two times are =
+  function correctOrderTimes($a,$b,$t=false){
+    $hA = substr($a,0,2);
+    $minA = substr($a,3,2);
+    $hB = substr($b,0,2);
+    $minB = substr($b,3,2);
+    if($hA < $hB){
+      return true;
+    }
+    if($hA > $hB){
+      return false;
+    }
+    if($minA < $minB){
+      return true;
+    }
+    if($minA < $minB && $t == true){
+      return true;
+    }
+    return false;
+  }
+
+  //Analyze a string representing the opening hours
+  //Returns an arrray of 3 elementss
+  //element "validity": returns if this string representing the opening hours is valid or not
+  //element "nowOpen": returns if this shop is now open or not
+  //element "description": returns a text with  a description of the time table
+  //Example of a string representing the opening hours: %MonF01:0203:04S05:0607:08
+  //max lenght of a string representing the opening hours: 182
+  function analyzeStringOpeningHours($stringOpeningHours){
+    $resultValidity = true;
+    $resultNowOpen = false;
+    $resultDescription = "";
+    $error = array("validity"=>false, "nowOpen"=>false, "description"=>"error");
+    $witchDayIsToday = date("D");
+    $hourNow = date('H');
+    if(strlen($hourNow) == 1){
+      $hourNow = "0".$hourNow;
+    }
+    $minNow = date('i');
+    if(strlen($minNow) == 1){
+      $minNow = "0".$minNow;
+    }
+    $nowTime = $hourNow.":".$minNow;
+    $days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];//possible days
+    $daysInfo = explode("%", $stringOpeningHours);
+    $numberOfThisDayPrev = -1;
+    foreach ($daysInfo as &$dayInfo){
+      if(strlen($dayInfo) == 14 || strlen($dayInfo) == 25){
+        $day = substr($dayInfo,0,3);
+        if(!in_array($day,$days)){
+          return $error;
+        }
+        $numberOfThisDay = array_search($day, $days);
+        if($numberOfThisDay <= $numberOfThisDayPrev){
+          return $error;
+        }
+        $numberOfThisDayPrev = $numberOfThisDay;
+        $resultDescription .= translate($day."L").": ";
+        $slot1kind = substr($dayInfo,3,1);
+        $slot1info = substr($dayInfo,4,10);
+        $slot1infoFrom = substr($slot1info,0,5);
+        $slot1infoTo = substr($slot1info,5,5);
+        if(!isThisStringIsATime($slot1infoFrom) || !isThisStringIsATime($slot1infoTo)){
+          return $error;
+        }
+        if(!correctOrderTimes($slot1infoFrom,$slot1infoTo)){
+          return $error;
+        }
+        $resultDescription .= translate("from")." ".$slot1infoFrom." ".translate("to")." ".$slot1infoTo;
+        $slot2kind = "";
+        if($witchDayIsToday == $day){
+          if(correctOrderTimes($slot1infoFrom,$nowTime,true) && correctOrderTimes($nowTime,$slot1infoTo,true)){
+            $resultNowOpen = true;
+          }
+        }
+        if(strlen($dayInfo) == 25){
+          $slot2kind = substr($dayInfo,14,1);
+          $slot2info = substr($dayInfo,15,10);
+          $slot2infoFrom = substr($slot2info,0,5);
+          $slot2infoTo = substr($slot2info,5,5);
+          if(!isThisStringIsATime($slot2infoFrom) || !isThisStringIsATime($slot2infoTo)){
+            return $error;
+          }
+          if(!correctOrderTimes($slot2infoFrom,$slot2infoTo)){
+            return $error;
+          }
+          $resultDescription .= " ".translate("and")." ".translate("from")." ".$slot2infoFrom." ".translate("to")." ".$slot2infoTo;
+          if(!correctOrderTimes($slot1infoTo,$slot2infoFrom)){
+            return $error;
+          }
+          if($witchDayIsToday == $day){
+            if(correctOrderTimes($slot2infoFrom,$nowTime,true) && correctOrderTimes($nowTime,$slot2infoTo,true)){
+              $resultNowOpen = true;
+            }
+          }
+        }
+        if($slot1kind != "F" && $slot1kind != "S"){
+          return $error;
+        }
+        if($slot2kind != ""){
+          if(!($slot1kind == "F" && $slot2kind == "S")){
+            return $error;
+          }
+        }
+        $resultDescription .= "%";
+      } else {
+        if(strlen($dayInfo) != 0){
+          return $error;
+        }
+      }
+    }
+    if($resultDescription == ""){
+      $resultDescription = translate("Never open");
+    }
+    $result = array("validity"=>$resultValidity, "nowOpen"=>$resultNowOpen, "description"=>$resultDescription);
+    return $result;
   }
 
 ?>

@@ -4,11 +4,11 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Create new account as customer page
+  //Create new account as designer page
   doInitialScripts();
   upperPartOfThePage(translate("Create account"),"./index.php");
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //Receive post request for creating a new account as customer
+    //Receive post request for creating a new account as designer
     $insertedEmail = $_POST['insertedEmail'];
     $insertedPassword = $_POST['insertedPassword'];
     $insertedConfirmedPassword = $_POST['insertedConfirmedPassword'];
@@ -92,9 +92,9 @@
   } else {
     $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
     ?>
-      <!-- Title Create new account as customer -->
+      <!-- Title Create new account as designer -->
       <?php addTitle(translate("Create new account as designer")); ?>
-      <!-- Form to insert data to create a new account as customer -->
+      <!-- Form to insert data to create a new account as designer -->
       <div class="row mb-3">
         <p><?= translate("Insert your data:") ?></p>
         <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">

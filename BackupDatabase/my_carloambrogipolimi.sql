@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Nov 20, 2023 alle 17:27
+-- Creato il: Nov 22, 2023 alle 16:18
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -20,6 +20,23 @@ SET time_zone = "+00:00";
 --
 -- Database: `my_carloambrogipolimi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `Artisan`
+--
+
+CREATE TABLE `Artisan` (
+  `id` int NOT NULL,
+  `shopName` varchar(25) NOT NULL,
+  `openingHours` varchar(183) NOT NULL,
+  `description` text NOT NULL,
+  `phoneNumber` varchar(25) NOT NULL,
+  `latitude` varchar(25) NOT NULL,
+  `longitude` varchar(25) NOT NULL,
+  `address` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -65,6 +82,10 @@ CREATE TABLE `User` (
 -- Trigger `User`
 --
 DELIMITER $$
+CREATE TRIGGER `WhenDeleteOnUserDeleteAlsoOnArtisan` AFTER DELETE ON `User` FOR EACH ROW DELETE FROM `Artisan` WHERE `id` = old.`id`
+$$
+DELIMITER ;
+DELIMITER $$
 CREATE TRIGGER `WhenDeleteOnUserDeleteAlsoOnCustomer` AFTER DELETE ON `User` FOR EACH ROW DELETE FROM `Customer` WHERE `id` = old.`id`
 $$
 DELIMITER ;
@@ -76,6 +97,12 @@ DELIMITER ;
 --
 -- Indici per le tabelle scaricate
 --
+
+--
+-- Indici per le tabelle `Artisan`
+--
+ALTER TABLE `Artisan`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -104,7 +131,7 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

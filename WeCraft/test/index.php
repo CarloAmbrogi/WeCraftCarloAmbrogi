@@ -4,3 +4,5 @@
 <br>
 <a href="./forceCreationDesigner.php">Force creation designer</a>
 <br>
+<a href="./forceCreationArtisan.php">Force creation artisan</a>
+<br>
