@@ -196,24 +196,73 @@
     }
   }
 
-    //Obtain infos (except password) of an user
-    function obtainUserInfos($userId){
-      $connectionDB = $GLOBALS['$connectionDB'];
-      $sql = "select `id`,`email`,`name`,`surname`,`iconExtension`,`icon`,`emailVerified` from `User` where `id` = ?;";
-      if($statement = $connectionDB->prepare($sql)){
-        $statement->bind_param("s",$userId);
-        $statement->execute();
-      } else {
-        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
-      }
-  
-      $results = $statement->get_result();
-      while($element = $results->fetch_assoc()){
-        $elements[] = $element;
-      }
-  
-      //return an associative array with the infos of this user
-      return $elements[0];
+  //Obtain infos (except password) of an user
+  function obtainUserInfos($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`email`,`name`,`surname`,`iconExtension`,`icon`,`emailVerified` from `User` where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
     }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this user
+    return $elements[0];
+  }
+
+  //Get the kind of this account
+  //input userId
+  //Returns "Customer" or "Artisan" or "Designer"
+  function getKindOfThisAccount($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT `kindOfThisAccount` from ((SELECT `id`,'Designer' as 'kindOfThisAccount' FROM `Designer`) UNION (SELECT `id`,'Artisan' as 'kindOfThisAccount' FROM `Artisan`) UNION (SELECT `id`,'Customer' as 'kindOfThisAccount' FROM `Customer`)) as t WHERE `id` = ? LIMIT 1;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    if(!is_countable($elements) || count($elements) == 0){
+      return "error";
+    }
+    return $elements[0]["kindOfThisAccount"];
+  }
+
+  //verify if the login is valid (returns true or false)
+  //you have to insert the email and to match the passord; moreover the account need to be with the email verified
+  function isPasswordValid($email,$password){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT `password` FROM `User` WHERE `email` = ? AND `emailVerified` = true;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$email);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    if(is_countable($elements) && count($elements) == 0){
+      return false;
+    }
+    $passwordHashInDatabase = $elements[0]["password"];
+    return password_verify($password, $passwordHashInDatabase);
+  }
 
 ?>

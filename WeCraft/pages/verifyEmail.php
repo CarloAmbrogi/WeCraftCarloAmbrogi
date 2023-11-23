@@ -38,14 +38,7 @@
   } else {
     addParagraph(translate("The link is wrong"));
   }
-  ?>
-    <div class="row">
-      <button type="button" onclick="window.location='./index.php';" class="btn btn-primary"
-        style="margin:10px;">
-        <?= translate("Return to home") ?>
-      </button>
-    </div>
-  <?php
+  addButtonLink(translate("Return to home"),"./index.php");
   lowerPartOfThePage([]);
   include "./../database/closeConnectionDB.php";
   ?>
