@@ -216,8 +216,7 @@
     return $elements[0];
   }
 
-  //Get the kind of this account
-  //input userId
+  //Get the kind of this account (specifying the userId)
   //Returns "Customer" or "Artisan" or "Designer"
   function getKindOfThisAccount($userId){
     $connectionDB = $GLOBALS['$connectionDB'];

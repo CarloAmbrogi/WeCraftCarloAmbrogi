@@ -8,21 +8,21 @@
   doInitialScripts();
   upperPartOfThePage(translate("Welcome to WeCraft"),"");
   //if you are logged in, you are redirect to your starting page (according if you are a customer or an artisan or a designer)
-  if(isset($_SESSION["userId"])){
-    $kindOfThisAccount = getKindOfThisAccount($_SESSION["userId"]);
-    switch ($kindOfThisAccount) {
-      case "Customer":
-        header('Location: ./map.php');
-        break;
-      case "Artisan":
-        header('Location: ./AAAAALOCATIONQUANDOARTISAN.php');
-        break;
-      case "Designer":
-        header('Location: ./AAAAALOCATIONQUANDOADESIGNER.php');
-        break;
-      default:
-        header('Location: ./logout.php');
-    }
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  switch($kindOfTheAccountInUse){
+    case "Guest":
+      break;
+    case "Customer":
+      header('Location: ./map.php');
+      break;
+    case "Artisan":
+      header('Location: ./AAAAALOCATIONQUANDOARTISAN.php');
+      break;
+    case "Designer":
+      header('Location: ./AAAAALOCATIONQUANDOADESIGNER.php');
+      break;
+    default:
+      header('Location: ./logout.php');
   }
   $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
   ?>

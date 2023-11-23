@@ -7,6 +7,9 @@
   //Create new account as designer page
   doInitialScripts();
   upperPartOfThePage(translate("Create account"),"./index.php");
+  if(getKindOfTheAccountInUse() != "Guest"){//Its not possible to create a new account if you are logged in
+    header('Location: ./logout.php');
+  }
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for creating a new account as designer
     $insertedEmail = $_POST['insertedEmail'];

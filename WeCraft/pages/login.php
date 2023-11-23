@@ -11,14 +11,19 @@
     //Receive post request for doing the login
     $insertedEmail = $_POST['insertedEmail'];
     $insertedPassword = $_POST['insertedPassword'];
-    $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
-    if($isLoginValid){
-      //log in done
-      $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
-      header('Location: ./index.php');
+    $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
+    if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
+      addParagraph(translate("Error of the csrf token"));
     } else {
-      addParagraph(translate("Wrong password or inexistent account or email not yet verified for this account"));
-      addButtonLink(translate("Return to home"),"./index.php");
+      $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
+      if($isLoginValid){
+        //log in done
+        $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
+        header('Location: ./index.php');
+      } else {
+        addParagraph(translate("Wrong password or inexistent account or email not yet verified for this account"));
+        addButtonLink(translate("Return to home"),"./index.php");
+      }
     }
   } else {
     header('Location: ./index.php');

@@ -4,13 +4,13 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Map
+  //Search
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if($kindOfTheAccountInUse == "Designer" || $kindOfTheAccountInUse == "Artisan"){
-    upperPartOfThePage(translate("Map"),"./more.php");
+    upperPartOfThePage(translate("Search"),"./more.php");
   } else {
-    upperPartOfThePage(translate("Map"),"");
+    upperPartOfThePage(translate("Search"),"");
   }
   addButtonLink(translate("Log out"),"./logout.php");//AAAAAAAAAAAAA
   lowerPartOfThePage(tabBarForTheAccountInUse());

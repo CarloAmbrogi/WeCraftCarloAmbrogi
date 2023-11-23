@@ -212,4 +212,28 @@
     return $result;
   }
 
+  //Returns the kind of the account in use: "Guest" or "Customer" or "Artisan" or "Designer"
+  function getKindOfTheAccountInUse(){
+    if(!isset($_SESSION["userId"])){//guest
+      return "Guest";
+    }
+    return getKindOfThisAccount($_SESSION["userId"]);
+  }
+
+  //Load the tab bar for the account in use
+  function tabBarForTheAccountInUse(){
+    switch(getKindOfTheAccountInUse()){
+      case "Guest":
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("More"),"./more.php"]];
+      case "Customer":
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+      case "Artisan":
+        return [[translate("My products"),"./products.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+      case "Designer":
+        return [[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+      default://error
+        return [];
+    }
+  }
+
 ?>
