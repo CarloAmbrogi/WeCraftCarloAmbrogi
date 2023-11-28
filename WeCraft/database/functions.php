@@ -264,4 +264,140 @@
     return password_verify($password, $passwordHashInDatabase);
   }
 
+  //update name and surname of an user
+  function updateNameAndSurnameOfAnUser($userId,$name,$surname){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `name` = ?, `surname` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssi",$name,$surname,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Delete the icon of an user
+  function deleteIconOfAnUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `icon` = null, `iconExtension` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Change the icon of an user
+  function changeIconOfAnUser($userId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `icon` = ?, `iconExtension` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssi",$imgData,$imgExtension,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //verify if the passwor of this user id is valid (it's useful to ask for the password for a last time before changing it)
+  function isPasswordValidUserId($userId,$password){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT `password` FROM `User` WHERE `id` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    if(is_countable($elements) && count($elements) == 0){
+      return false;
+    }
+    $passwordHashInDatabase = $elements[0]["password"];
+    return password_verify($password, $passwordHashInDatabase);
+  }
+
+  //Update the password of an user
+  function updatePasswordOfAnUser($userId,$passwordHash){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `password` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$passwordHash,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Add an image to an user
+  //You should use this function only for aritisans and designers (customers can't add other images)
+  function addImageToAnUser($userId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `UserImages` (`id`, `userId`, `imgExtension`, `image`) VALUES (NULL, ?, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$userId,$imgExtension,$imgData);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Remove an image to its user specifying the id of the image (and also the userId for security reason)
+  function removeThisImageToAnUser($userId,$imageId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `UserImages` WHERE `userId` = ? and `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$imageId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get the number of images of this user
+  function getNumberImagesOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberImagesOfThisUser from (select * from `UserImages` where `userId` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberImagesOfThisUser"];
+  }
+
+  //Get the images of this user
+  function getImagesOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`imgExtension`,`image` from `UserImages` where `userId` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the images of this user (id, imgExtension, image)
+    return $elements;
+  }
+
 ?>

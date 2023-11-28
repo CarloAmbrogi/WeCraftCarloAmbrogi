@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Nov 22, 2023 alle 16:18
+-- Creato il: Nov 28, 2023 alle 13:13
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -94,6 +94,19 @@ CREATE TRIGGER `WhenDeleteOnUserDeleteAlsoOnDesigner` AFTER DELETE ON `User` FOR
 $$
 DELIMITER ;
 
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `UserImages`
+--
+
+CREATE TABLE `UserImages` (
+  `id` int NOT NULL,
+  `userId` int NOT NULL,
+  `imgExtension` varchar(7) NOT NULL,
+  `image` longblob NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --
 -- Indici per le tabelle scaricate
 --
@@ -124,6 +137,12 @@ ALTER TABLE `User`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indici per le tabelle `UserImages`
+--
+ALTER TABLE `UserImages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
@@ -131,7 +150,13 @@ ALTER TABLE `User`
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT per la tabella `UserImages`
+--
+ALTER TABLE `UserImages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
