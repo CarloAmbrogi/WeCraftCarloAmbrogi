@@ -228,7 +228,7 @@
       case "Customer":
         return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
       case "Artisan":
-        return [[translate("My products"),"./products.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+        return [[translate("My products"),"./artisan.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
       case "Designer":
         return [[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
       default://error

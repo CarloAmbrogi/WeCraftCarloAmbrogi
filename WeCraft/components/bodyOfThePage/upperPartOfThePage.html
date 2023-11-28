@@ -31,9 +31,16 @@
   <nav class="navbar navbar-expand-md fixed-top bg-body-tertiary">
     <!-- Back button (not in all pages it will be present) -->
       <?php
-        if($backButtonLink != ""){
+        if($backButtonLink != "" && $backButtonLink != "jsBack"){
           ?>
             <button type="button" onclick="window.location='<?= $backButtonLink ?>';" class="btn btn-primary"
+              style="margin:10px;">⬅️
+              <?= translate("Back") ?>
+            </button>
+          <?php
+        } else if($backButtonLink == "jsBack"){
+          ?>
+            <button type="button" onclick="history.back();" class="btn btn-primary"
               style="margin:10px;">⬅️
               <?= translate("Back") ?>
             </button>

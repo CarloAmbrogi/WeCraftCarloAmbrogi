@@ -400,4 +400,24 @@
     return $elements;
   }
 
+  //Obtain infos of an artisan (similar to obtainUserInfos but watching Artisan table)
+  function obtainArtisanInfos($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`shopName`,`openingHours`,`description`,`phoneNumber`,`latitude`,`longitude`,`address` from `Artisan` where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this artisan
+    return $elements[0];
+  }
+
 ?>

@@ -4,6 +4,15 @@
   function addParagraph($written){
     ?>
       <div class="row mb-3">
+        <p><?= htmlentities($written) ?></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph and without htmlentities
+  function addParagraphUnsafe($written){
+    ?>
+      <div class="row mb-3">
         <p><?= $written ?></p>
       </div>
     <?php
@@ -13,7 +22,52 @@
   function addParagraphWithoutMb3($written){
     ?>
       <div class="row">
+        <p><?= htmlentities($written) ?></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph without mb-3 and without htmlentities
+  function addParagraphWithoutMb3Unsafe($written){
+    ?>
+      <div class="row">
         <p><?= $written ?></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph clickable to send an email
+  function addEmailToLink($email){
+    ?>
+      <div class="row mb-3">
+        <p><a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph clickable to send an email without mb-3
+  function addEmailToLinkWithoutMb3($email){
+    ?>
+      <div class="row">
+        <p><a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph clickable to start a call
+  function addTelLink($email){
+    ?>
+      <div class="row mb-3">
+        <p><a href="tel:<?= $email ?>"><?= $email ?></a></p>
+      </div>
+    <?php
+  }
+
+  //This function is to add a p paragraph clickable to start a call without mb-3
+  function addTelLinkWithoutMb3($email){
+    ?>
+      <div class="row">
+        <p><a href="tel:<?= $email ?>"><?= $email ?></a></p>
       </div>
     <?php
   }
@@ -22,7 +76,7 @@
   function addTitle($written){
     ?>
       <div class="row mb-3">
-        <h1><?= $written ?></h1>
+        <h1><?= htmlentities($written) ?></h1>
       </div>
     <?php
   }
@@ -33,16 +87,23 @@
       <div class="row">
         <button type="button" onclick="window.location='<?= $link ?>';" class="btn btn-primary"
           style="margin:10px;">
-          <?= $written ?>
+          <?= htmlentities($written) ?>
         </button>
-    </div>
+      </div>
     <?php
   }
 
   //Add an image centered with dimension according to width
   function addImage($src,$alt){
     ?>
-      <img src="<?= $src ?>" alt=<?= $alt ?> class="row mb-3" style="width:20%;max-height:300px;display:block;margin-left:auto;margin-right:auto;">
+      <img src="<?= $src ?>" alt=<?= htmlentities($alt) ?> class="row mb-3" style="width:20%;max-height:300px;display:block;margin-left:auto;margin-right:auto;">
+    <?php
+  }
+
+  //Add an image laterally (when you use the bootstrap cols)
+  function addLateralImage($src,$alt){
+    ?>
+      <img src="<?= $src ?>" alt=<?= htmlentities($alt) ?> class="row mb-3" style="width:40%;max-height:500px;min-width:100px;display:block;margin-left:auto;margin-right:auto;">
     <?php
   }
 
@@ -105,6 +166,78 @@
         </style>
       <?php
     }
+  }
+
+  //Start a bootstrap row
+  function startRow(){
+    ?>
+      <div class="row">
+    <?php
+  }
+
+  //Start a bootstrap col
+  function startCol(){
+    ?>
+      <div class="col">
+    <?php
+  }
+
+  //End a bootstrap row
+  function endRow(){
+    ?>
+      </div>
+    <?php
+  }
+
+  //End a bootstrap col
+  function endCol(){
+    ?>
+      </div>
+    <?php
+  }
+
+  //Add an iframe google maps specifying the latitude and the longitude
+  function addIframeGoogleMap($latitude,$longitude){
+    ?>
+      <iframe src = "https://maps.google.com/maps?q=<?= $latitude ?>,<?= $longitude ?>&hl=es;z=14&amp;output=embed" style="height:300px;width:70%;min-width:300px;"></iframe>
+    <?php
+  }
+
+  //Add button show / hide
+  function addButtonShowHide($written,$id){
+    ?>
+      <div class="row">
+        <button type="button" onclick="showHide<?= $id ?>();" class="btn btn-primary"
+          style="margin:10px;">
+          <?= htmlentities($written) ?>
+        </button>
+      </div>
+    <?php
+  }
+
+  //Start the div for the show / hide button
+  function startDivShowHide($id){
+    ?>
+      <div id="showHide<?= $id ?>">
+    <?php
+  }
+
+  //End the div for the show / hide button
+  function endDivShowHide($id){
+    ?>
+      </div>
+      <script>
+        var showHideElement<?= $id ?> = document.getElementById("showHide<?= $id ?>");
+        showHideElement<?= $id ?>.style.display = "none";
+        function showHide<?= $id ?>() {
+          if (showHideElement<?= $id ?>.style.display === "none") {
+            showHideElement<?= $id ?>.style.display = "block";
+          } else {
+            showHideElement<?= $id ?>.style.display = "none";
+          }
+        }
+      </script>
+    <?php
   }
 
 ?>

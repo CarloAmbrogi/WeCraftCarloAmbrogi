@@ -16,7 +16,7 @@
       header('Location: ./map.php');
       break;
     case "Artisan":
-      header('Location: ./AAAAALOCATIONQUANDOARTISAN.php');
+      header('Location: ./artisan.php');
       break;
     case "Designer":
       header('Location: ./AAAAALOCATIONQUANDOADESIGNER.php');
