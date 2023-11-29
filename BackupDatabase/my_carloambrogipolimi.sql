@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Nov 28, 2023 alle 13:13
+-- Creato il: Nov 29, 2023 alle 12:35
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -57,6 +57,23 @@ CREATE TABLE `Customer` (
 CREATE TABLE `Designer` (
   `id` int NOT NULL,
   `description` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `Product`
+--
+
+CREATE TABLE `Product` (
+  `id` int NOT NULL,
+  `artisan` int NOT NULL,
+  `name` varchar(25) NOT NULL,
+  `description` text NOT NULL,
+  `iconExtension` varchar(7) DEFAULT NULL,
+  `icon` longblob,
+  `price` float NOT NULL,
+  `quantity` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -130,6 +147,12 @@ ALTER TABLE `Designer`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `Product`
+--
+ALTER TABLE `Product`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `User`
 --
 ALTER TABLE `User`
@@ -147,16 +170,22 @@ ALTER TABLE `UserImages`
 --
 
 --
+-- AUTO_INCREMENT per la tabella `Product`
+--
+ALTER TABLE `Product`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT per la tabella `UserImages`
 --
 ALTER TABLE `UserImages`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

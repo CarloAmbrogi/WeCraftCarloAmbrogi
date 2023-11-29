@@ -420,4 +420,23 @@
     return $elements[0];
   }
 
+  //Get the number of products of this artisan
+  function getNumberOfProductsOfThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsOfThisArtisan from (select * from `Product` where `artisan` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsOfThisArtisan"];
+  }
+
 ?>

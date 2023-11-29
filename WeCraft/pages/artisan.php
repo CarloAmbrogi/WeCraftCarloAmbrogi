@@ -51,6 +51,10 @@
         $textButtonShowHide = translate("Show or hide more information about you");
       }
       addButtonShowHide($textButtonShowHide,"moreInformationOnThisArtisan");
+      if($kindOfTheAccountInUse != "Guest" && $_GET["id"] != $_SESSION["userId"]){
+        //Send message to this artisan
+        addButtonLink(translate("Send message"),"./sendMessage.php?to=".$_GET["id"]);
+      }
       endCol();
       endRow();
       startDivShowHide("moreInformationOnThisArtisan");
@@ -62,10 +66,12 @@
       endDivShowHide("moreInformationOnThisArtisan");
       //Button to add a new products
       if($_GET["id"] == $_SESSION["userId"]){
-        addButtonLink(translate("Add a new product"),"./addANewProduct");
+        addButtonLink(translate("Add a new product"),"./addANewProduct.php");
       }
+      //Show the number of products of this artisan
+      $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($_GET["id"]);
+      addParagraph(translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       //Show the products of this artisan
-      addParagraph(translate("aaaaaa Total products aaaaaaaaa"));
 
     }
   } else {
