@@ -439,4 +439,72 @@
     return $elements[0]["numberProductsOfThisArtisan"];
   }
 
+  //insert on Product a new product (without specifying an icon image)
+  function addANewProductWithoutIcon($artisan,$name,$description,$price,$quantity,$category){
+    //insert on Product
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`) VALUES (NULL, ?, ?, ?, NULL, NULL, ?, ?, ?, CURRENT_TIMESTAMP(), NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      //Add the new account to the database
+      $statement->bind_param("issdis",$artisan,$name,$description,$price,$quantity,$category);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //insert on Product a new product (specifying an icon image)
+  function addANewProductWithIcon($artisan,$name,$description,$imgExtension,$imgData,$price,$quantity,$category){
+    //insert on Product
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      //Add the new account to the database
+      $statement->bind_param("issssdis",$artisan,$name,$description,$imgExtension,$imgData,$price,$quantity,$category);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Obtain a preview of products of an artisan
+  function obtainProductsPreviewOfThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain infos of a product (similar to obtainUserInfos but watching Product table)
+  function obtainProductInfos($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`artisan`,`name`,`description`,`iconExtension`,`icon`,`price`,`quantity`,`category`,`added`,`lastSell` from `Product` where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this product
+    return $elements[0];
+  }
+
 ?>

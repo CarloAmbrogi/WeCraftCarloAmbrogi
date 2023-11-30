@@ -14,4 +14,10 @@
   //An image representing a generic user (for users without an image)
   define('genericUserImage', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/genericUser.jpg");
 
+  //An image representing a generic product (for products without an image)
+  define('genericProductImage', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/genericProduct.jpg");
+
+  //Possible categories of a product
+  define('categories', ["Jewerly","Home decoration","Pottery","Teppiches","Bedware Bathroomware","Artisan craft"]);
+
 ?>

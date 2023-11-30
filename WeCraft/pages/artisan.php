@@ -21,7 +21,7 @@
         upperPartOfThePage(translate("My products"),"");
       } else {
         //Products of this artisan (of the specified id with the get)
-        upperPartOfThePage(translate("Artisan"),"jsBack");
+        upperPartOfThePage(translate("Artisan"),"jsBack");//TODO don't use jsback but the page that sent you here adds a get to let you know if you go back to the map or search (without this get the button will not be shown)
       }
       //Show the artisan
       $userInfos = obtainUserInfos($_GET["id"]);
@@ -71,8 +71,42 @@
       //Show the number of products of this artisan
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($_GET["id"]);
       addParagraph(translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
-      //Show the products of this artisan
-
+      //Show the products previews of this artisan
+      $productsPreviewOfThisArtisan = obtainProductsPreviewOfThisArtisan($_GET["id"]);
+      ?>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+      <?php
+      foreach($productsPreviewOfThisArtisan as &$singleProductPreview){
+        $fileImageToVisualize = genericProductImage;
+        if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+          $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+        }
+          ?>
+            <div class="col">
+              <a href="./product?id=<?= $singleProductPreview["id"] ?>" style="text-decoration:none">
+                <div class="card mb-3" style="max-width: 540px;">
+                  <div class="row g-0">
+                    <div class="col-md-4">
+                      <img src="<?= $fileImageToVisualize ?>" class="img-fluid rounded-start" alt="<?= $singleProductPreview["name"] ?>" style="max-height:165px;">
+                    </div>
+                    <div class="col-md-8">
+                      <div class="card-body">
+                        <h5 class="card-title"><?= $singleProductPreview["name"] ?></h5>
+                        <p class="card-text"><?= translate("Category").": ".translate($singleProductPreview["category"]) ?><br><?= translate("Price").": ".$singleProductPreview["price"] ?></p>
+                        <p class="card-text"><small class="text-body-secondary"><?= translate("Quantity available").": ".$singleProductPreview["quantity"] ?></small></p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          <?php
+      }
+      ?>
+        </div>
+      <?php
+      //Here other things about this artisan
+      //AAAAAAAAA
     }
   } else {
     if($kindOfTheAccountInUse == "Artisan"){

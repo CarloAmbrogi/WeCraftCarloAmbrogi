@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Nov 29, 2023 alle 12:35
+-- Creato il: Nov 30, 2023 alle 16:46
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -73,7 +73,10 @@ CREATE TABLE `Product` (
   `iconExtension` varchar(7) DEFAULT NULL,
   `icon` longblob,
   `price` float NOT NULL,
-  `quantity` int NOT NULL
+  `quantity` int NOT NULL,
+  `category` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `added` timestamp NOT NULL,
+  `lastSell` timestamp NULL DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -173,19 +176,19 @@ ALTER TABLE `UserImages`
 -- AUTO_INCREMENT per la tabella `Product`
 --
 ALTER TABLE `Product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT per la tabella `UserImages`
 --
 ALTER TABLE `UserImages`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

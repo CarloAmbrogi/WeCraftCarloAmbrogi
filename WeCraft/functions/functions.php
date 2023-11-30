@@ -38,6 +38,24 @@
     return true;
   }
 
+  //Check if this price is valid
+  function isValidPrice($price){
+    $regex = "/^[0-9]+\.[0-9][0-9]$/";
+    if(!preg_match($regex, $price)){
+      return false;
+    }
+    return true;
+  }
+
+  //Check if this quantity is valid
+  function isValidQuantity($quantity){
+    $regex = "/^[0-9]+$/";
+    if(!preg_match($regex, $quantity)){
+      return false;
+    }
+    return true;
+  }
+
   //Generate a casual verification code, useful to verify a email in an account
   function generateAVerificationCode(){
     $result = "";
