@@ -2,6 +2,11 @@ html {
   font-size: 2rem;
 }
 
+.paragraphForTabBar {
+  font-size: 10px;
+}
+
+
 nav {
   height: 128px;
 }
@@ -25,7 +30,6 @@ nav {
 .btn-group {
   position: fixed;
   bottom: 0px;
-  padding: 20px;
   padding-bottom: 40px;
   transform: translateX(24px);
   height: 128px;
@@ -37,6 +41,10 @@ nav {
 }
 
 @media (min-aspect-ratio: 1/1) {
+
+  .paragraphForTabBar {
+    font-size: 20px;
+  }  
 
   .btn-group {
     padding-bottom: 0px;

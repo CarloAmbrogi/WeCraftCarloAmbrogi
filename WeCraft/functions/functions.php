@@ -242,16 +242,42 @@
   function tabBarForTheAccountInUse(){
     switch(getKindOfTheAccountInUse()){
       case "Guest":
-        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("More"),"./more.php"]];
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
       case "Customer":
-        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
       case "Artisan":
-        return [[translate("My products"),"./artisan.php"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
       case "Designer":
-        return [[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("More"),"./more.php"]];
+        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
       default://error
         return [];
     }
+  }
+
+  //Load the corresponding icon for the title of the tab for the tab bar
+  function tabBarIconForThisTab($tabTitle){
+    if($tabTitle == translate("Map")){
+      return WeCraftBaseUrl."Icons/mapIcon.png";
+    }
+    if($tabTitle == translate("Search")){
+      return WeCraftBaseUrl."Icons/searchIcon.png";
+    }
+    if($tabTitle == translate("My products")){
+      return WeCraftBaseUrl."Icons/myProductsIcon.png";
+    }
+    if($tabTitle == translate("Cooperate")){
+      return WeCraftBaseUrl."Icons/cooperateIcon.png";
+    }
+    if($tabTitle == translate("Chats")){
+      return WeCraftBaseUrl."Icons/chatsIcon.png";
+    }
+    if($tabTitle == translate("My WeCraft")){
+      return WeCraftBaseUrl."Icons/menuIcon.png";
+    }
+    if($tabTitle == translate("Personalized products")){
+      return WeCraftBaseUrl."Icons/personalizedProductsIcon.png";
+    }
+    return WeCraftBaseUrl."Icons/genericTabBarIcon.png";
   }
 
 ?>

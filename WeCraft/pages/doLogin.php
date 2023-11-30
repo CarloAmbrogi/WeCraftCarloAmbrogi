@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //When you do the login (from the home page), the form is sent to this page
+  //When you do the login (from the log in page), the form is sent to this page
   doInitialScripts();
   upperPartOfThePage(translate("Log in"),"./index.php");
   if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -19,14 +19,14 @@
       if($isLoginValid){
         //log in done
         $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
-        header('Location: ./index.php');
+        header('Location: ./account.php');
       } else {
         addParagraph(translate("Wrong password or inexistent account or email not yet verified for this account"));
         addButtonLink(translate("Return to home"),"./index.php");
       }
     }
   } else {
-    header('Location: ./index.php');
+    header('Location: ./account.php');
   }
   lowerPartOfThePage([]);
   include "./../database/closeConnectionDB.php";

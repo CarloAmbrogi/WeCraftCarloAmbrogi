@@ -65,7 +65,7 @@
       <input class="form-control" id="insertedShopName" type="text" name="insertedShopName" maxlength="24">
     </div>
     <div class="mb-3">
-      <label for="insertedOpeningHours" class="form-label"><?= translate("Opening hours")."ex: %MonF01:0203:04S05:0607:08" ?></label>
+      <label for="insertedOpeningHours" class="form-label"><?= translate("Opening hours")." ex: %MonF01:0203:04S05:0607:08" ?></label>
       <input class="form-control" id="insertedOpeningHours" type="text" name="insertedOpeningHours" maxlength="182">
     </div>
     <div class="mb-3">

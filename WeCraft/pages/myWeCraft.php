@@ -4,10 +4,10 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //More
+  //My WeCraft
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("More"),"");
+  upperPartOfThePage(translate("My WeCraft"),"");
   //For all users except guests
   if($kindOfTheAccountInUse != "Guest"){
     $userInfos = obtainUserInfos($_SESSION["userId"]);
@@ -46,8 +46,17 @@
   if($kindOfTheAccountInUse == "Artisan"){
 
   }
-  //For everyone
-  addButtonLink(translate("Log out"),"./logout.php");
+  //For all users except guests
+  if($kindOfTheAccountInUse != "Guest"){
+    addButtonLink(translate("Return to home without doing the log out"),"./index.php");
+    addButtonLink(translate("Log out"),"./logout.php");
+  }
+  //For guests
+  if($kindOfTheAccountInUse == "Guest"){
+    addParagraph("For more functions register or do the log in");
+    addButtonLink(translate("Go to register log in page"),"./account.php");
+    addButtonLink(translate("Return to home"),"./index.php");
+  }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
 ?>

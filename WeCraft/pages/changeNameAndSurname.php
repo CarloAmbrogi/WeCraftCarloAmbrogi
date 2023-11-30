@@ -12,7 +12,7 @@
     addParagraph(translate("This page is not visible without being logged in"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    upperPartOfThePage(translate("Account"),"./more.php");
+    upperPartOfThePage(translate("Account"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to change name and surname
       $insertedName = $_POST['insertedName'];

@@ -1,0 +1,11 @@
+Contenuto della home page (con una spiegazione su cos'è WeCraft e delle icone per le categorie e dei prodotti ecc)
+
+Aggiungi cookie per salvare la sessione
+
+filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc
+
+popola database con cose indiane
+
+dedica un po di tempo la cooperazione per decidere cosa metti in quella sezione
+
+Fai customized order con dati finti pagamento online e spedizione

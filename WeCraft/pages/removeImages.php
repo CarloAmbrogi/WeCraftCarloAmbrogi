@@ -13,7 +13,7 @@
     addParagraph(translate("This page is visible only to artisans and designers"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    upperPartOfThePage(translate("Remove images"),"./more.php");
+    upperPartOfThePage(translate("Remove images"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to add images to your profile
       $numberOfImages = getNumberImagesOfThisUser($_SESSION["userId"]);

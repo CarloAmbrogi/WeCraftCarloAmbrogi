@@ -13,7 +13,7 @@
     addParagraph(translate("This page is visible only to artisans and designers"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    upperPartOfThePage(translate("Add images"),"./more.php");
+    upperPartOfThePage(translate("Add images"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to add images to your profile
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
