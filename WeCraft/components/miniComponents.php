@@ -240,4 +240,158 @@
     <?php
   }
 
+  //Start a card grid
+  function startCardGrid(){
+    ?>
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+    <?php
+  }
+
+  //Add a card for the grid ($fileImageToVisualize and $title mandatory)
+  function addACardForTheGrid($link,$fileImageToVisualize,$title,$text1,$text2){
+    ?>
+      <div class="col">
+        <?php
+          if($link != ""){
+        ?>
+          <a href="<?= $link ?>" style="text-decoration:none">
+        <?php
+          }
+        ?>
+          <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="<?= $fileImageToVisualize ?>" class="img-fluid rounded-start" alt="<?= $title ?>" style="max-height:165px;">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><?= $title ?></h5>
+                    <?php
+                      if($text1 != ""){
+                    ?>
+                      <p class="card-text"><?= $text1 ?></p>
+                    <?php
+                      }
+                    ?>
+                    <?php
+                      if($text2 != ""){
+                    ?>
+                      <p class="card-text"><small class="text-body-secondary"><?= $text2 ?></small></p>
+                    <?php
+                      }
+                    ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php
+          if($link != ""){
+        ?>
+        </a>
+        <?php
+          }
+        ?>
+      </div>
+    <?php
+  }
+
+  //End a card grid
+  function endCardGrid(){
+    ?>
+      </div>
+    <?php
+  }
+
+  //Start a form 1 (set the csrf token and start the div to contain the form)
+  function startForm1(){
+    $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+    ?>
+      <div class="row mb-3">
+    <?php
+  }
+
+  //Start a form 2 (start the form, specify the action script php)
+  function startForm2($action){
+    ?>
+      <form method="post" action="<?= $action ?>" enctype="multipart/form-data">
+    <?php
+  }
+
+  //Add a paragraph inside a form
+  function addParagraphInAForm($text){
+    ?>
+      <p><?= $text ?></p>
+    <?php
+  }
+
+  //Add an email field in a form
+  function addEmailField($text,$id,$maxLenghtInsertedText){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input class="form-control" id="<?= $id ?>" aria-describedby="emailHelp" type="text" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+      </div>
+    <?php
+  }
+
+  //Add a tel field in a form
+  function addTelField($text,$id,$maxLenghtInsertedText){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input class="form-control" id="<?= $id ?>" type="tel" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+      </div>
+    <?php
+  }
+
+  //Add a password field in a form
+  function addPasswordField($text,$id){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input type="password" class="form-control" id="<?= $id ?>" type="text" name="<?= $id ?>">
+      </div>
+    <?php
+  }
+
+  //Add a short text field in a form
+  function addShortTextField($text,$id,$maxLenghtInsertedText){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input class="form-control" id="<?= $id ?>" type="text" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+      </div>
+    <?php
+  }
+
+  //Add a long text field in a form
+  function addLongTextField($text,$id,$maxLenghtInsertedText){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <textarea class="form-control" id="<?= $id ?>" rows="3" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>"></textarea>
+      </div>
+    <?php
+  }
+
+  //Add file field in a form (id is always: formFile)
+  function addFileField($text,$name){
+    ?>
+      <div class="mb-3">
+        <label for="formFile" class="form-label"><?= $text ?></label>
+        <input class="form-control" type="file" id="formFile" name="<?= $name ?>">
+      </div>
+    <?php
+  }
+
+  //End form (add submit button, csrf token hidden imput and close the form and the div with the form)
+  function endForm($textSubmitButton){
+    ?>
+          <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
+          <button id="submit" type="submit" class="btn btn-primary"><?= $textSubmitButton ?></button>
+        </form>
+      </div>
+    <?php
+  }
+
 ?>

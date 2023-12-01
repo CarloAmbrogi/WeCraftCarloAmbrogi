@@ -47,20 +47,14 @@
       }
     } else {
       //Content of the page add images
+      //Title Add images
+      addTitle(translate("Add images"));
+      //Form to insert data to add a new image
+      startForm1();
+      startForm2($_SERVER['PHP_SELF']);
+      addFileField(translate("Icon"),"insertedImage");
+      endForm(translate("Submit"));
       ?>
-        <!-- Title Add images -->
-        <?php addTitle(translate("Add images")); ?>
-        <!-- Form to insert data to add a new image -->
-        <div class="row mb-3">
-          <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="formFile" class="form-label"><?= translate("Icon") ?></label>
-              <input class="form-control" type="file" id="formFile" name="insertedImage">
-            </div>
-            <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-            <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-          </form>
-        </div>
         <script>
           //form inserted parameters
           const form = document.querySelector('form');

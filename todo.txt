@@ -1,7 +1,3 @@
-Contenuto della home page (con una spiegazione su cos'è WeCraft e delle icone per le categorie e dei prodotti ecc)
-
-Aggiungi cookie per salvare la sessione
-
 filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc
 
 popola database con cose indiane

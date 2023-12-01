@@ -44,29 +44,16 @@
       }
     } else {
       //Content of the page change password
-      $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+      //Title Change password
+      addTitle(translate("Change password"));
+      //Form to insert data to change name and surname
+      startForm1();
+      startForm2($_SERVER['PHP_SELF']);
+      addPasswordField(translate("Old password"),"insertedOldPassword");
+      addPasswordField(translate("New password"),"insertedOldPassword");
+      addPasswordField(translate("Confirm new password"),"insertedConfirmedPassword");
+      endForm(translate("Submit"));
       ?>
-        <!-- Title Change password -->
-        <?php addTitle(translate("Change password")); ?>
-        <!-- Form to insert data to change name and surname -->
-        <div class="row mb-3">
-          <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="insertedOldPassword" class="form-label"><?= translate("Old password") ?></label>
-              <input type="password" class="form-control" id="insertedOldPassword" type="text" name="insertedOldPassword">
-            </div>
-            <div class="mb-3">
-              <label for="insertedPassword" class="form-label"><?= translate("New password") ?></label>
-              <input type="password" class="form-control" id="insertedPassword" type="text" name="insertedPassword">
-            </div>
-            <div class="mb-3">
-              <label for="insertedConfirmedPassword" class="form-label"><?= translate("Confirm new password") ?></label>
-              <input type="password" class="form-control" id="insertedConfirmedPassword" type="text" name="insertedConfirmedPassword">
-            </div>
-            <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-            <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-          </form>
-        </div>
         <script>
           //form inserted parameters
           const form = document.querySelector('form');

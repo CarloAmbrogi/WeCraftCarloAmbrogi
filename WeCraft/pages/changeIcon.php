@@ -45,20 +45,14 @@
       }
     } else {
       //Content of the page change icon
+      //Title Change icon
+      addTitle(translate("Change icon"));
+      //Form to insert data to change the icon
+      startForm1();
+      startForm2($_SERVER['PHP_SELF']);
+      addFileField(translate("Icon"),"insertedIcon");
+      endForm(translate("Submit"));
       ?>
-        <!-- Title Change icon -->
-        <?php addTitle(translate("Change icon")); ?>
-        <!-- Form to insert data to change the icon -->
-        <div class="row mb-3">
-          <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="formFile" class="form-label"><?= translate("Icon") ?></label>
-              <input class="form-control" type="file" id="formFile" name="insertedIcon">
-            </div>
-            <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-            <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-          </form>
-        </div>
         <script>
           //form inserted parameters
           const form = document.querySelector('form');

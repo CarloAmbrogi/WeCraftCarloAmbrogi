@@ -36,25 +36,15 @@
       }
     } else {
       //Content of the page change name and surname
-      $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+      //Title Change name and surname
+      addTitle(translate("Change name and surname"));
+      //Form to insert data to change name and surname
+      startForm1();
+      startForm2($_SERVER['PHP_SELF']);
+      addShortTextField(translate("Name"),"insertedName",24);
+      addShortTextField(translate("Surname"),"insertedSurname",24);
+      endForm(translate("Submit"));
       ?>
-        <!-- Title Change name and surname -->
-        <?php addTitle(translate("Change name and surname")); ?>
-        <!-- Form to insert data to change name and surname -->
-        <div class="row mb-3">
-          <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="insertedName" class="form-label"><?= translate("Name") ?></label>
-              <input class="form-control" id="insertedName" type="text" name="insertedName" maxlength="24">
-            </div>
-            <div class="mb-3">
-              <label for="insertedSurname" class="form-label"><?= translate("Surname") ?></label>
-              <input class="form-control" id="insertedSurname" type="text" name="insertedSurname" maxlength="24">
-            </div>
-            <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-            <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-          </form>
-        </div>
         <script>
           //form inserted parameters
           const form = document.querySelector('form');

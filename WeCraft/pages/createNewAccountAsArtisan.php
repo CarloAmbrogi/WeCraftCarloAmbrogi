@@ -121,102 +121,64 @@
       mail($insertedEmail,"WeCraft - ".translate("Verify email"),$msg);
     }
   } else {
-    $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+    //Title Create new account as artisan
+    addTitle(translate("Create new account as artisan"));
+    //Form to insert data to create a new account as artisan
+    startForm1();
+    startForm2($_SERVER['PHP_SELF']);
+    addEmailField(translate("Email address"),"insertedEmail",49);
+    addPasswordField(translate("Password"),"insertedPassword");
+    addPasswordField(translate("Confirm password"),"insertedConfirmedPassword");
+    addShortTextField(translate("Name"),"insertedName",24);
+    addShortTextField(translate("Surname"),"insertedSurname",24);
+    addShortTextField(translate("Shop name"),"insertedShopName",24);
     ?>
-      <!-- Title Create new account as artisan -->
-      <?php addTitle(translate("Create new account as artisan")); ?>
-      <!-- Form to insert data to create a new account as artisan -->
-      <div class="row mb-3">
-        <p><?= translate("Insert your data:") ?></p>
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="insertedEmail" class="form-label"><?= translate("Email address") ?></label>
-            <input class="form-control" id="insertedEmail" aria-describedby="emailHelp" type="text" name="insertedEmail" maxlength="49">
-          </div>
-          <div class="mb-3">
-            <label for="insertedPassword" class="form-label"><?= translate("Password") ?></label>
-            <input type="password" class="form-control" id="insertedPassword" type="text" name="insertedPassword">
-          </div>
-          <div class="mb-3">
-            <label for="insertedConfirmedPassword" class="form-label"><?= translate("Confirm password") ?></label>
-            <input type="password" class="form-control" id="insertedConfirmedPassword" type="text" name="insertedConfirmedPassword">
-          </div>
-          <div class="mb-3">
-            <label for="insertedName" class="form-label"><?= translate("Name") ?></label>
-            <input class="form-control" id="insertedName" type="text" name="insertedName" maxlength="24">
-          </div>
-          <div class="mb-3">
-            <label for="insertedSurname" class="form-label"><?= translate("Surname") ?></label>
-            <input class="form-control" id="insertedSurname" type="text" name="insertedSurname" maxlength="24">
-          </div>
-          <p><?= translate("Insert your artisan data:") ?></p>
-          <div class="mb-3">
-            <label for="insertedShopName" class="form-label"><?= translate("Shop name") ?></label>
-            <input class="form-control" id="insertedShopName" type="text" name="insertedShopName" maxlength="24">
-          </div>
-          <!-- Insert opening hours -->
-          <p><?= translate("Insert the opening hours:") ?></p>
-          <?php
-            $days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-            foreach ($days as &$el) {
-              ?>
-                <ul class="list-group">
-                  <li class="list-group-item">
-                    <div for="inserted<?= $el ?>" class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>" name="inserted<?= $el ?>">
-                      <label class="form-check-label" for="inserted<?= $el ?>"><?= translate($el."L") ?></label>
-                    </div>
-                    <div for="inserted<?= $el ?>FirstSlot" class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>FirstSlot" name="inserted<?= $el ?>FirstSlot">
-                      <label class="form-check-label" for="inserted<?= $el ?>FirstSlot"><?= translate("First slot") ?></label>
-                      <label class="form-check-label" for="inserted<?= $el ?>FirstSlotFrom"><?= translate("from") ?></label>
-                      <input type="time" id="inserted<?= $el ?>FirstSlotFrom" name="inserted<?= $el ?>FirstSlotFrom">
-                      <label class="form-check-label" for="inserted<?= $el ?>FirstSlotTo"><?= translate("to") ?></label>
-                      <input type="time" id="inserted<?= $el ?>FirstSlotTo" name="inserted<?= $el ?>FirstSlotTo">
-                    </div>
-                    <div for="inserted<?= $el ?>SecondSlot" class="form-check form-switch">
-                      <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>SecondSlot" name="inserted<?= $el ?>SecondSlot">
-                      <label class="form-check-label" for="inserted<?= $el ?>SecondSlot"><?= translate("Second slot") ?></label>
-                      <label class="form-check-label" for="inserted<?= $el ?>SecondSlotFrom"><?= translate("from") ?></label>
-                      <input type="time" id="inserted<?= $el ?>SecondSlotFrom" name="inserted<?= $el ?>SecondSlotFrom">
-                      <label class="form-check-label" for="inserted<?= $el ?>SecondSlotTo"><?= translate("to") ?></label>
-                      <input type="time" id="inserted<?= $el ?>SecondSlotTo" name="inserted<?= $el ?>SecondSlotTo">
-                    </div>
-                  </li>
-                </ul>
-              <?php
-            }
+      <!-- Insert opening hours -->
+      <p><?= translate("Insert the opening hours:") ?></p>
+      <?php
+        $days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+        foreach ($days as &$el) {
           ?>
-          <!-- End of insert opening hours -->
-          <div class="mb-3">
-            <label for="insertedDescription" class="form-label"><?= translate("Description") ?></label>
-            <textarea class="form-control" id="insertedDescription" rows="3" name="insertedDescription" maxlength="2046"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="insertedPhoneNumber" class="form-label"><?= translate("Phone number") ?></label>
-            <input class="form-control" id="insertedPhoneNumber" type="tel" name="insertedPhoneNumber" maxlength="24">
-          </div>
-          <div class="mb-3">
-            <label for="insertedLatitude" class="form-label"><?= translate("Latitude") ?></label>
-            <input class="form-control" id="insertedLatitude" type="text" name="insertedLatitude" maxlength="24">
-          </div>
-          <div class="mb-3">
-            <label for="insertedLongitude" class="form-label"><?= translate("Longitude") ?></label>
-            <input class="form-control" id="insertedLongitude" type="text" name="insertedLongitude" maxlength="24">
-          </div>
-          <div class="mb-3">
-            <label for="insertedAddress" class="form-label"><?= translate("Address") ?></label>
-            <input class="form-control" id="insertedAddress" type="text" name="insertedAddress" maxlength="49">
-          </div>
-          <div class="mb-3">
-            <label for="formFile" class="form-label"><?= translate("Icon optional") ?></label>
-            <input class="form-control" type="file" id="formFile" name="insertedIcon">
-          </div>
-          <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-          <input type="hidden" name="insertedOpeningHours" id="insertedOpeningHours" value="error">
-          <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-        </form>
-      </div>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div for="inserted<?= $el ?>" class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>" name="inserted<?= $el ?>">
+                  <label class="form-check-label" for="inserted<?= $el ?>"><?= translate($el."L") ?></label>
+                </div>
+                <div for="inserted<?= $el ?>FirstSlot" class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>FirstSlot" name="inserted<?= $el ?>FirstSlot">
+                  <label class="form-check-label" for="inserted<?= $el ?>FirstSlot"><?= translate("First slot") ?></label>
+                  <label class="form-check-label" for="inserted<?= $el ?>FirstSlotFrom"><?= translate("from") ?></label>
+                  <input type="time" id="inserted<?= $el ?>FirstSlotFrom" name="inserted<?= $el ?>FirstSlotFrom">
+                  <label class="form-check-label" for="inserted<?= $el ?>FirstSlotTo"><?= translate("to") ?></label>
+                  <input type="time" id="inserted<?= $el ?>FirstSlotTo" name="inserted<?= $el ?>FirstSlotTo">
+                </div>
+                <div for="inserted<?= $el ?>SecondSlot" class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="inserted<?= $el ?>SecondSlot" name="inserted<?= $el ?>SecondSlot">
+                  <label class="form-check-label" for="inserted<?= $el ?>SecondSlot"><?= translate("Second slot") ?></label>
+                  <label class="form-check-label" for="inserted<?= $el ?>SecondSlotFrom"><?= translate("from") ?></label>
+                  <input type="time" id="inserted<?= $el ?>SecondSlotFrom" name="inserted<?= $el ?>SecondSlotFrom">
+                  <label class="form-check-label" for="inserted<?= $el ?>SecondSlotTo"><?= translate("to") ?></label>
+                  <input type="time" id="inserted<?= $el ?>SecondSlotTo" name="inserted<?= $el ?>SecondSlotTo">
+                </div>
+              </li>
+            </ul>
+          <?php
+        }
+      ?>
+      <!-- End of insert opening hours -->
+    <?php
+    addLongTextField(translate("Description"),"insertedDescription",2046);
+    addTelField(translate("Phone number"),"insertedPhoneNumber",24);
+    addShortTextField(translate("Latitude"),"insertedLatitude",24);
+    addShortTextField(translate("Longitude"),"insertedLongitude",24);
+    addShortTextField(translate("Address"),"insertedAddress",49);
+    addFileField(translate("Icon optional"),"insertedIcon");
+      ?>
+        <input type="hidden" name="insertedOpeningHours" id="insertedOpeningHours" value="error">
+      <?php
+    endForm(translate("Submit"));
+    ?>
       <script>
         //form inserted parameters
         const form = document.querySelector('form');

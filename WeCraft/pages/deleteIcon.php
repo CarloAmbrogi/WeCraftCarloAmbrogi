@@ -28,18 +28,12 @@
       //Content of the page delete icon
       $userInfos = obtainUserInfos($_SESSION["userId"]);
       if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
-        $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
-        ?>
-          <!-- Title Delete icon -->
-          <?php addTitle(translate("Delete icon")); ?>
-          <!-- Form to insert data to delete the icon -->
-          <div class="row mb-3">
-            <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-              <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-              <button id="submit" type="submit" class="btn btn-primary"><?= translate("Delete icon") ?></button>
-            </form>
-          </div>
-        <?php
+        //Title Delete icon
+        addTitle(translate("Delete icon"));
+        //Form to insert data to delete the icon
+        startForm1();
+        startForm2($_SERVER['PHP_SELF']);
+        endForm(translate("Delete icon"));
       } else {
         addParagraph(translate("You have not set the icon"));
       }

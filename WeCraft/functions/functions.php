@@ -11,6 +11,22 @@
     return "MISSEDSTRING".$textToTranslate;
   }
 
+  //Add a translated text from the long text files
+  //Ex $name = "myText" -> files in texts folder = myTexten.txt and myTextit.txt
+  function text($name){
+    $lines = file(dirname(__FILE__)."/../texts/".$name.translate("L").".txt");
+    $result = "";
+    $addBr = false;
+    foreach($lines as &$line){
+      if($addBr){
+        $result.='<br>';
+      }
+      $result.=$line;
+      $addBr = true;
+    }
+    return $result;
+  }
+
   //Check if this email address is valid
   function isValidEmail($email){
     $regex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";

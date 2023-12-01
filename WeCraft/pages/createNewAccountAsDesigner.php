@@ -93,47 +93,21 @@
       mail($insertedEmail,"WeCraft - ".translate("Verify email"),$msg);
     }
   } else {
-    $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+    //Title Create new account as designer
+    addTitle(translate("Create new account as designer"));
+    //Form to insert data to create a new account as designer
+    startForm1();
+    startForm2($_SERVER['PHP_SELF']);
+    addEmailField(translate("Email address"),"insertedEmail",49);
+    addPasswordField(translate("Password"),"insertedPassword");
+    addPasswordField(translate("Confirm password"),"insertedConfirmedPassword");
+    addShortTextField(translate("Name"),"insertedName",24);
+    addShortTextField(translate("Surname"),"insertedSurname",24);+
+    addParagraphInAForm(translate("Insert your designer data:"));
+    addLongTextField(translate("Description"),"insertedDescription",2046);
+    addFileField(translate("Icon optional"),"insertedIcon");
+    endForm(translate("Submit"));
     ?>
-      <!-- Title Create new account as designer -->
-      <?php addTitle(translate("Create new account as designer")); ?>
-      <!-- Form to insert data to create a new account as designer -->
-      <div class="row mb-3">
-        <p><?= translate("Insert your data:") ?></p>
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-          <div class="mb-3">
-            <label for="insertedEmail" class="form-label"><?= translate("Email address") ?></label>
-            <input class="form-control" id="insertedEmail" aria-describedby="emailHelp" type="text" name="insertedEmail" maxlength="49">
-          </div>
-          <div class="mb-3">
-            <label for="insertedPassword" class="form-label"><?= translate("Password") ?></label>
-            <input type="password" class="form-control" id="insertedPassword" type="text" name="insertedPassword">
-          </div>
-          <div class="mb-3">
-            <label for="insertedConfirmedPassword" class="form-label"><?= translate("Confirm password") ?></label>
-            <input type="password" class="form-control" id="insertedConfirmedPassword" type="text" name="insertedConfirmedPassword">
-          </div>
-          <div class="mb-3">
-            <label for="insertedName" class="form-label"><?= translate("Name") ?></label>
-            <input class="form-control" id="insertedName" type="text" name="insertedName" maxlength="24">
-          </div>
-          <div class="mb-3">
-            <label for="insertedSurname" class="form-label"><?= translate("Surname") ?></label>
-            <input class="form-control" id="insertedSurname" type="text" name="insertedSurname" maxlength="24">
-          </div>
-          <p><?= translate("Insert your designer data:") ?></p>
-          <div class="mb-3">
-            <label for="insertedDescription" class="form-label"><?= translate("Description") ?></label>
-            <textarea class="form-control" id="insertedDescription" rows="3" name="insertedDescription" maxlength="2046"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="formFile" class="form-label"><?= translate("Icon optional") ?></label>
-            <input class="form-control" type="file" id="formFile" name="insertedIcon">
-          </div>
-          <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-          <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-        </form>
-      </div>
       <script>
         //form inserted parameters
         const form = document.querySelector('form');

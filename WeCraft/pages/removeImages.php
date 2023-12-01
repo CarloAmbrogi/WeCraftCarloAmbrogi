@@ -47,33 +47,26 @@
       if($numberOfImages == 0){
         addParagraph(translate("You have no images"));
       } else {
-        ?>
-          <!-- Title Remove images -->
-          <?php addTitle(translate("Remove images")); ?>
-          <!-- Form to remove images -->
-          <div class="row mb-3">
-            <p><?= translate("Select the images to remove") ?></p>
-            <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-              <?php
-                $images = getImagesOfThisUser($_SESSION["userId"]);
-                for($i=0;$i<$numberOfImages;$i++){
-                  ?>
-                    <ul class="list-group">
-                      <li class="list-group-item">
-                        <div for="image<?= $images[$i]["id"] ?>" class="form-check form-switch">
-                          <input class="form-check-input" type="checkbox" role="switch" id="image<?= $images[$i]["id"] ?>" name="image<?= $images[$i]["id"] ?>">
-                          <?php addImage(blobToFile($images[$i]["imgExtension"],$images[$i]['image']),"Image ".($i+1)); ?>
-                        </div>
-                      </li>
-                    </ul>
-                  <?php
-                }
-              ?>
-              <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-              <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-            </form>
-          </div>
-        <?php
+        //Title Remove images
+        addTitle(translate("Remove images"));
+        //Form to remove images
+        startForm1();
+        addParagraphInAForm(translate("Select the images to remove"));
+        startForm2($_SERVER['PHP_SELF']);
+        $images = getImagesOfThisUser($_SESSION["userId"]);
+        for($i=0;$i<$numberOfImages;$i++){
+          ?>
+            <ul class="list-group">
+              <li class="list-group-item">
+                <div for="image<?= $images[$i]["id"] ?>" class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" role="switch" id="image<?= $images[$i]["id"] ?>" name="image<?= $images[$i]["id"] ?>">
+                  <?php addImage(blobToFile($images[$i]["imgExtension"],$images[$i]['image']),"Image ".($i+1)); ?>
+                </div>
+              </li>
+            </ul>
+          <?php
+        }
+        endForm(translate("Submit"));
       }
     }
   }

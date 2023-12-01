@@ -86,48 +86,32 @@
       }
     } else {
       //Content of the page add a new product
+      //Title Add a new product
+      addTitle(translate("Add a new product"));
+      //Form to insert data to add a new product
+      startForm1();
+      startForm2($_SERVER['PHP_SELF']);
+      addShortTextField(translate("Name"),"insertedName",24);
+      addLongTextField(translate("Description"),"insertedDescription",2046);
+      addShortTextField(translate("Price"),"insertedPrice",24);
+      addShortTextField(translate("Quantity"),"insertedQuantity",5);
       ?>
-        <!-- Title Add a new product -->
-        <?php addTitle(translate("Add a new product")); ?>
-        <!-- Form to insert data to add a new product -->
-        <div class="row mb-3">
-          <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label for="insertedName" class="form-label"><?= translate("Name") ?></label>
-              <input class="form-control" id="insertedName" type="text" name="insertedName" maxlength="24">
-            </div>
-            <div class="mb-3">
-              <label for="insertedDescription" class="form-label"><?= translate("Description") ?></label>
-              <textarea class="form-control" id="insertedDescription" rows="3" name="insertedDescription" maxlength="2046"></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="insertedPrice" class="form-label"><?= translate("Price") ?></label>
-              <input class="form-control" id="insertedPrice" type="text" name="insertedPrice" maxlength="24">
-            </div>
-            <div class="mb-3">
-              <label for="insertedQuantity" class="form-label"><?= translate("Quantity") ?></label>
-              <input class="form-control" id="insertedQuantity" type="text" name="insertedQuantity" maxlength="5">
-            </div>
-            <label for="formCategory" class="form-label"><?= translate("Category") ?></label>
-            <select id="insertedCategory" name="insertedCategory">
-              <option value="Nonee"><?= translate("Nonee") ?></option>
-              <?php
-                $possibleCategories = categories;
-                foreach($possibleCategories as &$category){
-                  ?>
-                    <option value="<?= $category ?>"><?= translate($category) ?></option>
-                  <?php
-                }
+        <label for="formCategory" class="form-label"><?= translate("Category") ?></label>
+        <select id="insertedCategory" name="insertedCategory">
+          <option value="Nonee"><?= translate("Nonee") ?></option>
+          <?php
+            $possibleCategories = categories;
+            foreach($possibleCategories as &$category){
               ?>
-            </select>
-            <div class="mb-3">
-              <label for="formFile" class="form-label"><?= translate("Icon optional") ?></label>
-              <input class="form-control" type="file" id="formFile" name="insertedIcon">
-            </div>
-            <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
-            <button id="submit" type="submit" class="btn btn-primary"><?= translate("Submit") ?></button>
-          </form>
-        </div>
+                <option value="<?= $category ?>"><?= translate($category) ?></option>
+              <?php
+            }
+          ?>
+        </select>
+      <?php
+        addFileField(translate("Icon optional"),"insertedIcon");
+        endForm(translate("Submit"));
+      ?>
         <script>
           //form inserted parameters
           const form = document.querySelector('form');
@@ -136,6 +120,7 @@
           const insertedPrice = document.getElementById('insertedPrice');
           const insertedQuantity = document.getElementById('insertedQuantity');
           const insertedCategory = document.getElementById('insertedCategory');
+          const inputFile = document.getElementById('formFile');
           
           function getFileExtension(filename){
             return filename.substring(filename.lastIndexOf('.')+1, filename.length) || filename;
@@ -172,6 +157,19 @@
             } else if(!isValidPrice(insertedPrice.value)){
               e.preventDefault();
               alert("<?= translate("The price is not in the format number plus dot plus two digits") ?>");
+            } else if(inputFile.files[0]){
+              let file = inputFile.files[0];
+              let fileSize = file.size;
+              let fileName = file.name;
+              let fileExtension = getFileExtension(fileName);
+              const permittedExtensions = ["jpg","jpeg","gif","png","webp","heic"];
+              if(fileSize > <?= maxSizeForAFile ?>){
+                e.preventDefault();
+                alert("<?= translate("The file is too big") ?>");
+              } else if(!permittedExtensions.includes(fileExtension)){
+                e.preventDefault();
+                alert("<?= translate("The extension of the file is not an image") ?>");
+              }
             }
           }
         </script>
