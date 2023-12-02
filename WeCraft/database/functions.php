@@ -361,6 +361,78 @@
     }
   }
 
+  //update the description of a designer
+  function updateDescriptionOfADesigner($userId,$description){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Designer` set `description` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$description,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the description of an artisan
+  function updateDescriptionOfAnArtisan($userId,$description){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Artisan` set `description` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$description,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the shop name of an artisan
+  function updateShopNameOfAnArtisan($userId,$shopName){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Artisan` set `shopName` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$shopName,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the phone number of an artisan
+  function updatePhoneNumberOfAnArtisan($userId,$phoneNumber){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Artisan` set `phoneNumber` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$phoneNumber,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the shop location of an artisan
+  function updateShopLocationOfAnArtisan($userId,$insertedLatitude,$insertedLongitude,$insertedAddress){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Artisan` set `latitude` = ?, `longitude` = ?, `address` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("sssi",$insertedLatitude,$insertedLongitude,$insertedAddress,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the opening hours of an artisan
+  function updateOpeningHoursOfAnArtisan($userId,$insertedOpeningHours){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Artisan` set `openingHours` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$insertedOpeningHours,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
   //Get the number of images of this user
   function getNumberImagesOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];

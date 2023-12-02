@@ -20,4 +20,7 @@
   //Possible categories of a product
   define('categories', ["Jewerly","Home decoration","Pottery","Teppiches","Bedware Bathroomware","Artisan craft"]);
 
+  //Days in a week
+  define('daysInAWeek', ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]);
+
 ?>

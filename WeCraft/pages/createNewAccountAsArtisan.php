@@ -57,14 +57,20 @@
       addParagraph(translate("You have missed to insert the description"));
     } else if($insertedPhoneNumber == ""){
       addParagraph(translate("You have missed to insert the phone number"));
+    } else if(strlen($insertedPhoneNumber) > 24){
+      addParagraph(translate("The phone number is too long"));
     } else if(!isValidPhoneNumber($insertedPhoneNumber)){
       addParagraph(translate("Phone number not valid"));
     } else if($insertedLatitude == ""){
       addParagraph(translate("You have missed to insert the latitude"));
+    } else if(strlen($insertedLatitude) > 24){
+      addParagraph(translate("The latitude is too long"));
     } else if(!isValidCoordinate($insertedLatitude)){
       addParagraph(translate("Latitude not valid"));
     } else if($insertedLongitude == ""){
       addParagraph(translate("You have missed to insert the longitude"));
+    } else if(strlen($insertedLongitude) > 24){
+      addParagraph(translate("The longitude is too long"));
     } else if(!isValidCoordinate($insertedLongitude)){
       addParagraph(translate("Longitude not valid"));
     } else if($insertedAddress == ""){
@@ -136,7 +142,7 @@
       <!-- Insert opening hours -->
       <p><?= translate("Insert the opening hours:") ?></p>
       <?php
-        $days = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+        $days = daysInAWeek;
         foreach ($days as &$el) {
           ?>
             <ul class="list-group">

@@ -55,11 +55,19 @@
   //For customers
   if($kindOfTheAccountInUse == "Customer"){
     //AAAAAAAAAAAAA
-    //AAAAAAAAAAAAA
   }
   //For artisans
   if($kindOfTheAccountInUse == "Artisan"){
+    addButtonLink(translate("Change description"),"./changeDescription.php");
+    addButtonLink(translate("Change shop name"),"./changeShopName.php");
+    addButtonLink(translate("Change opening hours"),"./changeOpeningHours.php");
+    addButtonLink(translate("Change phone number"),"./changePhoneNumber.php");
+    addButtonLink(translate("Change shop location"),"./changeShopLocation.php");
     //AAAAAAAAAAAAA
+  }
+  //For Designers
+  if($kindOfTheAccountInUse == "Designer"){
+    addButtonLink(translate("Change description"),"./changeDescription.php");
     //AAAAAAAAAAAAA
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());

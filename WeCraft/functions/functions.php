@@ -251,7 +251,11 @@
     if(!isset($_SESSION["userId"])){//guest
       return "Guest";
     }
-    return getKindOfThisAccount($_SESSION["userId"]);
+    $kindOfThisAccount = getKindOfThisAccount($_SESSION["userId"]);
+    if($kindOfThisAccount == "error"){
+      header('Location: '.WeCraftBaseUrl.'pages/logout.php');
+    }
+    return $kindOfThisAccount;
   }
 
   //Load the tab bar for the account in use
