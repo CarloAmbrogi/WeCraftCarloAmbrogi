@@ -21,7 +21,7 @@
         upperPartOfThePage(translate("My products"),"");
       } else {
         //Products of this artisan (of the specified id with the get)
-        upperPartOfThePage(translate("Artisan"),"jsBack");//TODO don't use jsback but the page that sent you here adds a get to let you know if you go back to the map or search (without this get the button will not be shown)
+        upperPartOfThePage(translate("Artisan"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back to the map or search (without this get the button will not be shown)
       }
       //Show the artisan
       $userInfos = obtainUserInfos($_GET["id"]);
@@ -79,12 +79,12 @@
         if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
           $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
         }
-        $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".$singleProductPreview["price"];
+        $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
         $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
         if($singleProductPreview["quantity"] == "0"){
           $text2 = translate("Not available");
         }
-        addACardForTheGrid("./product?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+        addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
       }
       endCardGrid();
       //Here other things about this artisan

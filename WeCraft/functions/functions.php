@@ -300,4 +300,25 @@
     return WeCraftBaseUrl."Icons/genericTabBarIcon.png";
   }
 
+  //convert a float number representing a price with 2 digits after the floating point
+  function floatToPrice($price){
+    $numbers = explode(".", $price);
+    $r1 = $numbers[0];
+    $r2 = ".";
+    $r3 = "";
+    if(count($numbers) > 1){
+      $r3 = $numbers[1];
+      while(strlen($r3) < 2){
+        $r3 = $r3."0";
+      }
+      while(strlen($r3) > 2){
+        $r3 = substr($r3,0,strlen($r3)-1);
+      }
+    } else {
+      $r3 = "00";
+    }
+    $result = $r1.$r2.$r3;
+    return $result;
+  }
+
 ?>

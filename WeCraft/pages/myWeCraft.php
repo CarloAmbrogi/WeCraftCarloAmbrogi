@@ -33,10 +33,7 @@
     addButtonLink(translate("Log out"),"./logout.php");//Log out
     endCol();
     endRow();
-    //For artisans and deigners it could be shown a carousel with all the images
-    if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
-      addCarouselImagesOfThisUser($_SESSION["userId"]);
-    }
+    //AAAAAAAAAAA insert here a button to visualize your profile in case of artian (go to your artisan page) or designer (go to your designer page)
     addButtonLink(translate("Change name and surname"),"./changeNameAndSurname.php");
     if($fileImageToVisualize != genericUserImage){
       addButtonLink(translate("Delete icon"),"./deleteIcon.php");

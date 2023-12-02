@@ -559,6 +559,26 @@
     return $elements;
   }
 
+  //Get if the product with this id exists or not
+  function doesThisProductExists($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as 'doesThisProductExists' from (select * from `Product` where `id` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this product
+    return $elements[0]["doesThisProductExists"];
+  }
+
   //Obtain infos of a product (similar to obtainUserInfos but watching Product table)
   function obtainProductInfos($productId){
     $connectionDB = $GLOBALS['$connectionDB'];

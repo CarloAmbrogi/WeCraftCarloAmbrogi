@@ -107,6 +107,13 @@
     <?php
   }
 
+  //Add an image laterally (when you use the bootstrap cols) witch is not so hight
+  function addLateralImageLow($src,$alt){
+    ?>
+      <img src="<?= $src ?>" alt=<?= htmlentities($alt) ?> class="row mb-3" style="width:40%;max-height:300px;min-width:100px;display:block;margin-left:auto;margin-right:auto;">
+    <?php
+  }
+
   //Add a carosuel with the imges of this user (if there are no images for this user, the carousel is not shown)
   function addCarouselImagesOfThisUser($userId){
     $numberOfImages = getNumberImagesOfThisUser($userId);
@@ -238,6 +245,11 @@
         }
       </script>
     <?php
+  }
+
+  //Add a card ($fileImageToVisualize and $title mandatory)
+  function addACard($link,$fileImageToVisualize,$title,$text1,$text2){
+    addACardForTheGrid($link,$fileImageToVisualize,$title,$text1,$text2);
   }
 
   //Start a card grid
