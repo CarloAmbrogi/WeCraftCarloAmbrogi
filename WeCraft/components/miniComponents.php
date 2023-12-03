@@ -1,12 +1,20 @@
 <?php
 
   //This function is to add a p paragraph
-  function addParagraph($written){
-    ?>
-      <div class="row mb-3">
-        <p><?= htmlentities($written) ?></p>
-      </div>
-    <?php
+  function addParagraph($written,$identifier=""){
+    if($identifier == ""){
+      ?>
+        <div class="row mb-3">
+          <p><?= htmlentities($written) ?></p>
+        </div>
+      <?php
+    } else {
+      ?>
+        <div class="row mb-3">
+          <p id="<?= $identifier ?>"><?= htmlentities($written) ?></p>
+        </div>
+      <?php
+    }
   }
 
   //This function is to add a p paragraph and without htmlentities
@@ -78,6 +86,35 @@
       <div class="row mb-3">
         <h1><?= htmlentities($written) ?></h1>
       </div>
+    <?php
+  }
+
+  //This function is to add a button for an api action witch is called via js
+  function addApiActionViaJsLink($written,$link,$id,$functionToCallAfter=""){
+    ?>
+      <div class="row">
+        <button type="button" onclick="functionApiAction<?= $id ?>();" class="btn btn-primary"
+          style="margin:10px;">
+          <?= htmlentities($written) ?>
+        </button>
+      </div>
+      <script>
+        function functionApiAction<?= $id ?>(){
+          let requestUrl = "<?= $link ?>";
+            let request = new XMLHttpRequest();
+            request.open("GET", requestUrl);
+            request.send();
+            request.onload = function(){
+              <?php
+                if($functionToCallAfter != ""){
+                  ?>
+                    <?= $functionToCallAfter ?>();
+                  <?php
+                }
+              ?>
+            }
+        }
+      </script>
     <?php
   }
 
@@ -199,6 +236,14 @@
   //End a bootstrap col
   function endCol(){
     ?>
+      </div>
+    <?php
+  }
+
+  //Add a col mini spacer
+  function addColMiniSpacer(){
+    ?>
+      <div class="col" style="max-width:10px;">
       </div>
     <?php
   }
@@ -393,6 +438,13 @@
         <label for="formFile" class="form-label"><?= $text ?></label>
         <input class="form-control" type="file" id="formFile" name="<?= $name ?>">
       </div>
+    <?php
+  }
+
+  //Add a value hidden field in a form
+  function addHiddenField($name,$value){
+    ?>
+      <input type="hidden" name="<?= $name ?>" id="<?= $name ?>" value="<?= $value ?>">
     <?php
   }
 

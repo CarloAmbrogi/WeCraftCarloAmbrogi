@@ -599,4 +599,28 @@
     return $elements[0];
   }
 
+  //update the general info of a product
+  function updateGeneralInfoOfAProduct($productId,$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `name` = ?, `description` = ?, `price` = ?, `quantity` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssssi",$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //update the category of a product
+  function updateCategoryOfAProduct($productId,$insertedCategory){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `category` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$insertedCategory,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

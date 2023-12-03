@@ -25,22 +25,41 @@
       addTitle($productInfos["name"]);
       addParagraph(translate("Category").": ".translate($productInfos["category"]));
       addParagraph(translate("Price").": ".floatToPrice($productInfos["price"]));
-      $textQuantity = translate("Quantity available").": ".$productInfos["quantity"];
+      $textQuantity = translate("Quantity available")." ".translate("at")." ".$artisanInfosArtisan["shopName"].": ".$productInfos["quantity"];
       if($productInfos["quantity"] == "0"){
         $textQuantity = translate("Not available");
       }
-      addParagraph($textQuantity);
+      addParagraph($textQuantity,"quantity");
       if($_SESSION["userId"] == $productInfos["artisan"]){
+        //The owner of this product can change the quantity available in his shop
         startRow();
         startCol();
-        addButtonLink("+","AAAAAAAAAAA");
+        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"],"inc","updateQuantityValue");
         endCol();
+        addColMiniSpacer();
         startCol();
-        endCol();
-        startCol();
-        addButtonLink("-","AAAAAAAAAAA");
+        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"],"dec","updateQuantityValue");
         endCol();
         endRow();
+        ?>
+          <script>
+            //When the artisan click on button + or - to change the quantity, the quantity is changed without exiting from the page via an api
+            //It is also changed the text of the quantity via innerHTML
+            function updateQuantityValue(){
+              const quantity = document.getElementById('quantity');
+              let requestUrl = "<?= WeCraftBaseUrl ?>api/getQuantityOfThisProduct.php?productId=" + <?= $_GET["id"] ?>;
+              let request = new XMLHttpRequest();
+              request.open("GET", requestUrl);
+              request.responseType = "json";
+              request.send();
+              request.onload = function(){
+                const result = request.response;
+                let quantityOfThisProduct = result[0].quantityOfThisProduct;
+                quantity.innerHTML = "<?= translate("Quantity available")." ".translate("at")." ".$artisanInfosArtisan["shopName"].": " ?>"+quantityOfThisProduct;
+              }
+            }
+          </script>
+        <?php
       }
       //AAAAAAAAAAA tags
       endCol();
@@ -59,8 +78,17 @@
       }
       addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualize,$artisanInfosUser["name"]." ".$artisanInfosUser["surname"],$artisanInfosArtisan["shopName"],"");
       //AAAAAAAAAAA images carousel
-      //AAAAAAAAAAA edit product
-
+      //Edit product (you can edit the product if you are the owner)
+      if($_SESSION["userId"] == $productInfos["artisan"]){
+        addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
+        addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".$_GET["id"]);
+        addButtonLink(translate("Delete product icon"),"deleteProductIcon.php?id=".$_GET["id"]);
+        addButtonLink(translate("Edit product icon"),"editProductIcon.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add images to this product"),"addImagesToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add tags to this product"),"addTagsToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Remove tags to this product"),"removeTagsToThisProduct.php?id=".$_GET["id"]);
+      }
     } else {
       addParagraph(translate("This product doesnt exists"));
     }
