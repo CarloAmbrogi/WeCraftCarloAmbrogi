@@ -72,6 +72,15 @@
     return true;
   }
 
+  //Check if this tag is valid
+  function isValidTag($tag){
+    $regex = "/^[a-zA-Z0-9]+$/";
+    if(!preg_match($regex, $tag)){
+      return false;
+    }
+    return true;
+  }
+
   //Generate a casual verification code, useful to verify a email in an account
   function generateAVerificationCode(){
     $result = "";

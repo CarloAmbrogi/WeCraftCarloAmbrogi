@@ -455,7 +455,7 @@
   //Get the images of this user
   function getImagesOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`imgExtension`,`image` from `UserImages` where `userId` = ?;";
+    $sql = "select `id`,`imgExtension`,`image` from `UserImages` where `userId` = ? ORDER BY `id` ASC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -542,7 +542,7 @@
   //Obtain a preview of products of an artisan
   function obtainProductsPreviewOfThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ?;";
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ? ORDER BY `id` ASC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -617,6 +617,156 @@
     $sql = "update `Product` set `category` = ? where `id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("si",$insertedCategory,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Delete the icon of a product
+  function deleteIconOfAProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `icon` = null, `iconExtension` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Change the icon of a product
+  function changeIconOfAProduct($productId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `icon` = ?, `iconExtension` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssi",$imgData,$imgExtension,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Add an image to a product
+  function addImageToAProduct($productId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `ProductImages` (`id`, `productId`, `imgExtension`, `image`) VALUES (NULL, ?, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$productId,$imgExtension,$imgData);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get the number of images of this product
+  function getNumberImagesOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberImagesOfThisProduct from (select * from `ProductImages` where `productId` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberImagesOfThisProduct"];
+  }
+
+  //Get the images of this product
+  function getImagesOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`imgExtension`,`image` from `ProductImages` where `productId` = ? ORDER BY `id` ASC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the images of this product (id, imgExtension, image)
+    return $elements;
+  }
+
+  //Remove an image to its product specifying the id of the image (and also the productId for security reason)
+  function removeThisImageToAProduct($productId,$imageId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ProductImages` WHERE `productId` = ? and `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$imageId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Add a tag to a product
+  function addATagToAProduct($productId,$tag){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `ProductTags` (`id`, `productId`, `tag`) VALUES (NULL, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("is",$productId,$tag);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get the number of tags of this product
+  function getNumberTagsOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberTagsOfThisProduct from (select * from `ProductTags` where `productId` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberTagsOfThisProduct"];
+  }
+
+  //Get the tags of this product
+  function getTagsOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`tag` from `ProductTags` where `productId` = ? ORDER BY `id` ASC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the tags of this product (id, tag)
+    return $elements;
+  }
+
+  //Remove a tag to its product specifying the id of the tag (and also the productId for security reason)
+  function removeThisTagToAProduct($productId,$tagId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ProductTags` WHERE `productId` = ? and `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$tagId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;

@@ -10,16 +10,18 @@
   upperPartOfThePage(translate("Product"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back where (without this get the button will not be shown)
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
+      //Real content of this page
+      //General info of this product
       $productInfos = obtainProductInfos($_GET["id"]);
       $artisanInfosUser = obtainUserInfos($productInfos["artisan"]);
       $artisanInfosArtisan = obtainArtisanInfos($productInfos["artisan"]);
       startRow();
       startCol();
-      $fileImageToVisualize = genericProductImage;
+      $fileImageToVisualizeProduct = genericProductImage;
       if(isset($productInfos['icon']) && ($productInfos['icon'] != null)){
-        $fileImageToVisualize = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
+        $fileImageToVisualizeProduct = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
       }
-      addLateralImageLow($fileImageToVisualize,$nameAndSurname);
+      addLateralImageLow($fileImageToVisualizeProduct,$nameAndSurname);
       endCol();
       startCol();
       addTitle($productInfos["name"]);
@@ -61,9 +63,23 @@
           </script>
         <?php
       }
-      //AAAAAAAAAAA tags
+      //Tags of this product
+      $numberOfTags = getNumberTagsOfThisProduct($_GET["id"]);
+      if($numberOfTags > 0){
+        $tags = getTagsOfThisProduct($_GET["id"]);
+        $tagWritten = translate("Tags").":";
+        for($i=0;$i<$numberOfTags;$i++){
+          $tagWritten = $tagWritten." ";
+          $tagWritten = $tagWritten.$tags[$i]['tag'];
+          $firstTimeTagWritten = false;
+        }
+        addParagraph($tagWritten);
+      } else {
+        addParagraph(translate("No tag"));
+      }
       endCol();
       endRow();
+      //Description and other information on this product
       addParagraph($productInfos["description"]);
       addParagraph(translate("Added when").": ".$productInfos["added"]);
       $lastSellString = $productInfos["lastSell"];
@@ -71,23 +87,33 @@
         $lastSellString = translate("never sold");
       }
       addParagraph(translate("Last sell").": ".$lastSellString);
+      //Info about the artisan owner of this product
       addParagraph(translate("Product created by this artisan").":");
-      $fileImageToVisualize = genericUserImage;
+      $fileImageToVisualizeArtisan = genericUserImage;
       if(isset($artisanInfosUser['icon']) && ($artisanInfosUser['icon'] != null)){
-        $fileImageToVisualize = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
+        $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
       }
-      addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualize,$artisanInfosUser["name"]." ".$artisanInfosUser["surname"],$artisanInfosArtisan["shopName"],"");
-      //AAAAAAAAAAA images carousel
+      $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($productInfos["artisan"]);
+      addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualizeArtisan,$artisanInfosUser["name"]." ".$artisanInfosUser["surname"],$artisanInfosArtisan["shopName"],translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      //Carousel with images of this product
+      addCarouselImagesOfThisProduct($_GET["id"]);
       //Edit product (you can edit the product if you are the owner)
       if($_SESSION["userId"] == $productInfos["artisan"]){
         addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
         addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".$_GET["id"]);
-        addButtonLink(translate("Delete product icon"),"deleteProductIcon.php?id=".$_GET["id"]);
+        if($fileImageToVisualizeProduct != genericProductImage){
+          addButtonLink(translate("Delete product icon"),"deleteProductIcon.php?id=".$_GET["id"]);
+        }
         addButtonLink(translate("Edit product icon"),"editProductIcon.php?id=".$_GET["id"]);
         addButtonLink(translate("Add images to this product"),"addImagesToThisProduct.php?id=".$_GET["id"]);
-        addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".$_GET["id"]);
+        $numberOfImages = getNumberImagesOfThisProduct($_GET["id"]);
+        if($numberOfImages > 0){
+          addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".$_GET["id"]);
+        }
         addButtonLink(translate("Add tags to this product"),"addTagsToThisProduct.php?id=".$_GET["id"]);
-        addButtonLink(translate("Remove tags to this product"),"removeTagsToThisProduct.php?id=".$_GET["id"]);
+        if($numberOfTags > 0){
+          addButtonLink(translate("Remove tags to this product"),"removeTagsToThisProduct.php?id=".$_GET["id"]);
+        }
       }
     } else {
       addParagraph(translate("This product doesnt exists"));
