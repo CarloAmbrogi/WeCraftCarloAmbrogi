@@ -773,4 +773,24 @@
     }
   }
 
+  //Obtain infos of a designer (similar to obtainUserInfos but watching Designer table)
+  function obtainDesignerInfos($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`description` from `Designer` where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this designer
+    return $elements[0];
+  }
+
 ?>

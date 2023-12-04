@@ -303,7 +303,7 @@
     if($tabTitle == translate("My WeCraft")){
       return WeCraftBaseUrl."Icons/menuIcon.png";
     }
-    if($tabTitle == translate("Personalized products")){
+    if($tabTitle == translate("Personalized items")){
       return WeCraftBaseUrl."Icons/personalizedProductsIcon.png";
     }
     return WeCraftBaseUrl."Icons/genericTabBarIcon.png";

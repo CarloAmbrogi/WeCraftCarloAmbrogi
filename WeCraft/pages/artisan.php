@@ -29,6 +29,7 @@
       $analyzedOpeningHours = analyzeStringOpeningHours($artisanInfos["openingHours"]);
       startRow();
       startCol();
+      $nameAndSurname = $userInfos["name"]." ".$userInfos["surname"];
       $fileImageToVisualize = genericUserImage;
       if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
         $fileImageToVisualize = blobToFile($userInfos["iconExtension"],$userInfos['icon']);
@@ -37,7 +38,7 @@
       endCol();
       startCol();
       addParagraph($artisanInfos["shopName"]);
-      addParagraphWithoutMb3($userInfos["name"]." ".$userInfos["surname"]);
+      addParagraphWithoutMb3($nameAndSurname);
       addEmailToLinkWithoutMb3($userInfos["email"]);
       addTelLinkWithoutMb3($artisanInfos["phoneNumber"]);
       addParagraphWithoutMb3($artisanInfos["address"]);

@@ -33,7 +33,14 @@
     addButtonLink(translate("Log out"),"./logout.php");//Log out
     endCol();
     endRow();
-    //AAAAAAAAAAA insert here a button to visualize your profile in case of artian (go to your artisan page) or designer (go to your designer page)
+    //Go to your artisan / designer page
+    if($kindOfTheAccountInUse == "Artisan"){
+      addButtonLink(translate("Go to your artisan page"),"./artisan.php");
+    }
+    if($kindOfTheAccountInUse == "Designer"){
+      addButtonLink(translate("Go to your designer page"),"./designer.php");
+    }
+    //User settings
     addButtonLink(translate("Change name and surname"),"./changeNameAndSurname.php");
     if($fileImageToVisualize != genericUserImage){
       addButtonLink(translate("Delete icon"),"./deleteIcon.php");
