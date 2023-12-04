@@ -7,6 +7,7 @@
   //Visualize a product by id (the id is sent as a get)
   //The atisan owner of this product has more options on the page such as add image, add tags, change quantity, edit the product
   doInitialScripts();
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Product"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back where (without this get the button will not be shown)
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
@@ -36,11 +37,11 @@
         //The owner of this product can change the quantity available in his shop
         startRow();
         startCol();
-        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"],"inc","updateQuantityValue");
+        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"],"dec","updateQuantityValue");
         endCol();
         addColMiniSpacer();
         startCol();
-        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"],"dec","updateQuantityValue");
+        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"],"inc","updateQuantityValue");
         endCol();
         endRow();
         ?>
@@ -102,18 +103,25 @@
         addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
         addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".$_GET["id"]);
         if($fileImageToVisualizeProduct != genericProductImage){
-          addButtonLink(translate("Delete product icon"),"deleteProductIcon.php?id=".$_GET["id"]);
+          addButtonLink(translate("Delete product icon"),"./deleteProductIcon.php?id=".$_GET["id"]);
         }
-        addButtonLink(translate("Edit product icon"),"editProductIcon.php?id=".$_GET["id"]);
-        addButtonLink(translate("Add images to this product"),"addImagesToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Edit product icon"),"./editProductIcon.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add images to this product"),"./addImagesToThisProduct.php?id=".$_GET["id"]);
         $numberOfImages = getNumberImagesOfThisProduct($_GET["id"]);
         if($numberOfImages > 0){
           addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".$_GET["id"]);
         }
-        addButtonLink(translate("Add tags to this product"),"addTagsToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add tags to this product"),"./addTagsToThisProduct.php?id=".$_GET["id"]);
         if($numberOfTags > 0){
-          addButtonLink(translate("Remove tags to this product"),"removeTagsToThisProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Remove tags to this product"),"./removeTagsToThisProduct.php?id=".$_GET["id"]);
         }
+      }
+      //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
+      if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
+        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".$_GET["id"]);
+        $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
+        $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
+        addParagraph($AddedToShoppingCartWritten);
       }
     } else {
       addParagraph(translate("This product doesnt exists"));

@@ -101,6 +101,7 @@
       <script>
         function functionApiAction<?= $id ?>(){
           let requestUrl = "<?= $link ?>";
+          if(requestUrl != ""){
             let request = new XMLHttpRequest();
             request.open("GET", requestUrl);
             request.send();
@@ -113,6 +114,15 @@
                 }
               ?>
             }
+          } else {
+            <?php
+              if($functionToCallAfter != ""){
+                ?>
+                  <?= $functionToCallAfter ?>();
+                <?php
+              }
+            ?>
+          }
         }
       </script>
     <?php

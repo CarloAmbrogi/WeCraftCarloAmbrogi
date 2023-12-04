@@ -793,4 +793,23 @@
     return $elements[0];
   }
 
+  //Get the quantity of this product in the shopping cart by this user
+  function getQuantityOfThisProductInShoppingCartByThisUser($productId,$userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select COALESCE(t.`quantity`,0) as 'quantity' from `User` left join (select * from `ShoppingCart` where `product` = ? and `customer` = ?) as t on `User`.`id` = t.`customer`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["quantity"];
+  }
+
 ?>
