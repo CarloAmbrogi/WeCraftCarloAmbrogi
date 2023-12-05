@@ -7,23 +7,25 @@
   doInitialScripts();
 
   //The artisan owner of this product can increment or decrement the quantity of this product
-  if(isset($_GET["kind"]) && isset($_GET["productId"])){
+  if(isset($_GET["kind"]) && isset($_GET["productId"]) && isset($_GET["token"])){
     if(isset($_SESSION["userId"])){
+      if($_GET["token"] == $_SESSION['csrftoken']){
 
-      $sql = "update `Product` set `quantity` = (`quantity` + 0) where `id` = ? and `artisan` = ?;";
-      if($_GET["kind"] == "inc"){
-        $sql = "update `Product` set `quantity` = (`quantity` + 1) where `id` = ? and `artisan` = ?;";
-      }
-      if($_GET["kind"] == "dec"){
-        $sql = "update `Product` set `quantity` = (`quantity` - 1) where `id` = ? and `artisan` = ?;";
-      }
-      if($statement = $connectionDB->prepare($sql)){
-        $statement->bind_param("ii",$_GET["productId"],$_SESSION["userId"]);
-        $statement->execute();
-      } else {
-        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
-      }
+        $sql = "update `Product` set `quantity` = (`quantity` + 0) where `id` = ? and `artisan` = ?;";
+        if($_GET["kind"] == "inc"){
+          $sql = "update `Product` set `quantity` = (`quantity` + 1) where `id` = ? and `artisan` = ?;";
+        }
+        if($_GET["kind"] == "dec"){
+          $sql = "update `Product` set `quantity` = (`quantity` - 1) where `id` = ? and `artisan` = ?;";
+        }
+        if($statement = $connectionDB->prepare($sql)){
+          $statement->bind_param("ii",$_GET["productId"],$_SESSION["userId"]);
+          $statement->execute();
+        } else {
+          echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+        }
 
+      }
     }
   }
 

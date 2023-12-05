@@ -37,11 +37,12 @@
         //The owner of this product can change the quantity available in his shop
         startRow();
         startCol();
-        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"],"dec","updateQuantityValue");
+        $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"dec","updateQuantityValue");
         endCol();
         addColMiniSpacer();
         startCol();
-        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"],"inc","updateQuantityValue");
+        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"inc","updateQuantityValue");
         endCol();
         endRow();
         ?>
@@ -95,7 +96,7 @@
         $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
       }
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($productInfos["artisan"]);
-      addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualizeArtisan,$artisanInfosUser["name"]." ".$artisanInfosUser["surname"],$artisanInfosArtisan["shopName"],translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       //Carousel with images of this product
       addCarouselImagesOfThisProduct($_GET["id"]);
       //Edit product (you can edit the product if you are the owner)

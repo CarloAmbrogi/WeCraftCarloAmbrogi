@@ -48,7 +48,7 @@
   function addEmailToLink($email){
     ?>
       <div class="row mb-3">
-        <p><a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+        <p><a href="mailto:<?= $email ?>"><?= htmlentities($email) ?></a></p>
       </div>
     <?php
   }
@@ -57,25 +57,25 @@
   function addEmailToLinkWithoutMb3($email){
     ?>
       <div class="row">
-        <p><a href="mailto:<?= $email ?>"><?= $email ?></a></p>
+        <p><a href="mailto:<?= $email ?>"><?= htmlentities($email) ?></a></p>
       </div>
     <?php
   }
 
   //This function is to add a p paragraph clickable to start a call
-  function addTelLink($email){
+  function addTelLink($tel){
     ?>
       <div class="row mb-3">
-        <p><a href="tel:<?= $email ?>"><?= $email ?></a></p>
+        <p><a href="tel:<?= $tel ?>"><?= htmlentities($tel) ?></a></p>
       </div>
     <?php
   }
 
   //This function is to add a p paragraph clickable to start a call without mb-3
-  function addTelLinkWithoutMb3($email){
+  function addTelLinkWithoutMb3($tel){
     ?>
       <div class="row">
-        <p><a href="tel:<?= $email ?>"><?= $email ?></a></p>
+        <p><a href="tel:<?= $tel ?>"><?= htmlentities($tel) ?></a></p>
       </div>
     <?php
   }
@@ -128,8 +128,8 @@
     <?php
   }
 
-  //This function is to add a button link
-  function addButtonLink($written,$link){
+  //This function is to add a button link (js version)
+  function addButtonLinkJsVersion($written,$link){
     ?>
       <div class="row">
         <button type="button" onclick="window.location='<?= $link ?>';" class="btn btn-primary"
@@ -137,6 +137,20 @@
           <?= htmlentities($written) ?>
         </button>
       </div>
+    <?php
+  }
+
+  //This function is to add a button link
+  function addButtonLink($written,$link){
+    ?>
+      <a href="<?= $link ?>">
+        <div class="row">
+          <button type="button" class="btn btn-primary"
+            style="margin:10px;">
+            <?= htmlentities($written) ?>
+          </button>
+        </div>
+      </a>
     <?php
   }
 

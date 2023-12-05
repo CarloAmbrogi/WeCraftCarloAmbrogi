@@ -812,4 +812,147 @@
     return $elements[0]["quantity"];
   }
 
+  //Update the quantity of this product in shopping cart for this user (witch is a customer)
+  //(update or most frequently insert into if the record is not present)
+  //(in case the record is present but the quantity is 0, remove the record)
+  function updateQuantityOfThisProductInShoppingCartForThisUser($productId,$quantity,$userId){
+    if(getIfRecordQuantityOfThisProductInShoppingCartByThisUser($productId,$userId)){
+      if($quantity > 0){
+        updateRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$quantity,$userId);
+      } else {
+        deleteRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$userId);
+      }
+    } else {
+      if($quantity > 0){
+        newRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$quantity,$userId);
+      }
+    }
+  }
+
+  //Update the quantity of this product in shopping cart for this user (witch is a customer) (update the record)
+  function updateRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$quantity,$userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `ShoppingCart` set `quantity` = ? where `product` = ? and `customer` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$quantity,$productId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Update the quantity of this product in shopping cart for this user (witch is a customer) (insert into this new record)
+  function newRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$quantity,$userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `ShoppingCart` (`customer`,`product`,`quantity`) VALUES (?,?,?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$userId,$productId,$quantity);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get if there is a record about the quantity of this product in the shopping cart by this user
+  function getIfRecordQuantityOfThisProductInShoppingCartByThisUser($productId,$userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as ifRecordQuantityOfThisProductInShoppingCartByThisUser from (select * from `ShoppingCart` where `product` = ? and `customer` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["ifRecordQuantityOfThisProductInShoppingCartByThisUser"];
+  }
+
+  //delete the record about the quantity of this product in shopping cart for this user (witch is a customer)
+  function deleteRecordQuantityOfThisProductInShoppingCartForThisUser($productId,$userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ShoppingCart` WHERE `product` = ? and `customer` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get the number of items in the shopping cart of this user (witch is a customer)
+  function numberOfItemsInTheShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select COALESCE((select sum(`quantity`) as r from (select * from `ShoppingCart` where `customer` = ?) as t),0) as numberOfItemsInTheShoppingCartOfThisUser;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfItemsInTheShoppingCartOfThisUser"];
+  }
+
+  //Obtain a preview of the shopping cart of this user (witch is a customer)
+  function obtainPreviewShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select sc.`quantity`,sc.`product`,`User`.`name`,`User`.`surname`,`Artisan`.`shopName`,`Product`.`name` as 'productName',`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price` from ((((select `ShoppingCart`.`product`,`ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`customer` = ? and `ShoppingCart`.`quantity` > 0) as sc join `Product` on sc.`product` = `Product`.`id`) join `User` on `Product`.`artisan` = `User`.`id`) join `Artisan` on `Product`.`artisan` = `Artisan`.`id`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the infos:
+    // quantity product (=the id of the product) name surname shopName productName iconExtension icon price
+    return $elements;
+  }
+
+  //Empty the shopping cart of this user (witch is a customer)
+  function emptyTheShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ShoppingCart` WHERE `customer` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Show the number of items in the shopping cart of this user (given the user id) witch violates the condition of exceeding the available quantity
+  function getNumberOfViolatingItemsQ($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfViolatingItemsQ from (select `ShoppingCart`.`product` as r from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `Product`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfViolatingItemsQ"];
+  }
+
 ?>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 04, 2023 alle 18:59
+-- Creato il: Dic 05, 2023 alle 19:08
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -38,13 +38,6 @@ CREATE TABLE `Artisan` (
   `address` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
---
--- Dump dei dati per la tabella `Artisan`
---
-
-INSERT INTO `Artisan` (`id`, `shopName`, `openingHours`, `description`, `phoneNumber`, `latitude`, `longitude`, `address`) VALUES
-(71, 'shopName', '%MonF01:0203:04S05:0607:08', 'aaa', '2', '1.3', '1.5', 'via');
-
 -- --------------------------------------------------------
 
 --
@@ -54,13 +47,6 @@ INSERT INTO `Artisan` (`id`, `shopName`, `openingHours`, `description`, `phoneNu
 CREATE TABLE `Customer` (
   `id` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dump dei dati per la tabella `Customer`
---
-
-INSERT INTO `Customer` (`id`) VALUES
-(70);
 
 -- --------------------------------------------------------
 
@@ -92,13 +78,6 @@ CREATE TABLE `Product` (
   `added` timestamp NOT NULL,
   `lastSell` timestamp NULL DEFAULT NULL
 ) ;
-
---
--- Dump dei dati per la tabella `Product`
---
-
-INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`) VALUES
-(19, 71, 'aaa', 'aaa', NULL, NULL, 5.5, 8, 'Home decoration', '2023-12-04 16:50:12', NULL);
 
 -- --------------------------------------------------------
 
@@ -155,14 +134,6 @@ CREATE TABLE `User` (
   `verificationCode` varchar(10) NOT NULL,
   `timeVerificationCode` timestamp NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dump dei dati per la tabella `User`
---
-
-INSERT INTO `User` (`id`, `email`, `password`, `name`, `surname`, `iconExtension`, `icon`, `emailVerified`, `verificationCode`, `timeVerificationCode`) VALUES
-(70, 'customer@mail.com', '$2y$10$QUJxP00IC0Vpayxol/H5..VJJtz0mfe.tex1WYRzvlZzPSEmQME5u', 'name', 'surname', NULL, NULL, 1, '230241', '2023-12-04 16:49:04'),
-(71, 'artisan@mail.com', '$2y$10$89hUXXg3qMR/ZGxcwstEMOb6x51/HNvoBwFg.SjeNTamPkW4x8Zmy', 'name', 'surname', NULL, NULL, 1, '484518', '2023-12-04 16:49:46');
 
 --
 -- Trigger `User`

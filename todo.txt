@@ -1,6 +1,3 @@
-carrello ee cronologia ordini ee nascondi prodotto
-
-
 filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc
 
 popola database con cose indiane
