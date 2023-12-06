@@ -28,9 +28,14 @@
         } else {
           //The order is sent and the payment is done
           //Move the current shopping cart in the recent orders
-          //AAAAAAAAAAAAA
+          $price = totalPriceShoppingCartOfThisUser($_SESSION["userId"]);
+          moveCurrentShoppingCartOfThisUserInRecentOrders($_SESSION["userId"],$insertedAddress,$price);
+          //Update data last sell
+          updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Empty the current shopping cart
           emptyTheShoppingCartOfThisUser($_SESSION["userId"]);
+          //Done
+          addParagraph(translate("The order has been sent"));
         }
       } else {
         //Normal content of this page

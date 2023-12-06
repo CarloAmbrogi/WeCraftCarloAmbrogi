@@ -955,4 +955,158 @@
     return $elements[0]["numberOfViolatingItemsQ"];
   }
 
+  //Total price of the shopping cart of this user (witch is a customer)
+  function totalPriceShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT sum(`Product`.`price` * `ShoppingCart`.`quantity`) as 'totalPrice' FROM `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` WHERE `ShoppingCart`.`customer` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["totalPrice"];
+  }
+
+  //The current shopping cart of this user (witch is a customer) is moved in the recent orders
+  function moveCurrentShoppingCartOfThisUserInRecentOrders($userId,$address,$price){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql1 = "insert into `RecentOrders` (`id`,`customer`,`timestamp`,`address`,`totalCost`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?,?);";
+    $sql2 = "insert into `ContentRecentOrder` (`recentOrder`,`product`,`quantity`) select last_insert_id(),`product`,`quantity` from `ShoppingCart` where `customer` = ?;";
+    if($statement = $connectionDB->prepare($sql1)){
+      $statement->bind_param("isd",$userId,$address,$price);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql1. " . $connectionDB->error;
+    }
+    if($statement = $connectionDB->prepare($sql2)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql2. " . $connectionDB->error;
+    }
+  }
+
+  //Get the number of recentOrders of this user (witch is a customer)
+  function numberOfRecentOrdersOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfRecentOrdersOfThisUser from (select * from `RecentOrders` where `customer` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfRecentOrdersOfThisUser"];
+  }
+
+  //Obtain a preview of recent orders of this user (witch is a customer)
+  function obtainPreviewRecentOrdersOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT t.`id`,t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? GROUP by `RecentOrders`.`id`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the infos:
+    // id timestamp address totalCost numberOfProducts numberOfDifferentProducts
+    return $elements;
+  }
+
+  //Get if the recent order of this customer with this id exists or not
+  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful both to semplify the query and to improve the security
+  function doesThisRecentOrederExists($userId,$recentOrderId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as 'doesThisRecentOrederExists' from (select * from `RecentOrders` where `customer` = ? and `id` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$recentOrderId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this product
+    return $elements[0]["doesThisRecentOrederExists"];
+  }
+
+  //Obtain general infos of a recent order
+  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful both to semplify the query and to improve the security
+  function recentOrderGeneralInfos($userId,$recentOrderId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? and `RecentOrders`.`id` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$recentOrderId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the general infos of this recent order
+    // timestamp address totalCost numberOfProducts numberOfDifferentProducts
+    return $elements[0];
+  }
+
+  //Obtain the content of a recent order
+  function obtainContentRecentOrder($userId,$recentOrderId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select sc.`quantity`,sc.`product`,`User`.`name`,`User`.`surname`,`Artisan`.`shopName`,`Product`.`name` as 'productName',`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price` from ((((select `ContentRecentOrder`.`product`,`ContentRecentOrder`.`quantity` from `ContentRecentOrder` join `RecentOrders` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` where `ContentRecentOrder`.`recentOrder` = ? and `RecentOrders`.`customer` = ?) as sc join `Product` on sc.`product` = `Product`.`id`) join `User` on `Product`.`artisan` = `User`.`id`) join `Artisan` on `Product`.`artisan` = `Artisan`.`id`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$recentOrderId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the infos:
+    // quantity product (=the id of the product) name surname shopName productName iconExtension icon price
+    return $elements;
+  }
+
+  //Update data last sell based on selling now content of shopping cart of this user (witch is a customer)
+  function updateDataLastSellBasedOnShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `lastSell` = CURRENT_TIMESTAMP() where `id` in (select `product` from `ShoppingCart` where `customer` = ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

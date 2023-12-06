@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 05, 2023 alle 19:08
+-- Creato il: Dic 06, 2023 alle 19:54
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -36,6 +36,18 @@ CREATE TABLE `Artisan` (
   `latitude` varchar(25) NOT NULL,
   `longitude` varchar(25) NOT NULL,
   `address` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ContentRecentOrder`
+--
+
+CREATE TABLE `ContentRecentOrder` (
+  `recentOrder` int NOT NULL,
+  `product` int NOT NULL,
+  `quantity` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -102,6 +114,20 @@ CREATE TABLE `ProductTags` (
   `id` int NOT NULL,
   `productId` int NOT NULL,
   `tag` varchar(25) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `RecentOrders`
+--
+
+CREATE TABLE `RecentOrders` (
+  `id` int NOT NULL,
+  `customer` int NOT NULL,
+  `timestamp` timestamp NOT NULL,
+  `address` varchar(50) NOT NULL,
+  `totalCost` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -175,6 +201,12 @@ ALTER TABLE `Artisan`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `ContentRecentOrder`
+--
+ALTER TABLE `ContentRecentOrder`
+  ADD PRIMARY KEY (`recentOrder`,`product`);
+
+--
 -- Indici per le tabelle `Customer`
 --
 ALTER TABLE `Customer`
@@ -202,6 +234,12 @@ ALTER TABLE `ProductImages`
 -- Indici per le tabelle `ProductTags`
 --
 ALTER TABLE `ProductTags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `RecentOrders`
+--
+ALTER TABLE `RecentOrders`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -246,10 +284,16 @@ ALTER TABLE `ProductTags`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
+-- AUTO_INCREMENT per la tabella `RecentOrders`
+--
+ALTER TABLE `RecentOrders`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT per la tabella `UserImages`

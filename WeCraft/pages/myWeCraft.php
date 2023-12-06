@@ -58,7 +58,7 @@
   }
   //For customers
   if($kindOfTheAccountInUse == "Customer"){
-    //AAAAAAAAAAAAA
+    addButtonLink(translate("Recent orders"),"./recentOrders.php");
   }
   //For artisans
   if($kindOfTheAccountInUse == "Artisan"){

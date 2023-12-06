@@ -1,3 +1,15 @@
+- Mostrare numero vendite di un prodotto
+- Nascondi prodotti in quantità zero
+
+- La ricerca (per filtri / tag / ultima vendita ecc)
+- I prodotti consigliati nella home page
+- La sponsorizzazione da un'artigiano di qualche prodotto di un'altro artigiano
+- La vendita dei prodotti di qualche artigiano presso il negozio di un'altro artigiano
+- La chat
+
+
+
+
 filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc
 
 popola database con cose indiane

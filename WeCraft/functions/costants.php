@@ -17,6 +17,9 @@
   //An image representing a generic product (for products without an image)
   define('genericProductImage', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/genericProduct.jpg");
 
+  //An image representing an order
+  define('orderIcon', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/orderIcon.png");
+
   //Possible categories of a product
   define('categories', ["Jewerly","Home decoration","Pottery","Teppiches","Bedware Bathroomware","Artisan craft"]);
 
