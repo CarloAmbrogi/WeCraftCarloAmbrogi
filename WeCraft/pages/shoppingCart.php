@@ -32,6 +32,10 @@
           moveCurrentShoppingCartOfThisUserInRecentOrders($_SESSION["userId"],$insertedAddress,$price);
           //Update data last sell
           updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
+          //Notify the artisans about this sell
+          //AAAAAAAAAAAAAA
+          //Update the remaining quantity of the products
+          updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Empty the current shopping cart
           emptyTheShoppingCartOfThisUser($_SESSION["userId"]);
           //Done

@@ -31,8 +31,42 @@
   addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/ArtisanCraftIcon.png",translate("Artisan craft"),"","");
   endCardGrid();
   //Some products
-  addTitle(translate("Some products"));
-  //AAAAAAAAAA
+  addTitle(translate("New products"));
+  $productsPreview = obtainProductsPreviewNewProducts();
+  startCardGrid();
+  $addedAtListOneProduct = false;
+  foreach($productsPreview as &$singleProductPreview){
+    $addedAtListOneProduct = true;
+    $fileImageToVisualize = genericProductImage;
+    if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+      $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+    }
+    $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+    $text2 = translate("Added when").": ".$singleProductPreview["added"];
+    addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+  }
+  endCardGrid();
+  if($addedAtListOneProduct == false){
+    addParagraph(translate("No product"));
+  }
+  addTitle(translate("Most sold products in last period"));
+  $productsPreview = obtainMostSoldProductsPreviewInLastPeriod();
+  startCardGrid();
+  $addedAtListOneProduct = false;
+  foreach($productsPreview as &$singleProductPreview){
+    $addedAtListOneProduct = true;
+    $fileImageToVisualize = genericProductImage;
+    if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+      $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+    }
+    $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+    $text2 = translate("Number of unit sold").": ".$singleProductPreview["numSells"];
+    addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+  }
+  endCardGrid();
+  if($addedAtListOneProduct == false){
+    addParagraph(translate("No product"));
+  }
   //End of the page
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";

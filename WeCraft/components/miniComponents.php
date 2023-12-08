@@ -352,6 +352,16 @@
     <?php
   }
 
+  //Add button on off show / hide
+  function addButtonOnOffShowHide($written,$id){
+    ?>
+      <div for="inserted<?= $id ?>" class="form-check form-switch">
+        <input onclick="showHide<?= $id ?>();" class="form-check-input" type="checkbox" role="switch" id="inserted<?= $id ?>" name="inserted<?= $id ?>">
+        <label class="form-check-label" for="inserted<?= $id ?>"><?= htmlentities($written) ?></label>
+      </div>
+    <?php
+  }
+
   //Start the div for the show / hide button
   function startDivShowHide($id){
     ?>
@@ -373,6 +383,80 @@
             showHideElement<?= $id ?>.style.display = "none";
           }
         }
+      </script>
+    <?php
+  }
+
+  //Add button show / hide multiple
+  function addButtonShowHideMultiple($written,$id){
+    ?>
+      <div class="row">
+        <button type="button" onclick="showHide<?= $id ?>();" class="btn btn-primary"
+          style="margin:10px;">
+          <?= htmlentities($written) ?>
+        </button>
+      </div>
+    <?php
+  }
+
+  //Add button on off show / hide multiple
+  function addButtonOnOffShowHideMultiple($written,$id){
+    ?>
+      <div for="inserted<?= $id ?>" class="form-check form-switch">
+        <input onclick="showHide<?= $id ?>();" class="form-check-input" type="checkbox" role="switch" id="inserted<?= $id ?>" name="inserted<?= $id ?>">
+        <label class="form-check-label" for="inserted<?= $id ?>"><?= htmlentities($written) ?></label>
+      </div>
+    <?php
+  }
+
+  //Start the div for the show / hide button multiple
+  function startDivShowHideMultiple($id){
+    ?>
+      <div class="showHide<?= $id ?>">
+    <?php
+  }
+
+  //End the div for the show / hide button multiple
+  function endDivShowHideMultiple(){
+    ?>
+      </div>
+    <?php
+  }
+  
+  //Add the final script for show / hide button multiple
+  function addScriptShowHideMultiple($id){
+    ?>
+      <script>
+        var showHideElements<?= $id ?> = document.getElementsByClassName("showHide<?= $id ?>");
+        for(var i = 0; i < showHideElements<?= $id ?>.length; i++){
+          showHideElements<?= $id ?>[i].style.display = "none";
+        }
+        function showHide<?= $id ?>() {
+          for(var i = 0; i < showHideElements<?= $id ?>.length; i++){
+            if (showHideElements<?= $id ?>[i].style.display === "none") {
+              showHideElements<?= $id ?>[i].style.display = "block";
+            } else {
+              showHideElements<?= $id ?>[i].style.display = "none";
+            }
+          }
+        }
+      </script>
+    <?php
+  }
+
+  //Add this script in a page to force the page reload in case you return back with browser back button
+  function forceThisPageReloadWhenBrowserBackButton(){
+    ?>
+      <script>
+        window.addEventListener( "pageshow", function ( event ) {
+          var historyTraversal = event.persisted || 
+                                ( typeof window.performance != "undefined" && 
+                                      window.performance.navigation.type === 2 );
+          if ( historyTraversal ) {
+            // Handle page restore.
+            window.location.reload();
+          }
+        });
       </script>
     <?php
   }

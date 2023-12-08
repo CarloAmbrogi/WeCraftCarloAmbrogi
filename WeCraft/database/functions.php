@@ -1109,4 +1109,74 @@
     }
   }
 
+  function updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `Product`.`quantity` = `Product`.`quantity` - (select `ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`customer` = ?) where `Product`.`id` in (select `ShoppingCart`.`product` from `ShoppingCart` where `ShoppingCart`.`customer` = ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Number of units sold of this product
+  function numberOfUnitsSoldOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select COALESCE(sum(`quantity`),0) as numberOfUnitsSoldOfThisProduct from `ContentRecentOrder` where `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfUnitsSoldOfThisProduct"];
+  }
+
+  //Obtain a preview of new products (for the home page)
+  //We take the products added in last 14 days limit 100 and quantity > 0
+  function obtainProductsPreviewNewProducts(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category`,`added` from `Product` where TIMESTAMPDIFF(SECOND, `added`, CURRENT_TIMESTAMP()) < 1036800 and `quantity` > 0 ORDER BY `id` DESC limit 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain a preview of most sold products in last period (for the home page)
+  //We take the products wich has sold in last 14 days limit 100 and quantity > 0 ordered by number of sold
+  function obtainMostSoldProductsPreviewInLastPeriod(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentRecentOrder`.`quantity`) as numSells from `Product` join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where `Product`.`lastSell` is not null and TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) < 1036800 and `Product`.`quantity` > 0 group by `Product`.`id` ORDER BY numSells DESC limit 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
 ?>

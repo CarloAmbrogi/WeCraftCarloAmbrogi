@@ -51,7 +51,7 @@
       if($_GET["id"] == $_SESSION["userId"]){
         $textButtonShowHide = translate("Show or hide more information about you");
       }
-      addButtonShowHide($textButtonShowHide,"moreInformationOnThisArtisan");
+      addButtonOnOffShowHide($textButtonShowHide,"moreInformationOnThisArtisan");
       if($kindOfTheAccountInUse != "Guest" && $_GET["id"] != $_SESSION["userId"]){
         //Send message to this artisan
         addButtonLink(translate("Send message"),"./sendMessage.php?to=".$_GET["id"]);
@@ -71,7 +71,14 @@
       }
       //Show the number of products of this artisan
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($_GET["id"]);
+      startRow();
+      startCol();
       addParagraph(translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      endCol();
+      startCol();
+      addButtonOnOffShowHide(translate("Show hide not available products"),"notAvailableProduct");
+      endCol();
+      endRow();
       //Show the products previews of this artisan
       $productsPreviewOfThisArtisan = obtainProductsPreviewOfThisArtisan($_GET["id"]);
       startCardGrid();
@@ -82,11 +89,21 @@
         }
         $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
         $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
+        $isAvailable = true;
         if($singleProductPreview["quantity"] == "0"){
           $text2 = translate("Not available");
+          $isAvailable = false;
+        }
+        if(!$isAvailable){
+          startDivShowHideMultiple("notAvailableProduct");
         }
         addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+        if(!$isAvailable){
+          endDivShowHideMultiple();
+        }
       }
+      addScriptShowHideMultiple("notAvailableProduct");
+      forceThisPageReloadWhenBrowserBackButton();
       endCardGrid();
       //Here other things about this artisan
       //AAAAAAAAA

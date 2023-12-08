@@ -89,6 +89,7 @@
         $lastSellString = translate("never sold");
       }
       addParagraph(translate("Last sell").": ".$lastSellString);
+      addParagraph(translate("Number of unit sold").": ".numberOfUnitsSoldOfThisProduct($_GET["id"]));
       //Info about the artisan owner of this product
       addParagraph(translate("Product created by this artisan").":");
       $fileImageToVisualizeArtisan = genericUserImage;
