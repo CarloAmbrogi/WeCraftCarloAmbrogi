@@ -128,6 +128,44 @@
     <?php
   }
 
+  //Add button on off for an api action witch is called via js
+  function addButtonOnOffApiActionViaJsLink($startingStatus,$written,$link,$id,$functionToCallAfter=""){
+    //$startingStatus of the button is true or false: on or off
+    ?>
+      <div for="inserted<?= $id ?>" class="form-check form-switch">
+        <input onclick="functionApiAction<?= $id ?>();" class="form-check-input" type="checkbox" role="switch" id="inserted<?= $id ?>" name="inserted<?= $id ?>" <?php if($startingStatus == true){echo "checked";} ?>>
+        <label class="form-check-label" for="inserted<?= $id ?>"><?= htmlentities($written) ?></label>
+      </div>
+      <script>
+        function functionApiAction<?= $id ?>(){
+          let requestUrl = "<?= $link ?>";
+          if(requestUrl != ""){
+            let request = new XMLHttpRequest();
+            request.open("GET", requestUrl);
+            request.send();
+            request.onload = function(){
+              <?php
+                if($functionToCallAfter != ""){
+                  ?>
+                    <?= $functionToCallAfter ?>();
+                  <?php
+                }
+              ?>
+            }
+          } else {
+            <?php
+              if($functionToCallAfter != ""){
+                ?>
+                  <?= $functionToCallAfter ?>();
+                <?php
+              }
+            ?>
+          }
+        }
+      </script>
+    <?php
+  }
+
   //This function is to add a button link (js version)
   function addButtonLinkJsVersion($written,$link){
     ?>

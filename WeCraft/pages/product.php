@@ -117,6 +117,12 @@
         if($numberOfTags > 0){
           addButtonLink(translate("Remove tags to this product"),"./removeTagsToThisProduct.php?id=".$_GET["id"]);
         }
+      } else if($kindOfTheAccountInUse == "Artisan"){//If you are not the owner butyou are another artisan, here there are some functions about the cooperation
+        //Cooperation for visibility and marketing
+        $areYouSponsoringThisProduct = isThisArtisanSponsoringThisProduct($_SESSION["userId"],$_GET["id"]);
+        $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
+        addButtonOnOffApiActionViaJsLink($areYouSponsoringThisProduct,translate("Sponsor this product"),WeCraftBaseUrl."api/changeIfYouAreSponsoringThisProduct.php?artisan=".$_SESSION["userId"]."&product=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"sponsorAProduct");
+        //AAAAAAAAA Here other kind of cooperations
       }
       //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
       if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){

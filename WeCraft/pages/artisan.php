@@ -102,11 +102,40 @@
           endDivShowHideMultiple();
         }
       }
-      addScriptShowHideMultiple("notAvailableProduct");
-      forceThisPageReloadWhenBrowserBackButton();
       endCardGrid();
+      //This artisan is suggests also theese products
+      $numberProductsThisArtisanIsSponsoring = numberProductsThisArtisanIsSponsoring($_GET["id"]);
+      if($numberProductsThisArtisanIsSponsoring > 0){
+        addParagraph(translate("This artisan suggests also these products")." (".$numberProductsThisArtisanIsSponsoring."):");
+        $productsPreviewThisArtisanIsSponsoring = obtainProductsPreviewThisArtisanIsSponsoring($_GET["id"]);
+        startCardGrid();
+        foreach($productsPreviewThisArtisanIsSponsoring as &$singleProductPreview){
+          $fileImageToVisualize = genericProductImage;
+          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+          }
+          $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+          $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
+          $isAvailable = true;
+          if($singleProductPreview["quantity"] == "0"){
+            $text2 = translate("Not available");
+            $isAvailable = false;
+          }
+          if(!$isAvailable){
+            startDivShowHideMultiple("notAvailableProduct");
+          }
+          addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+          if(!$isAvailable){
+            endDivShowHideMultiple();
+          }
+        }
+        endCardGrid();
+      }
       //Here other things about this artisan
       //AAAAAAAAA
+      //Manage visibility products quantity 0
+      addScriptShowHideMultiple("notAvailableProduct");
+      forceThisPageReloadWhenBrowserBackButton();
     }
   } else {
     if($kindOfTheAccountInUse == "Artisan"){

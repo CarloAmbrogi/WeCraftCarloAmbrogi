@@ -542,7 +542,7 @@
   //Obtain a preview of products of an artisan
   function obtainProductsPreviewOfThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ? ORDER BY `id` ASC;";
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ? ORDER BY `id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -1165,6 +1165,131 @@
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentRecentOrder`.`quantity`) as numSells from `Product` join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where `Product`.`lastSell` is not null and TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) < 1036800 and `Product`.`quantity` > 0 group by `Product`.`id` ORDER BY numSells DESC limit 100;";
     if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Return if a certain artisan is sponsoring a certain product or not
+  function isThisArtisanSponsoringThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as 'isThisArtisanSponsoringThisProduct' from (select * from `Advertisement` where `artisan` = ? and `product` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an associative array with the infos of this product
+    return $elements[0]["isThisArtisanSponsoringThisProduct"];
+  }
+
+  //Start sponsoring this product
+  function startSponsoringThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `Advertisement` (`artisan`,`product`) VALUES (?,?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Stop sponsoring this product
+  function stopSponsoringThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `Advertisement` WHERE `artisan` = ? and `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Number of products this artisan is sponsoring
+  function numberProductsThisArtisanIsSponsoring($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsThisArtisanIsSponsoring from (select * from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsThisArtisanIsSponsoring"];
+  }
+
+  //Obtain a preview of products this artisan is sponsoring
+  function obtainProductsPreviewThisArtisanIsSponsoring($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain a preview of products about a suggestion of products of artisans who are sponsoring some of your products
+  // show in this preview only products you are not sponsoring and quantity > 0 and limit 100
+  function obtainProductsPreviewSuggestionProductsOfArtisansWhoAreSponsoringYourProducts($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `quantity` > 0 and `artisan` in (select `artisan` from `Advertisement` where `product` in (select `id` from `Product` where `artisan` = ?)) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC LIMIT 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain a preview of products about a suggestion of products of artisans who you are sponsoring other theim products
+  // show in this preview only products you are not sponsoring and quantity > 0 and limit 100
+  function obtainProductsPreviewSuggestionProductsOfArtisansWhooseYouAreSponsoringSomeOtherProducts($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `quantity` > 0 and `artisan` in (select `artisan` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?)) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC LIMIT 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$artisanId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
