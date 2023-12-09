@@ -35,7 +35,7 @@
       if($_GET["id"] == $_SESSION["userId"]){
         $textButtonShowHide = translate("Show or hide more information about you");
       }
-      addButtonShowHide($textButtonShowHide,"moreInformationOnThisDesigner");
+      addButtonOnOffShowHide($textButtonShowHide,"moreInformationOnThisDesigner");
       if($kindOfTheAccountInUse != "Guest" && $_GET["id"] != $_SESSION["userId"]){
         //Send message to this designer
         addButtonLink(translate("Send message"),"./sendMessage.php?to=".$_GET["id"]);

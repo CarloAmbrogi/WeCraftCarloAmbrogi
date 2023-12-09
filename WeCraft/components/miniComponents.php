@@ -133,7 +133,7 @@
     ?>
       <div class="row">
         <button type="button" onclick="window.location='<?= $link ?>';" class="btn btn-primary"
-          style="margin:10px;">
+          style="margin:10px; transform: translateX(-10px);">
           <?= htmlentities($written) ?>
         </button>
       </div>
@@ -143,10 +143,10 @@
   //This function is to add a button link
   function addButtonLink($written,$link){
     ?>
-      <a href="<?= $link ?>">
+      <a href="<?= $link ?>" style="text-decoration: none;">
         <div class="row">
           <button type="button" class="btn btn-primary"
-            style="margin:10px;">
+            style="margin:10px; transform: translateX(-10px);">
             <?= htmlentities($written) ?>
           </button>
         </div>
@@ -345,7 +345,7 @@
     ?>
       <div class="row">
         <button type="button" onclick="showHide<?= $id ?>();" class="btn btn-primary"
-          style="margin:10px;">
+          style="margin:10px; transform: translateX(-10px);">
           <?= htmlentities($written) ?>
         </button>
       </div>
@@ -392,7 +392,7 @@
     ?>
       <div class="row">
         <button type="button" onclick="showHide<?= $id ?>();" class="btn btn-primary"
-          style="margin:10px;">
+          style="margin:10px; transform: translateX(-10px);">
           <?= htmlentities($written) ?>
         </button>
       </div>
@@ -624,6 +624,22 @@
           <button id="submit" type="submit" class="btn btn-primary"><?= $textSubmitButton ?></button>
         </form>
       </div>
+    <?php
+  }
+
+  //Start a square
+  function startSquare(){
+    ?>
+      <ul class="list-group mb-3">
+        <li class="list-group-item">
+    <?php
+  }
+
+  //End a square
+  function endSquare(){
+    ?>
+        </li>
+      </ul>
     <?php
   }
 
