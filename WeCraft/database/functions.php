@@ -575,7 +575,6 @@
       $elements[] = $element;
     }
 
-    //return an associative array with the infos of this product
     return $elements[0]["doesThisProductExists"];
   }
 
@@ -1050,7 +1049,6 @@
       $elements[] = $element;
     }
 
-    //return an associative array with the infos of this product
     return $elements[0]["doesThisRecentOrederExists"];
   }
 
@@ -1109,6 +1107,7 @@
     }
   }
 
+  //Update the remaining quantity of a product based on the shopping cart of this user
   function updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "update `Product` set `Product`.`quantity` = `Product`.`quantity` - (select `ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`customer` = ?) where `Product`.`id` in (select `ShoppingCart`.`product` from `ShoppingCart` where `ShoppingCart`.`customer` = ?);";
@@ -1195,7 +1194,6 @@
       $elements[] = $element;
     }
 
-    //return an associative array with the infos of this product
     return $elements[0]["isThisArtisanSponsoringThisProduct"];
   }
 
@@ -1302,6 +1300,119 @@
 
     //return an array of associative array with id name iconExtension icon price quantity category
     return $elements;
+  }
+
+  //Obtain a preview of the exchange products availble to the store of this artisan
+  function obtainExchangeProductsAvailableToYourStore($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,`ExchangeProduct`.`quantity` as quantityToThePatner from `Product` join `ExchangeProduct` on `Product`.`id` = `ExchangeProduct`.`product` where `ExchangeProduct`.`artisan` = ? ORDER BY `Product`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category quantityToThePatner
+    return $elements;
+  }
+
+  //Return if a certain artisan is selling this product (witch is of another artisan) on him physical store
+  function isThisArtisanSellingThisExchangeProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as 'isThisArtisanSellingThisExchangeProduct' from (select * from `ExchangeProduct` where `artisan` = ? and `product` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisArtisanSellingThisExchangeProduct"];
+  }
+
+  //Obtain the quantity of this exange product
+  function obtainQuantityExchangeProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "SELECT `quantity` FROM `ExchangeProduct` WHERE `artisan` = ? and `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["quantity"];
+  }
+
+  //Update the quantity of an exchange product
+  function updateQuantityExchangeProduct($userId,$productId,$quantity){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `ExchangeProduct` set `quantity` = ? where `artisan` = ? and `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$quantity,$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Start selling this exchange product
+  function startSellingThisExchangeProduct($userId,$productId,$quantity){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `ExchangeProduct` (`artisan`,`product`,`quantity`) VALUES (?,?,?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$userId,$productId,$quantity);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Stop selling this exchange product
+  function stopSellingThisExchangeProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ExchangeProduct` WHERE `artisan` = ? and `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Obtain number of exchange product available to the store of this artisan
+  function obtainNumberExchangeProductsAvailableToYourStore($artisanId){    
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberExchangeProductsAvailableToYourStore from (select * from `ExchangeProduct` where `artisan` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberExchangeProductsAvailableToYourStore"];
   }
 
 ?>

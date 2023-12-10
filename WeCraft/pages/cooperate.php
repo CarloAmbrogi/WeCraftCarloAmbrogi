@@ -24,7 +24,7 @@
     addParagraph(translate("The artisans agree to sponsor each others products"));
     endSquare();
     startSquare();
-    addButtonLink(translate("Exchange complementary products"),"./AAAAAAAAAAAAA");
+    addButtonLink(translate("Exchange complementary products"),"./exchangeComplementaryProducts.php");
     addParagraph(translate("Artisans sell other artisans products at their physical stores and WeCrafts system helps by suggesting possible artisans who create complementary products"));
     endSquare();
   }

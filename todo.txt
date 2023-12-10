@@ -1,10 +1,9 @@
 - La ricerca (per filtri / tag / ultima vendita ecc)
 - Script che carica un database finto
-- La sponsorizzazione da un'artigiano di qualche prodotto di un'altro artigiano
-- La vendita dei prodotti di qualche artigiano presso il negozio di un'altro artigiano
-- La chat
-- Copyright check
 
+- La chat
+- Coofiliera
+- Back button in some pages
 
 
 filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc

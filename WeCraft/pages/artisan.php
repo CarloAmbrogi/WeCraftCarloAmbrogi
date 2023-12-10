@@ -131,8 +131,33 @@
         }
         endCardGrid();
       }
-      //Here other things about this artisan
-      //AAAAAAAAA
+      //This artisan sells also theese products of other artisans
+      $numberExchangeProductsAvailableToThisStore = obtainNumberExchangeProductsAvailableToYourStore($_GET["id"]);
+      if($numberExchangeProductsAvailableToThisStore > 0){
+        addParagraph(translate("This artisan sells also theese products of other artisans")." (".$numberExchangeProductsAvailableToThisStore."):");
+        $exchangeProductsPreviewAvailableToThisStore = obtainExchangeProductsAvailableToYourStore($_GET["id"]);
+        startCardGrid();
+        foreach($exchangeProductsPreviewAvailableToThisStore as &$singleProductPreview){
+          $fileImageToVisualize = genericProductImage;
+          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+          }
+          $isAvailable = true;
+          if($singleProductPreview["quantity"] == "0" && $singleProductPreview["quantityToThePatner"] == "0"){
+            $isAvailable = false;
+          }
+          $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+          $text2 = translate("Quantity available").": ".translate("from the owner").": ".$singleProductPreview["quantity"]." ".translate("to this patner").": ".$singleProductPreview["quantityToThePatner"];
+          if(!$isAvailable){
+            startDivShowHideMultiple("notAvailableProduct");
+          }
+          addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+          if(!$isAvailable){
+            endDivShowHideMultiple();
+          }
+        }
+        endCardGrid();
+      }
       //Manage visibility products quantity 0
       addScriptShowHideMultiple("notAvailableProduct");
       forceThisPageReloadWhenBrowserBackButton();

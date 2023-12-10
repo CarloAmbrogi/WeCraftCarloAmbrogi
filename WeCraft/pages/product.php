@@ -100,6 +100,17 @@
       addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       //Carousel with images of this product
       addCarouselImagesOfThisProduct($_GET["id"]);
+      //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
+      if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
+        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".$_GET["id"]);
+        $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
+        $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
+        addParagraph($AddedToShoppingCartWritten);
+      }
+      //This product is available also from theese artisans
+      
+      //This product is suggested also by theese artisans
+
       //Edit product (you can edit the product if you are the owner)
       if($_SESSION["userId"] == $productInfos["artisan"]){
         addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
@@ -122,14 +133,46 @@
         $areYouSponsoringThisProduct = isThisArtisanSponsoringThisProduct($_SESSION["userId"],$_GET["id"]);
         $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
         addButtonOnOffApiActionViaJsLink($areYouSponsoringThisProduct,translate("Sponsor this product"),WeCraftBaseUrl."api/changeIfYouAreSponsoringThisProduct.php?artisan=".$_SESSION["userId"]."&product=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"sponsorAProduct");
-        //AAAAAAAAA Here other kind of cooperations
-      }
-      //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
-      if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
-        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".$_GET["id"]);
-        $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
-        $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
-        addParagraph($AddedToShoppingCartWritten);
+        //Exchange products
+        $areYouSellingThisExchangeProduct = isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$_GET["id"]);
+        if($areYouSellingThisExchangeProduct){
+          addParagraph(translate("You are selling this exchange product"));
+          addButtonLink(translate("Stop selling this exchange product"),"./stopSellingThisExchangeProduct.php?id=".$_GET["id"]);
+          $quantityOfThisExchangeProduct = obtainQuantityExchangeProduct($_SESSION["userId"],$_GET["id"]);
+          addParagraph(translate("Quantity of this product available in your phisical store").": ".$quantityOfThisExchangeProduct,"exchangeQuantity");
+          startRow();
+          startCol();
+          addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=dec&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"dec","updateExchangeQuantityValue");
+          endCol();
+          addColMiniSpacer();
+          startCol();
+          addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=inc&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"inc","updateExchangeQuantityValue");
+          endCol();
+          endRow();
+          ?>
+            <script>
+              //When the artisan who is selling this exchange product click on button + or - to change the quantity of this exchange product available in his physica store,
+              //the quantity is changed without exiting from the page via an api
+              //It is also changed the text of the quantity via innerHTML
+              function updateExchangeQuantityValue(){
+                const exchangeQuantity = document.getElementById('exchangeQuantity');
+                let requestUrl = "<?= WeCraftBaseUrl ?>api/getExchangeQuantityOfThisProduct.php?artisan=" + <?= $_SESSION["userId"] ?> + "&product=" + <?= $_GET["id"] ?>;
+                let request = new XMLHttpRequest();
+                request.open("GET", requestUrl);
+                request.responseType = "json";
+                request.send();
+                request.onload = function(){
+                  const result = request.response;
+                  let quantityOfThisProduct = result[0].quantity;
+                  exchangeQuantity.innerHTML = "<?= translate("Quantity of this product available in your phisical store").": " ?>"+quantityOfThisProduct;
+                }
+              }
+            </script>
+          <?php
+          addButtonLink(translate("Change quantity"),"./startSellingThisExchangeProduct.php?id=".$_GET["id"]);
+        } else {
+          addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".$_GET["id"]);
+        }
       }
     } else {
       addParagraph(translate("This product doesnt exists"));
