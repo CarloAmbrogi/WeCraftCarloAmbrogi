@@ -32,7 +32,16 @@
     addParagraph(translate("If you receive from an artisan an his product you can start sell it in your physical shop and you can notify this on WeCraft from the page of that product"));
     addParagraph(translate("Here there are some suggestions of possible artisans who sell complemetary products to yours").":");
     //Show these suggested artisans
-    
+    $previewArtisansWhoCouldBeComplementaryToThisArtisan = obtainPreviewArtisansWhoCouldBeComplementaryToThisArtisan($_SESSION["userId"]);
+    startCardGrid();
+    foreach($previewArtisansWhoCouldBeComplementaryToThisArtisan as &$singleArtisanPreview){
+      $fileImageToVisualize = genericUserImage;
+      if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+        $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+      }
+      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+    }
+    endCardGrid();
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";

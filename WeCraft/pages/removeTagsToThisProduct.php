@@ -43,7 +43,7 @@
             }
           }
         } else {
-          addParagraph(translate("you cant modify this product"));
+          addParagraph(translate("You cant modify this product"));
         }
       } else {
         addParagraph(translate("This product doesnt exists"));
@@ -87,7 +87,7 @@
           }
           //End main content of this page
         } else {
-          addParagraph(translate("you cant modify this product"));
+          addParagraph(translate("You cant modify this product"));
         }
       } else {
         addParagraph(translate("This product doesnt exists"));

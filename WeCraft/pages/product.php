@@ -108,9 +108,39 @@
         addParagraph($AddedToShoppingCartWritten);
       }
       //This product is available also from theese artisans
-      
+      $numberOtherArtisansWhoAreSellingThisExchangeProduct = obtainNumberOtherArtisansWhoAreSellingThisExchangeProduct($_GET["id"]);
+      if($numberOtherArtisansWhoAreSellingThisExchangeProduct > 0){
+        addParagraph(translate("This product is sold also from the physical shop of theese artisans")." (".$numberOtherArtisansWhoAreSellingThisExchangeProduct."):");
+        $previewOtherArtisansWhoAreSellingThisExchangeProduct = obtainPreviewOtherArtisansWhoAreSellingThisExchangeProduct($_GET["id"]);
+        startCardGrid();
+        foreach($previewOtherArtisansWhoAreSellingThisExchangeProduct as &$singleArtisanPreview){
+          $fileImageToVisualize = genericUserImage;
+          if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+          }
+          $text2 = translate("Quantity available from the physical shop of this artisan").": ".$singleArtisanPreview["quantity"];
+          if($singleArtisanPreview["quantity"] == "0"){
+            $text2 = translate("Not available from this artisan");
+          }
+          addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),$text2);
+        }
+        endCardGrid();
+      }
       //This product is suggested also by theese artisans
-
+      $numberOtherArtisansWhoAreSponsoringThisProduct = obtainNumberOtherArtisansWhoAreSponsoringThisProduct($_GET["id"]);
+      if($numberOtherArtisansWhoAreSponsoringThisProduct > 0){
+        addParagraph(translate("This product is suggested also by theese artisans")." (".$numberOtherArtisansWhoAreSponsoringThisProduct."):");
+        $previewOtherArtisansWhoAreSponsoringThisProduct = obtainPreviewOtherArtisansWhoAreSponsoringThisProduct($_GET["id"]);
+        startCardGrid();
+        foreach($previewOtherArtisansWhoAreSponsoringThisProduct as &$singleArtisanPreview){
+          $fileImageToVisualize = genericUserImage;
+          if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+          }
+          addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+        }
+        endCardGrid();
+      }
       //Edit product (you can edit the product if you are the owner)
       if($_SESSION["userId"] == $productInfos["artisan"]){
         addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
