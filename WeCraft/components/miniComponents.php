@@ -636,6 +636,32 @@
     <?php
   }
 
+  //Add a short text field in a form with the possibility to select like or not
+  function addShortTextFieldWithLike($text,$id,$idLike,$maxLenghtInsertedText){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input class="form-control" id="<?= $id ?>" type="text" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+        <select id="<?= $idLike ?>" name="<?= $idLike ?>">
+          <option value="exactly"><?= translate("exactly") ?></option>
+          <option value="like"><?= translate("like") ?></option>
+        </select>
+      </div>
+    <?php
+  }
+
+  //Add a selector with 2 options
+  function addSelector2Options($option1text,$option2text,$option1value,$option2value,$id){
+    ?>
+      <div class="mb-3">
+        <select id="<?= $id ?>" name="<?= $id ?>">
+          <option value="<?= $option1value ?>"><?= $option1text ?></option>
+          <option value="<?= $option2value ?>"><?= $option2text ?></option>
+        </select>
+      </div>
+    <?php
+  }
+
   //Add a long text field in a form
   function addLongTextField($text,$id,$maxLenghtInsertedText){
     ?>

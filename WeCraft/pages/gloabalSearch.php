@@ -48,7 +48,7 @@
   //Artisans
   $GlobalSearchPreviewArtisans = obtainGlobalSearchPreviewArtisans($search);
   startCardGrid();
-    foreach($GlobalSearchPreviewArtisans as &$singleArtisanPreview){
+  foreach($GlobalSearchPreviewArtisans as &$singleArtisanPreview){
     $foundAtLeastOneResult = true;
     $fileImageToVisualize = genericUserImage;
     if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
@@ -60,14 +60,15 @@
   //Designers
   $GlobalSearchPreviewDesigners = obtainGlobalSearchPreviewDesigners($search);
   startCardGrid();
-    foreach($GlobalSearchPreviewDesigners as &$singleDesignerPreview){
+  foreach($GlobalSearchPreviewDesigners as &$singleDesignerPreview){
     $foundAtLeastOneResult = true;
     $fileImageToVisualize = genericUserImage;
     if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
       $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
     }
-    addACardForTheGrid("./designer.php?id=".$singleDesignerPreview["id"],$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),"","");
+    addACardForTheGrid("./designer.php?id=".$singleDesignerPreview["id"],$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"");
   }
+  endCardGrid();
   //In case of no result
   if($foundAtLeastOneResult == false){
     addParagraphUnsafe("<br>".translate("No result"));

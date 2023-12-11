@@ -337,4 +337,15 @@
     return $result;
   }
 
+  //remove the quotes from this string (to prevent sql injection)
+  function removeQuotes($str){
+    $str = str_replace("'","",$str);
+    $str = str_replace("\\","",$str);
+    $str = str_replace("\"","",$str);
+    $str = str_replace("/","",$str);
+    $str = str_replace("|","",$str);
+    $str = str_replace("`","",$str);
+    return $str;
+  }
+
 ?>

@@ -1602,7 +1602,7 @@
     $search = trim($search);
     $search = "%".$search."%";
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Artisan`.`shopName` like ? or `Artisan`.`description` like ? or `Artisan`.`address` like ? or `Artisan`.`phoneNumber` like ? group by `User`.`id` order by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Artisan`.`shopName` like ? or `Artisan`.`description` like ? or `Artisan`.`address` like ? or `Artisan`.`phoneNumber` like ? group by `User`.`id` order by `User`.`id` limit 100;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("sssssssss",$search,$search,$search,$search,$search,$search,$search,$search,$search);
       $statement->execute();
@@ -1624,7 +1624,7 @@
     $search = trim($search);
     $search = "%".$search."%";
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` join `Designer` on `User`.`id` = `Designer`.`id` where `User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Designer`.`description` like ? order by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` join `Designer` on `User`.`id` = `Designer`.`id` where `User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Designer`.`description` like ? order by `User`.`id` limit 100;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ssssss",$search,$search,$search,$search,$search,$search);
       $statement->execute();
@@ -1638,6 +1638,24 @@
     }
 
     //return an array of associative array with id name surname icon iconExtension
+    return $elements;
+  }
+
+  //Exectue select multiple rows and cols sql
+  function executeSql($sqlStatement){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = $sqlStatement;
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
     return $elements;
   }
 

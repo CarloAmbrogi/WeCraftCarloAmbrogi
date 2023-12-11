@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 06, 2023 alle 19:54
+-- Creato il: Dic 11, 2023 alle 19:19
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -20,6 +20,17 @@ SET time_zone = "+00:00";
 --
 -- Database: `my_carloambrogipolimi`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `Advertisement`
+--
+
+CREATE TABLE `Advertisement` (
+  `artisan` int NOT NULL,
+  `product` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -70,6 +81,18 @@ CREATE TABLE `Designer` (
   `id` int NOT NULL,
   `description` text NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ExchangeProduct`
+--
+
+CREATE TABLE `ExchangeProduct` (
+  `artisan` int NOT NULL,
+  `product` int NOT NULL,
+  `quantity` int NOT NULL
+) ;
 
 -- --------------------------------------------------------
 
@@ -195,6 +218,12 @@ CREATE TABLE `UserImages` (
 --
 
 --
+-- Indici per le tabelle `Advertisement`
+--
+ALTER TABLE `Advertisement`
+  ADD PRIMARY KEY (`artisan`,`product`);
+
+--
 -- Indici per le tabelle `Artisan`
 --
 ALTER TABLE `Artisan`
@@ -217,6 +246,12 @@ ALTER TABLE `Customer`
 --
 ALTER TABLE `Designer`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `ExchangeProduct`
+--
+ALTER TABLE `ExchangeProduct`
+  ADD PRIMARY KEY (`artisan`,`product`);
 
 --
 -- Indici per le tabelle `Product`
@@ -281,25 +316,25 @@ ALTER TABLE `ProductImages`
 -- AUTO_INCREMENT per la tabella `ProductTags`
 --
 ALTER TABLE `ProductTags`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT per la tabella `RecentOrders`
 --
 ALTER TABLE `RecentOrders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT per la tabella `UserImages`
 --
 ALTER TABLE `UserImages`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
