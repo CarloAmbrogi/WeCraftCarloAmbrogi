@@ -1,4 +1,3 @@
-- La ricerca (per filtri / tag / ultima vendita ecc)
 - Script che carica un database finto
 
 - La chat
@@ -6,10 +5,7 @@
 - Back button in some pages
 
 
-filtraggio per categoria, tag, prezzo data di aggiunta, data di vendita, ecc
 
 popola database con cose indiane
 
-dedica un po di tempo la cooperazione per decidere cosa metti in quella sezione
-
-Fai customized order con dati finti pagamento online e spedizione
+Fai customized order (con dati finti pagamento online e spedizione)

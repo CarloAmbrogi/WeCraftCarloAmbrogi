@@ -581,6 +581,14 @@
     <?php
   }
 
+  //Start a form but using the get method (start the form, specify the action script php)
+  function startFormGet($action){
+    ?>
+      <div class="row mb-3">
+        <form method="get" action="<?= $action ?>" enctype="multipart/form-data">
+    <?php
+  }
+
   //Add a paragraph inside a form
   function addParagraphInAForm($text){
     ?>
@@ -659,6 +667,15 @@
   function endForm($textSubmitButton){
     ?>
           <input type="hidden" name="csrftoken" value="<?php echo $_SESSION['csrftoken'] ?? '' ?>">
+          <button id="submit" type="submit" class="btn btn-primary"><?= $textSubmitButton ?></button>
+        </form>
+      </div>
+    <?php
+  }
+
+  //End form but with get (no csrf token) (add submit button and close the form and the div with the form)
+  function endFormGet($textSubmitButton){
+    ?>
           <button id="submit" type="submit" class="btn btn-primary"><?= $textSubmitButton ?></button>
         </form>
       </div>
