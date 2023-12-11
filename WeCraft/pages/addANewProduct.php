@@ -49,40 +49,60 @@
       } else if($insertedCategory != "Nonee" && !in_array($insertedCategory,$possibleCategories)){
         addParagraph(translate("Category not valid"));
       } else {
-        //Add a new product
-        if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
-          //You have chosen to send the file icon
-          $fileName = $_FILES["insertedIcon"]["name"];
-          $fileType = $_FILES["insertedIcon"]["type"];
-          $fileSize = $_FILES['insertedIcon']['size'];
-          $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-          $insertCorrectlyTheIcon = false;
-          if($fileSize > maxSizeForAFile){
-            addParagraph(translate("The file is too big"));
-          } else if(!array_key_exists($fileExtension, permittedExtensions)){
-            addParagraph(translate("The extension of the file is not an image"));
-          } else if(!in_array($fileType, permittedExtensions)){
-            addParagraph(translate("The file is not an image"));
-          } else {
-            $insertCorrectlyTheIcon = true;
-            //add the new product with file icon
-            $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-            addANewProductWithIcon($_SESSION["userId"],$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedQuantity,$insertedCategory);
-            addParagraph(translate("Your data has been loaded correctly"));
+        //Copyright check
+        $productsPreviewCopyrightCheck = copyrightCheck($_SESSION["userId"],$insertedName,$insertedCategory);
+        startCardGrid();
+        $foundAProduct = false;
+        foreach($productsPreviewCopyrightCheck as &$singleProductPreview){
+          $foundAProduct = true;
+          $fileImageToVisualize = genericProductImage;
+          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
           }
-          if($insertCorrectlyTheIcon == false){
-            //add the new product without file icon (because of error in the icon)
-            addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
-            addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change the icon later"));
-          }
-        } else {
-          //add the new product without file icon
-          addParagraph(translate("Your data has been loaded correctly"));
-          addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
+          $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+          $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
+          addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
         }
-        //Show button to return to your artisan page
-        addParagraph(translate("Now you can optionaly edit the product, for example to add tags and images and you can start to sell this product"));
-        addButtonLink(translate("Return to your artisan page"),"./artisan.php");
+        endCardGrid();
+        if($foundAProduct == true){
+          addParagraph(translate("Is not possible to proceed because the copyright check has found theese similar products"));
+          addButtonLink(translate("Return to your artisan page"),"./artisan.php");
+        } else {
+          //Add a new product
+          if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
+            //You have chosen to send the file icon
+            $fileName = $_FILES["insertedIcon"]["name"];
+            $fileType = $_FILES["insertedIcon"]["type"];
+            $fileSize = $_FILES['insertedIcon']['size'];
+            $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+            $insertCorrectlyTheIcon = false;
+            if($fileSize > maxSizeForAFile){
+              addParagraph(translate("The file is too big"));
+            } else if(!array_key_exists($fileExtension, permittedExtensions)){
+              addParagraph(translate("The extension of the file is not an image"));
+            } else if(!in_array($fileType, permittedExtensions)){
+              addParagraph(translate("The file is not an image"));
+            } else {
+              $insertCorrectlyTheIcon = true;
+              //add the new product with file icon
+              $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
+              addANewProductWithIcon($_SESSION["userId"],$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedQuantity,$insertedCategory);
+              addParagraph(translate("Your data has been loaded correctly"));
+            }
+            if($insertCorrectlyTheIcon == false){
+              //add the new product without file icon (because of error in the icon)
+              addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
+              addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change the icon later"));
+            }
+          } else {
+            //add the new product without file icon
+            addParagraph(translate("Your data has been loaded correctly"));
+            addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
+          }
+          //Show button to return to your artisan page
+          addParagraph(translate("Now you can optionaly edit the product, for example to add tags and images and you can start to sell this product"));
+          addButtonLink(translate("Return to your artisan page"),"./artisan.php");
+        }
       }
     } else {
       //Content of the page add a new product

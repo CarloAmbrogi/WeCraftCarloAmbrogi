@@ -1517,7 +1517,7 @@
   //obtain preview of artisans who are sponsoring some of the products of this artisan
   function obtainPreviewArtisansWhoAreSponsoringSomeOfTheProductsOfThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` where `Advertisement`.`product` in (select `Product`.`id` from `Product` where `Product`.`artisan` = ?)) group by `User`.`id` order by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Advertisement`.`product`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Advertisement` on `User`.`id` = `Advertisement`.`artisan` where `Advertisement`.`product` in (select `Product`.`id` from `Product` where `Product`.`artisan` = ?) group by `Advertisement`.`artisan` order by numberProductsIsSponsoring,`User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -1530,14 +1530,14 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    //return an array of associative array with id name surname icon iconExtension shopName numberProductsIsSponsoring
     return $elements;
   }
 
   //obtain preview of artisans whoose this artisan is sponsoring some products
   function obtainPreviewArtisansWhooseThisArtisanIsSponsoringSomeProducts($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `Artisan`.`id` in (select `Product`.`artisan` from `Product` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?)) group by `User`.`id` order by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Product` on `User`.`id` = `Product`.`artisan` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?) group by `User`.`id` order by numberProductsIsSponsoring,`User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -1550,7 +1550,28 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    //return an array of associative array with id name surname icon iconExtension shopName numberProductsIsSponsoring
+    return $elements;
+  }
+
+  //Obtain a preview of products with copyright check problems whit the product you are going to add
+  //Products of another artisan, with same name, with same category and added in last 14 days
+  function copyrightCheck($artisanId,$name,$category){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` <> ? and `name` = ? and `category` = ? and TIMESTAMPDIFF(SECOND, `Product`.`added`, CURRENT_TIMESTAMP()) < 1036800 ORDER BY `id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$artisanId,$name,$category);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
     return $elements;
   }
 

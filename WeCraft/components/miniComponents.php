@@ -681,4 +681,11 @@
     <?php
   }
 
+  //Add subtopic index for an internal link
+  function addSubtopicIndex($id){
+    ?>
+      <a id="<?= $id ?>"></a>
+    <?php
+  }
+
 ?>

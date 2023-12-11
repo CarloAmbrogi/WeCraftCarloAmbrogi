@@ -33,7 +33,11 @@
     }
     endCardGrid();
     addParagraph(translate("If you find an interesting product you want to sponsor on your artisan page, you can add it from the product page"));
-    
+    //Index
+    addButtonLink(translate("Suggested products"),"#suggestedProducts");
+    addButtonLink(translate("Suggested artisans"),"#suggestedArtisans");
+    //Suggested products
+    addSubtopicIndex("suggestedProducts");
     addTitle(translate("Suggested products"));
     addParagraph(translate("Here there are some suggested products you could sponsor on your artisan page")."...");
     addParagraph(translate("Products of artisans who are sponsoring some of your products").":");
@@ -80,7 +84,8 @@
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
-
+    //Suggested artisans
+    addSubtopicIndex("suggestedArtisans");
     addTitle(translate("Suggested artisans"));
     addParagraph(translate("Here there are some suggested artisans you could sponsor some of their products on your artisan page")."...");
     addParagraph(translate("Artisans who are sponsoring some of your products").":");
@@ -94,7 +99,7 @@
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
       }
-      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of your products this artisan is sponsoring").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
     }
     endCardGrid();
     if($foundAResult == false){
@@ -111,13 +116,12 @@
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
       }
-      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of products you are sponsoring of this artisan").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
     }
     endCardGrid();
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
-
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
