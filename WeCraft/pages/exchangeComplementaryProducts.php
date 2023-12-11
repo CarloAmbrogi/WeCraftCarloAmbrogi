@@ -34,7 +34,9 @@
     //Show these suggested artisans
     $previewArtisansWhoCouldBeComplementaryToThisArtisan = obtainPreviewArtisansWhoCouldBeComplementaryToThisArtisan($_SESSION["userId"]);
     startCardGrid();
+    $foundAResult = false;
     foreach($previewArtisansWhoCouldBeComplementaryToThisArtisan as &$singleArtisanPreview){
+      $foundAResult = true;
       $fileImageToVisualize = genericUserImage;
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
@@ -42,6 +44,9 @@
       addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
     }
     endCardGrid();
+    if($foundAResult == false){
+      addParagraph(translate("No result"));
+    }
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
