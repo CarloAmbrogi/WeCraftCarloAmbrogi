@@ -3,6 +3,7 @@
 - La chat
 - Coofiliera
 - Back button in some pages
+- Tag e categorie nella home cliccabili
 
 
 

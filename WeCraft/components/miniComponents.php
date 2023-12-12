@@ -650,6 +650,41 @@
     <?php
   }
 
+  //Add a short text field in a form with also a select
+  function addShortTextFieldWithAlsoASelect($text,$id,$maxLenghtInsertedText,$option1text,$option2text,$option1value,$option2value,$idSelect){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <input class="form-control" id="<?= $id ?>" type="text" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+        <select id="<?= $idSelect ?>" name="<?= $idSelect ?>">
+          <option value="<?= $option1value ?>"><?= $option1text ?></option>
+          <option value="<?= $option2value ?>"><?= $option2text ?></option>
+        </select>
+      </div>
+    <?php
+  }
+
+  //Add a short text field in a form with also a select
+  function addShortTextFieldWithTwoSelectForTimePeriod($text,$id,$maxLenghtInsertedText,$idSelectInTheLastBefore,$idSelectDuration){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <select id="<?= $idSelectInTheLastBefore ?>" name="<?= $idSelectInTheLastBefore ?>">
+          <option value="inTheLast"><?= translate("In the last") ?></option>
+          <option value="before"><?= translate("Before") ?></option>
+        </select>
+        <input class="form-control" id="<?= $id ?>" type="text" name="<?= $id ?>" maxlength="<?= $maxLenghtInsertedText ?>">
+        <select id="<?= $idSelectDuration ?>" name="<?= $idSelectDuration ?>">
+          <option value="hours"><?= translate("hours") ?></option>
+          <option value="days"><?= translate("days") ?></option>
+          <option value="weeks"><?= translate("weeks") ?></option>
+          <option value="months"><?= translate("months") ?></option>
+          <option value="years"><?= translate("years") ?></option>
+        </select>
+      </div>
+    <?php
+  }
+
   //Add a selector with 2 options
   function addSelector2Options($option1text,$option2text,$option1value,$option2value,$id){
     ?>

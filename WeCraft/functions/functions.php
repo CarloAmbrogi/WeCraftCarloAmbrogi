@@ -63,6 +63,18 @@
     return true;
   }
 
+  //Check if this is a valid float number
+  function isValidFloatNumber($number){
+    if(isValidPrice($number)){
+      return true;
+    }
+    $regex = "/^[0-9]+\.?[0-9]*$/";
+    if(!preg_match($regex, $number)){
+      return false;
+    }
+    return true;
+  }
+
   //Check if this quantity is valid
   function isValidQuantity($quantity){
     $regex = "/^[0-9]+$/";

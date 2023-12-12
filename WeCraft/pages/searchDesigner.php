@@ -64,13 +64,13 @@
   $descriptionL = "exactly";
   if(isset($_GET["descriptionL"])){
     if($_GET["descriptionL"] == "like"){
-        $descriptionL = "like";
+      $descriptionL = "like";
     }
   }
   $cond = "and";
   if(isset($_GET["cond"])){
     if($_GET["cond"] == "or"){
-        $cond = "or";
+      $cond = "or";
     }
   }
   //Load previous inserted values in the form
