@@ -23,12 +23,12 @@
   //Categories buttons
   addTitle(translate("Categories"));
   startCardGrid();
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/JewerlyIcon.png",translate("Jewerly"),"","");
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/HomeDecorationIcon.png",translate("Home decoration"),"","");
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/PotteryIcon.png",translate("Pottery"),"","");
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/TeppichesIcon.png",translate("Teppiches"),"","");
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/BedwareBathroomwareIcon.png",translate("Bedware Bathroomware"),"","");
-  addACardForTheGrid("./AAAAAAAAAAAA",WeCraftBaseUrl."Icons/ArtisanCraftIcon.png",translate("Artisan craft"),"","");
+  addACardForTheGrid("./category.php?cat=Jewerly",WeCraftBaseUrl."Icons/JewerlyIcon.png",translate("Jewerly"),"","");
+  addACardForTheGrid("./category.php?cat=Home decoration",WeCraftBaseUrl."Icons/HomeDecorationIcon.png",translate("Home decoration"),"","");
+  addACardForTheGrid("./category.php?cat=Pottery",WeCraftBaseUrl."Icons/PotteryIcon.png",translate("Pottery"),"","");
+  addACardForTheGrid("./category.php?cat=Teppiches",WeCraftBaseUrl."Icons/TeppichesIcon.png",translate("Teppiches"),"","");
+  addACardForTheGrid("./category.php?cat=Bedware Bathroomware",WeCraftBaseUrl."Icons/BedwareBathroomwareIcon.png",translate("Bedware Bathroomware"),"","");
+  addACardForTheGrid("./category.php?cat=Artisan craft",WeCraftBaseUrl."Icons/ArtisanCraftIcon.png",translate("Artisan craft"),"","");
   endCardGrid();
   //Some products
   addTitle(translate("New products"));

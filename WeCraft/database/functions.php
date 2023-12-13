@@ -1659,4 +1659,24 @@
     return $elements;
   }
 
+  //Obtain a preview of products with this category
+  function obtainPreviewProductsWithThisCategory($category){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `category` = ? ORDER BY `id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$category);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
 ?>
