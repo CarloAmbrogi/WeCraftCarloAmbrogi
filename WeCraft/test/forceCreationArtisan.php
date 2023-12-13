@@ -29,6 +29,7 @@
     $verificationCode = generateAVerificationCode();
     if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
       //You have chosen to send the file icon
+      $fileName = $_FILES["insertedIcon"]["name"];
       $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
       $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
       addANewArtisanWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);

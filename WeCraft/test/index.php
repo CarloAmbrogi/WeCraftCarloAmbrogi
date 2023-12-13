@@ -6,3 +6,7 @@
 <br>
 <a href="./forceCreationArtisan.php">Force creation artisan</a>
 <br>
+<a href="./populateTheDatabase.php">Populate the database</a>
+<br>
+<a href="./clearTheDatabase.php">Crear the database</a>
+<br>

@@ -1,12 +1,8 @@
-- Script che carica un database finto
-
+- Tag e categorie nella home cliccabili
 - La chat
 - Coofiliera
 - Back button in some pages
-- Tag e categorie nella home cliccabili
 
 
-
-popola database con cose indiane
 
 Fai customized order (con dati finti pagamento online e spedizione)
