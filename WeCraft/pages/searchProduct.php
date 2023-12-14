@@ -426,13 +426,15 @@
         if($firstTimeTag == true){
           $firstTimeTag = false;
           if($sql != ""){
-            $sql.=$cond." ";
+            $sql.=$cond." (";
+          } else {
+            $sql.="(";
           }
           $sql.="`Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where ";
         } else {
-          $sql.=$tagCond." ";
+          $sql.=$tagCond." "."`Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where ";
         }
-        $sql.="`ProductTags`.`tag` = '".$singleTag."' ";
+        $sql.="`ProductTags`.`tag` = '".$singleTag."') ";
       }
     }
     if($aTag == true){

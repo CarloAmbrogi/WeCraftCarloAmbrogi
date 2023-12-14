@@ -16,6 +16,7 @@
       addParagraph(translate("Error of the csrf token"));
     } else {
       $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
+      //$isLoginValid = true;//Uncomment to force log in valid
       if($isLoginValid){
         //log in done
         $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
