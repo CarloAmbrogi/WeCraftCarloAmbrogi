@@ -1,4 +1,4 @@
-- Tag cliccabili
+- Magari nella ricerca possibilità di ordinare i prodotti o dal più recente o dal più venduto
 - La chat
 - Coofiliera
 - Back button in some pages

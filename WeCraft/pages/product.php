@@ -38,11 +38,11 @@
         startRow();
         startCol();
         $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
-        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"dec","updateQuantityValue");
+        addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=dec&productId=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"dec","updateQuantityValue");
         endCol();
         addColMiniSpacer();
         startCol();
-        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"inc","updateQuantityValue");
+        addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAProduct.php?kind=inc&productId=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"inc","updateQuantityValue");
         endCol();
         endRow();
         ?>
@@ -51,7 +51,7 @@
             //It is also changed the text of the quantity via innerHTML
             function updateQuantityValue(){
               const quantity = document.getElementById('quantity');
-              let requestUrl = "<?= WeCraftBaseUrl ?>api/getQuantityOfThisProduct.php?productId=" + <?= $_GET["id"] ?>;
+              let requestUrl = "<?= WeCraftBaseUrl ?>api/getQuantityOfThisProduct.php?productId=" + encodeURIComponent(<?= $_GET["id"] ?>);
               let request = new XMLHttpRequest();
               request.open("GET", requestUrl);
               request.responseType = "json";
@@ -69,13 +69,13 @@
       $numberOfTags = getNumberTagsOfThisProduct($_GET["id"]);
       if($numberOfTags > 0){
         $tags = getTagsOfThisProduct($_GET["id"]);
-        $tagWritten = translate("Tags").":";
+        startParagraph();
+        insertHtmlWritten(translate("Tags").":");
         for($i=0;$i<$numberOfTags;$i++){
-          $tagWritten = $tagWritten." ";
-          $tagWritten = $tagWritten.$tags[$i]['tag'];
+          insertHtmlWritten(" ");
+          insertALink($tags[$i]['tag'],"./tag.php?tag=".urlencode($tags[$i]['tag']));
           $firstTimeTagWritten = false;
         }
-        addParagraph($tagWritten);
       } else {
         addParagraph(translate("No tag"));
       }
@@ -97,12 +97,12 @@
         $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
       }
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($productInfos["artisan"]);
-      addACard("./artisan.php?id=".$productInfos["artisan"],$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      addACard("./artisan.php?id=".urlencode($productInfos["artisan"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       //Carousel with images of this product
       addCarouselImagesOfThisProduct($_GET["id"]);
       //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
       if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
-        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".urlencode($_GET["id"]));
         $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
         $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
         addParagraph($AddedToShoppingCartWritten);
@@ -122,7 +122,7 @@
           if($singleArtisanPreview["quantity"] == "0"){
             $text2 = translate("Not available from this artisan");
           }
-          addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),$text2);
+          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),$text2);
         }
         endCardGrid();
       }
@@ -137,46 +137,46 @@
           if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
             $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
           }
-          addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
         }
         endCardGrid();
       }
       //Edit product (you can edit the product if you are the owner)
       if($_SESSION["userId"] == $productInfos["artisan"]){
-        addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".$_GET["id"]);
-        addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".$_GET["id"]);
+        addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".urlencode($_GET["id"]));
+        addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".urlencode($_GET["id"]));
         if($fileImageToVisualizeProduct != genericProductImage){
-          addButtonLink(translate("Delete product icon"),"./deleteProductIcon.php?id=".$_GET["id"]);
+          addButtonLink(translate("Delete product icon"),"./deleteProductIcon.php?id=".urlencode($_GET["id"]));
         }
-        addButtonLink(translate("Edit product icon"),"./editProductIcon.php?id=".$_GET["id"]);
-        addButtonLink(translate("Add images to this product"),"./addImagesToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Edit product icon"),"./editProductIcon.php?id=".urlencode($_GET["id"]));
+        addButtonLink(translate("Add images to this product"),"./addImagesToThisProduct.php?id=".urlencode($_GET["id"]));
         $numberOfImages = getNumberImagesOfThisProduct($_GET["id"]);
         if($numberOfImages > 0){
-          addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Remove images to this product"),"removeImagesToThisProduct.php?id=".urlencode($_GET["id"]));
         }
-        addButtonLink(translate("Add tags to this product"),"./addTagsToThisProduct.php?id=".$_GET["id"]);
+        addButtonLink(translate("Add tags to this product"),"./addTagsToThisProduct.php?id=".urlencode($_GET["id"]));
         if($numberOfTags > 0){
-          addButtonLink(translate("Remove tags to this product"),"./removeTagsToThisProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Remove tags to this product"),"./removeTagsToThisProduct.php?id=".urlencode($_GET["id"]));
         }
       } else if($kindOfTheAccountInUse == "Artisan"){//If you are not the owner butyou are another artisan, here there are some functions about the cooperation
         //Cooperation for visibility and marketing
         $areYouSponsoringThisProduct = isThisArtisanSponsoringThisProduct($_SESSION["userId"],$_GET["id"]);
         $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
-        addButtonOnOffApiActionViaJsLink($areYouSponsoringThisProduct,translate("Sponsor this product"),WeCraftBaseUrl."api/changeIfYouAreSponsoringThisProduct.php?artisan=".$_SESSION["userId"]."&product=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"sponsorAProduct");
+        addButtonOnOffApiActionViaJsLink($areYouSponsoringThisProduct,translate("Sponsor this product"),WeCraftBaseUrl."api/changeIfYouAreSponsoringThisProduct.php?artisan=".urlencode($_SESSION["userId"])."&product=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"sponsorAProduct");
         //Exchange products
         $areYouSellingThisExchangeProduct = isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$_GET["id"]);
         if($areYouSellingThisExchangeProduct){
           addParagraph(translate("You are selling this exchange product"));
-          addButtonLink(translate("Stop selling this exchange product"),"./stopSellingThisExchangeProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Stop selling this exchange product"),"./stopSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
           $quantityOfThisExchangeProduct = obtainQuantityExchangeProduct($_SESSION["userId"],$_GET["id"]);
           addParagraph(translate("Quantity of this product available in your phisical store").": ".$quantityOfThisExchangeProduct,"exchangeQuantity");
           startRow();
           startCol();
-          addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=dec&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"dec","updateExchangeQuantityValue");
+          addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=dec&productId=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"dec","updateExchangeQuantityValue");
           endCol();
           addColMiniSpacer();
           startCol();
-          addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=inc&productId=".$_GET["id"]."&token=".$_SESSION['csrftoken'],"inc","updateExchangeQuantityValue");
+          addApiActionViaJsLink("+",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=inc&productId=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"inc","updateExchangeQuantityValue");
           endCol();
           endRow();
           ?>
@@ -186,7 +186,7 @@
               //It is also changed the text of the quantity via innerHTML
               function updateExchangeQuantityValue(){
                 const exchangeQuantity = document.getElementById('exchangeQuantity');
-                let requestUrl = "<?= WeCraftBaseUrl ?>api/getExchangeQuantityOfThisProduct.php?artisan=" + <?= $_SESSION["userId"] ?> + "&product=" + <?= $_GET["id"] ?>;
+                let requestUrl = "<?= WeCraftBaseUrl ?>api/getExchangeQuantityOfThisProduct.php?artisan=" + encodeURIComponent(<?= $_SESSION["userId"] ?>) + "&product=" + encodeURIComponent(<?= $_GET["id"] ?>);
                 let request = new XMLHttpRequest();
                 request.open("GET", requestUrl);
                 request.responseType = "json";
@@ -199,9 +199,9 @@
               }
             </script>
           <?php
-          addButtonLink(translate("Change quantity"),"./startSellingThisExchangeProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Change quantity"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
         } else {
-          addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".$_GET["id"]);
+          addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
         }
       }
     } else {

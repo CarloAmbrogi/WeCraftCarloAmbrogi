@@ -58,7 +58,7 @@
           $subtotal = $singleProductPreview["price"] * $singleProductPreview["quantity"];
           $TotalPrice = $TotalPrice + $subtotal;
           $text2 = translate("Quantity").": ".$singleProductPreview["quantity"]." x ".translate("price").": ".floatToPrice($singleProductPreview["price"])." = ".floatToPrice($subtotal);
-          addACardForTheGrid("./product.php?id=".$singleProductPreview["product"],$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),htmlentities($text1),htmlentities($text2));
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["product"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),htmlentities($text1),htmlentities($text2));
         }
         endCardGrid();
         //TotalPrice
@@ -87,7 +87,7 @@
               } else if(!shoppingCartViolatingItemsCheck) {
                 //prevent sending form if the there is an item violating the max quantity available
                 e.preventDefault();
-                let requestUrl = "<?= WeCraftBaseUrl ?>api/numberOfViolatingItemsQ.php?userId=" + userId;
+                let requestUrl = "<?= WeCraftBaseUrl ?>api/numberOfViolatingItemsQ.php?userId=" + encodeURIComponent(userId);
                 let request = new XMLHttpRequest();
                 request.open("GET", requestUrl);
                 request.responseType = "json";

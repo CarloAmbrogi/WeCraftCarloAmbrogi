@@ -21,7 +21,7 @@
         $title = htmlentities($singleRecentOrder["timestamp"])."<br>".htmlentities(floatToPrice($singleRecentOrder["totalCost"]));
         $text1 = translate("Number of products").": ".htmlentities($singleRecentOrder["numberOfProducts"])."<br>".translate("Number of different products").": ".htmlentities($singleRecentOrder["numberOfDifferentProducts"]);
         $text2 = $singleRecentOrder["address"];
-        addACardForTheGrid("./recentOrder.php?id=".$singleRecentOrder["id"],$fileImageToVisualize,$title,$text1,htmlentities($text2));
+        addACardForTheGrid("./recentOrder.php?id=".urlencode($singleRecentOrder["id"]),$fileImageToVisualize,$title,$text1,htmlentities($text2));
       }
       endCardGrid();
     } else {

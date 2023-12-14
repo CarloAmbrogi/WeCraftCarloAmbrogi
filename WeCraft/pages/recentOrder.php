@@ -28,7 +28,7 @@
           $text1 = translate("From")." ".$singleProductPreview["shopName"]." (".$singleProductPreview["name"]." ".$singleProductPreview["surname"].")";
           $subtotal = $singleProductPreview["price"] * $singleProductPreview["quantity"];
           $text2 = translate("Quantity").": ".$singleProductPreview["quantity"]." x ".translate("today price").": ".floatToPrice($singleProductPreview["price"])." = ".floatToPrice($subtotal);
-          addACardForTheGrid("./product.php?id=".$singleProductPreview["product"],$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),htmlentities($text1),htmlentities($text2));
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["product"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),htmlentities($text1),htmlentities($text2));
         }
         endCardGrid();
       } else {

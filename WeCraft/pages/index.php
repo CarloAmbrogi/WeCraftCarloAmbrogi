@@ -23,12 +23,12 @@
   //Categories buttons
   addTitle(translate("Categories"));
   startCardGrid();
-  addACardForTheGrid("./category.php?cat=Jewerly",WeCraftBaseUrl."Icons/JewerlyIcon.png",translate("Jewerly"),"","");
-  addACardForTheGrid("./category.php?cat=Home decoration",WeCraftBaseUrl."Icons/HomeDecorationIcon.png",translate("Home decoration"),"","");
-  addACardForTheGrid("./category.php?cat=Pottery",WeCraftBaseUrl."Icons/PotteryIcon.png",translate("Pottery"),"","");
-  addACardForTheGrid("./category.php?cat=Teppiches",WeCraftBaseUrl."Icons/TeppichesIcon.png",translate("Teppiches"),"","");
-  addACardForTheGrid("./category.php?cat=Bedware Bathroomware",WeCraftBaseUrl."Icons/BedwareBathroomwareIcon.png",translate("Bedware Bathroomware"),"","");
-  addACardForTheGrid("./category.php?cat=Artisan craft",WeCraftBaseUrl."Icons/ArtisanCraftIcon.png",translate("Artisan craft"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Jewerly"),WeCraftBaseUrl."Icons/JewerlyIcon.png",translate("Jewerly"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Home decoration"),WeCraftBaseUrl."Icons/HomeDecorationIcon.png",translate("Home decoration"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Pottery"),WeCraftBaseUrl."Icons/PotteryIcon.png",translate("Pottery"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Teppiches"),WeCraftBaseUrl."Icons/TeppichesIcon.png",translate("Teppiches"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Bedware Bathroomware"),WeCraftBaseUrl."Icons/BedwareBathroomwareIcon.png",translate("Bedware Bathroomware"),"","");
+  addACardForTheGrid("./category.php?cat=".urlencode("Artisan craft"),WeCraftBaseUrl."Icons/ArtisanCraftIcon.png",translate("Artisan craft"),"","");
   endCardGrid();
   //Some products
   addTitle(translate("New products"));
@@ -43,7 +43,7 @@
     }
     $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
     $text2 = translate("Added when").": ".$singleProductPreview["added"];
-    addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
   }
   endCardGrid();
   if($addedAtListOneProduct == false){
@@ -61,7 +61,7 @@
     }
     $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
     $text2 = translate("Number of unit sold").": ".$singleProductPreview["numSells"];
-    addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
   }
   endCardGrid();
   if($addedAtListOneProduct == false){

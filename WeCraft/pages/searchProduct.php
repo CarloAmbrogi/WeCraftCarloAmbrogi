@@ -562,7 +562,7 @@
       if($singleProductPreview["quantity"] == "0"){
         $text2 = translate("Not available");
       }
-      addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
     //In case of no result

@@ -168,7 +168,7 @@
       if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
       }
-      addACardForTheGrid("./designer.php?id=".$singleDesignerPreview["id"],$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"");
+      addACardForTheGrid("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"");
     }
     endCardGrid();
     //In case of no result

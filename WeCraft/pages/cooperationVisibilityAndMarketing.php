@@ -29,7 +29,7 @@
       if($singleProductPreview["quantity"] == "0"){
         $text2 = translate("Not available");
       }
-      addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
     addParagraph(translate("If you find an interesting product you want to sponsor on your artisan page, you can add it from the product page"));
@@ -57,7 +57,7 @@
       if($singleProductPreview["quantity"] == "0"){
         $text2 = translate("Not available");
       }
-      addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
     if($foundAResult == false){
@@ -79,7 +79,7 @@
       if($singleProductPreview["quantity"] == "0"){
         $text2 = translate("Not available");
       }
-      addACardForTheGrid("./product.php?id=".$singleProductPreview["id"],$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
     if($foundAResult == false){
@@ -100,7 +100,7 @@
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
       }
-      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of your products this artisan is sponsoring").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
+      addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of your products this artisan is sponsoring").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
     }
     endCardGrid();
     if($foundAResult == false){
@@ -117,7 +117,7 @@
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
       }
-      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of products you are sponsoring of this artisan").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
+      addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of products you are sponsoring of this artisan").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
     }
     endCardGrid();
     if($foundAResult == false){
@@ -137,7 +137,7 @@
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
         $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
       }
-      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+      addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
     }
     endCardGrid();
     //In case of no result

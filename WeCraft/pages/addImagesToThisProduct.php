@@ -10,7 +10,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for adding images to this product
     $insertedProductId = $_POST['insertedProductId'];
-    upperPartOfThePage(translate("Edit product"),"./product.php?id=".$insertedProductId);
+    upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($insertedProductId));
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -38,7 +38,7 @@
               $imgData = file_get_contents($_FILES['insertedImage']['tmp_name']);
               addImageToAProduct($insertedProductId,$fileExtension,$imgData);
               addParagraph(translate("Done"));
-              addButtonLink(translate("Add another image"),"addImagesToThisProduct.php?id=".$insertedProductId);
+              addButtonLink(translate("Add another image"),"addImagesToThisProduct.php?id=".urlencode($insertedProductId));
             }
           } else {
             addParagraph(translate("You have missed to select the new image"));
@@ -53,7 +53,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Edit product"),"./product.php?id=".$_GET["id"]);
+      upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($_GET["id"]));
       if(doesThisProductExists($_GET["id"])){
         //Verify to be the owner of this product
         $productInfos = obtainProductInfos($_GET["id"]);

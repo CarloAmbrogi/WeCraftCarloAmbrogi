@@ -10,7 +10,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for editing the general info of this product
     $insertedProductId = $_POST['insertedProductId'];
-    upperPartOfThePage(translate("Edit product"),"./product.php?id=".$insertedProductId);
+    upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($insertedProductId));
     $insertedName = $_POST['insertedName'];
     $insertedDescription = $_POST['insertedDescription'];
     $insertedPrice = $_POST['insertedPrice'];
@@ -57,7 +57,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Edit product"),"./product.php?id=".$_GET["id"]);
+      upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($_GET["id"]));
       if(doesThisProductExists($_GET["id"])){
         //Verify to be the owner of this product
         $productInfos = obtainProductInfos($_GET["id"]);

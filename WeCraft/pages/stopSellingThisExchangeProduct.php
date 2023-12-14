@@ -11,7 +11,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for stopping to sell this exchange product
     $insertedProductId = $_POST['insertedProductId'];
-    upperPartOfThePage(translate("Stop selling exchange product"),"./product.php?id=".$insertedProductId);
+    upperPartOfThePage(translate("Stop selling exchange product"),"./product.php?id=".urlencode($insertedProductId));
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -38,7 +38,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Stop selling exchange product"),"./product.php?id=".$_GET["id"]);
+      upperPartOfThePage(translate("Stop selling exchange product"),"./product.php?id=".urlencode($_GET["id"]));
       if(doesThisProductExists($_GET["id"])){
         //Verify to not be the owner of this product and to be an artisan
         $productInfos = obtainProductInfos($_GET["id"]);

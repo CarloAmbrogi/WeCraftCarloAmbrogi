@@ -1174,7 +1174,7 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name iconExtension icon price quantity category
+    //return an array of associative array with id name iconExtension icon price quantity category numSells
     return $elements;
   }
 
@@ -1696,6 +1696,46 @@
     }
 
     //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain a preview of products with this tag (ordered by id desc)
+  function obtainProductsPreviewWithThisTag($tag){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,`Product`.`added` from `Product` where `Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where `ProductTags`.`tag` = ?) ORDER BY `Product`.`id` DESC limit 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$tag);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category
+    return $elements;
+  }
+
+  //Obtain a preview of most sold product with this tag (only product sold at least one time)
+  function obtainMostSoldProductsWithThisTag($tag){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentRecentOrder`.`quantity`) as numSells from `Product` join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where `Product`.`lastSell` is not null and `Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where `ProductTags`.`tag` = ?) group by `Product`.`id` ORDER BY numSells DESC limit 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$tag);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category numSells
     return $elements;
   }
 

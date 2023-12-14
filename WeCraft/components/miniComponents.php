@@ -89,6 +89,36 @@
     <?php
   }
 
+  //This function is to start a paragraph
+  function startParagraph(){
+    ?>
+      <div class="row mb-3">
+        <p>
+    <?php
+  }
+
+  //This function is to insert an html written
+  function insertHtmlWritten($written){
+    ?>
+      <?= htmlentities($written) ?>
+    <?php
+  }
+
+  //This function is to insert an a link
+  function insertALink($written,$link){
+    ?>
+      <a href="<?= $link ?>"><?= htmlentities($written) ?></a>
+    <?php
+  }
+
+  //This function is to end a paragraph
+  function endParagraph($written){
+    ?>
+        </p>
+      </div>
+    <?php
+  }
+
   //This function is to add a button for an api action witch is called via js
   function addApiActionViaJsLink($written,$link,$id,$functionToCallAfter=""){
     ?>

@@ -82,7 +82,7 @@
       }
       //send an email to verify the email address
       $userId = idUserWithThisEmail($insertedEmail);
-      $generatedLink = WeCraftBaseUrl."pages/verifyEmail.php?userid=".$userId."&verificationCode=".$verificationCode;
+      $generatedLink = WeCraftBaseUrl."pages/verifyEmail.php?userid=".urlencode($userId)."&verificationCode=".urlencode($verificationCode);
       $msg = translate("Click on this link only if it has been requested by you");
       $msg = $msg.": ".$generatedLink;
       mail($insertedEmail,"WeCraft - ".translate("Verify email"),$msg);
@@ -148,7 +148,7 @@
           } else if(!emailAddressBeenUsedCheck) {
             //prevent sending form if the email address has been used
             e.preventDefault();
-            let requestUrl = "<?= WeCraftBaseUrl ?>api/hasThisEmailAddressBeenUsed.php?thisEmailAddress=" + insertedEmail.value;
+            let requestUrl = "<?= WeCraftBaseUrl ?>api/hasThisEmailAddressBeenUsed.php?thisEmailAddress=" + encodeURIComponent(insertedEmail.value);
             let request = new XMLHttpRequest();
             request.open("GET", requestUrl);
             request.responseType = "json";

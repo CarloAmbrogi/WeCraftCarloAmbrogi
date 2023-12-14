@@ -10,7 +10,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for adding tags to this product
     $insertedProductId = $_POST['insertedProductId'];
-    upperPartOfThePage(translate("Edit product"),"./product.php?id=".$insertedProductId);
+    upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($insertedProductId));
     $insertedTag = $_POST['insertedTag'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
@@ -30,7 +30,7 @@
           //Add a tag to this product
           addATagToAProduct($insertedProductId,$insertedTag);
           addParagraph(translate("Done"));
-          addButtonLink(translate("Add another tag"),"addTagsToThisProduct.php?id=".$insertedProductId);
+          addButtonLink(translate("Add another tag"),"addTagsToThisProduct.php?id=".urlencode($insertedProductId));
         } else {
           addParagraph(translate("You cant modify this product"));
         }
@@ -41,7 +41,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Edit product"),"./product.php?id=".$_GET["id"]);
+      upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($_GET["id"]));
       if(doesThisProductExists($_GET["id"])){
         //Verify to be the owner of this product
         $productInfos = obtainProductInfos($_GET["id"]);

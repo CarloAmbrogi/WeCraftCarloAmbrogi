@@ -38,7 +38,7 @@
       addButtonOnOffShowHide($textButtonShowHide,"moreInformationOnThisDesigner");
       if($kindOfTheAccountInUse != "Guest" && $_GET["id"] != $_SESSION["userId"]){
         //Send message to this designer
-        addButtonLink(translate("Send message"),"./sendMessage.php?to=".$_GET["id"]);
+        addButtonLink(translate("Send message"),"./sendMessage.php?to=".urlencode($_GET["id"]));
       }
       endCol();
       endRow();
@@ -50,7 +50,7 @@
   } else {
     if($kindOfTheAccountInUse == "Designer"){
       //Redirect to this page of the designer
-      header('Location: ./designer.php?id='.$_SESSION["userId"]);
+      header('Location: ./designer.php?id='.urlencode($_SESSION["userId"]));
     } else {
       upperPartOfThePage(translate("Error"),"");
       addParagraph(translate("This page is visible only to designers"));

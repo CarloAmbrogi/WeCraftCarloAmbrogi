@@ -12,7 +12,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for adding a certain quantity of this product to the shopping cart
     $insertedProductId = $_POST['insertedProductId'];
-    upperPartOfThePage(translate("Product"),"./product.php?id=".$insertedProductId);
+    upperPartOfThePage(translate("Product"),"./product.php?id=".urlencode($insertedProductId));
     $insertedQuantity = $_POST['insertedQuantity'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
@@ -46,7 +46,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Product"),"./product.php?id=".$_GET["id"]);
+      upperPartOfThePage(translate("Product"),"./product.php?id=".urlencode($_GET["id"]));
       if($kindOfTheAccountInUse == "Customer"){
         if(doesThisProductExists($_GET["id"])){
           //Real content of this page
