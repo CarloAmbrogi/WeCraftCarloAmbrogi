@@ -1514,12 +1514,12 @@
     return $elements;
   }
 
-  //obtain preview of artisans who are sponsoring some of the products of this artisan
+  //obtain preview of artisans who are sponsoring some of the products of this artisan (exclude artisans who are sponsoring some of your products)
   function obtainPreviewArtisansWhoAreSponsoringSomeOfTheProductsOfThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Advertisement`.`product`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Advertisement` on `User`.`id` = `Advertisement`.`artisan` where `Advertisement`.`product` in (select `Product`.`id` from `Product` where `Product`.`artisan` = ?) group by `Advertisement`.`artisan` order by numberProductsIsSponsoring,`User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Advertisement`.`product`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Advertisement` on `User`.`id` = `Advertisement`.`artisan` where `Advertisement`.`artisan` not in (select `User`.`id` from `User` join `Artisan` on `User`.`id` = `Artisan`.`id` where `User`.`id` <> ? and `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` join `Product` on `Product`.`id` = `Advertisement`.`product` where `Product`.`artisan` = ?) and `User`.`id` in (select `Product`.`artisan` from `Product` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?))) and `Advertisement`.`product` in (select `Product`.`id` from `Product` where `Product`.`artisan` = ?) group by `Advertisement`.`artisan` order by numberProductsIsSponsoring,`User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$artisanId);
+      $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1534,12 +1534,12 @@
     return $elements;
   }
 
-  //obtain preview of artisans whoose this artisan is sponsoring some products
+  //obtain preview of artisans whoose this artisan is sponsoring some products (exclude artisans who are sponsoring some of your products)
   function obtainPreviewArtisansWhooseThisArtisanIsSponsoringSomeProducts($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Product` on `User`.`id` = `Product`.`artisan` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?) group by `User`.`id` order by numberProductsIsSponsoring,`User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` not in (select `User`.`id` from `User` join `Artisan` on `User`.`id` = `Artisan`.`id` where `User`.`id` <> ? and `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` join `Product` on `Product`.`id` = `Advertisement`.`product` where `Product`.`artisan` = ?) and `User`.`id` in (select `Product`.`artisan` from `Product` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?))) and `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?) group by `User`.`id` order by numberProductsIsSponsoring,`User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$artisanId);
+      $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1551,6 +1551,26 @@
     }
 
     //return an array of associative array with id name surname icon iconExtension shopName numberProductsIsSponsoring
+    return $elements;
+  }
+
+  //obtain preview of artisans with witch this artisan is sponsoring each other some product
+  function obtainPreviewArtisansWithWhichYouAreSponsoringSomeProductsEachOthers($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` <> ? and `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` join `Product` on `Product`.`id` = `Advertisement`.`product` where `Product`.`artisan` = ?) and `User`.`id` in (select `Product`.`artisan` from `Product` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?)) group by `User`.`id` order by `User`.`id` limit 100;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$artisanId,$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
     return $elements;
   }
 

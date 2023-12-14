@@ -36,6 +36,7 @@
     //Index
     addButtonLink(translate("Suggested products"),"#suggestedProducts");
     addButtonLink(translate("Suggested artisans"),"#suggestedArtisans");
+    addButtonLink(translate("Cooperating artisans"),"#cooperatingArtisans");
     //Suggested products
     addSubtopicIndex("suggestedProducts");
     addTitle(translate("Suggested products"));
@@ -119,6 +120,27 @@
       addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Number of products you are sponsoring of this artisan").": ".$singleArtisanPreview["numberProductsIsSponsoring"]);
     }
     endCardGrid();
+    if($foundAResult == false){
+      addParagraph(translate("No result"));
+    }
+    //Cooperating artisans
+    addSubtopicIndex("cooperatingArtisans");
+    addTitle(translate("Cooperating artisans"));
+    addParagraph(translate("Here there are the artisans with which you are sponsoring some products each others"));
+    //Show artisans with which you are sponsoring some products each others
+    $artisansWithWhichYouAreSponsoringSomeProductsEachOthers = obtainPreviewArtisansWithWhichYouAreSponsoringSomeProductsEachOthers($_SESSION["userId"]);
+    startCardGrid();
+    $foundAResult = false;
+    foreach($artisansWithWhichYouAreSponsoringSomeProductsEachOthers as &$singleArtisanPreview){
+      $foundAResult = true;
+      $fileImageToVisualize = genericUserImage;
+      if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+        $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+      }
+      addACardForTheGrid("./artisan.php?id=".$singleArtisanPreview["id"],$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+    }
+    endCardGrid();
+    //In case of no result
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
