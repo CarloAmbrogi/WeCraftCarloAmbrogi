@@ -76,7 +76,7 @@
       addParagraph(translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       endCol();
       startCol();
-      addButtonOnOffShowHide(translate("Show hide not available products"),"notAvailableProduct");
+      addButtonOnOffShowHide(translate("Show hide not available products from this artisan"),"notAvailableProduct");
       endCol();
       endRow();
       //Show the products previews of this artisan
@@ -91,8 +91,11 @@
         $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
         $isAvailable = true;
         if($singleProductPreview["quantity"] == "0"){
-          $text2 = translate("Not available");
+          $text2 = translate("Not available from this artisan");
           $isAvailable = false;
+          if($singleProductPreview["quantityFromPatners"] == "0"){
+            $text2 = translate("Not available");
+          }
         }
         if(!$isAvailable){
           startDivShowHideMultiple("notAvailableProduct");
@@ -103,34 +106,6 @@
         }
       }
       endCardGrid();
-      //This artisan is suggests also theese products
-      $numberProductsThisArtisanIsSponsoring = numberProductsThisArtisanIsSponsoring($_GET["id"]);
-      if($numberProductsThisArtisanIsSponsoring > 0){
-        addParagraph(translate("This artisan suggests also these products")." (".$numberProductsThisArtisanIsSponsoring."):");
-        $productsPreviewThisArtisanIsSponsoring = obtainProductsPreviewThisArtisanIsSponsoring($_GET["id"]);
-        startCardGrid();
-        foreach($productsPreviewThisArtisanIsSponsoring as &$singleProductPreview){
-          $fileImageToVisualize = genericProductImage;
-          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
-            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
-          }
-          $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-          $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
-          $isAvailable = true;
-          if($singleProductPreview["quantity"] == "0"){
-            $text2 = translate("Not available");
-            $isAvailable = false;
-          }
-          if(!$isAvailable){
-            startDivShowHideMultiple("notAvailableProduct");
-          }
-          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
-          if(!$isAvailable){
-            endDivShowHideMultiple();
-          }
-        }
-        endCardGrid();
-      }
       //This artisan sells also theese products of other artisans
       $numberExchangeProductsAvailableToThisStore = obtainNumberExchangeProductsAvailableToYourStore($_GET["id"]);
       if($numberExchangeProductsAvailableToThisStore > 0){
@@ -143,7 +118,7 @@
             $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
           }
           $isAvailable = true;
-          if($singleProductPreview["quantity"] == "0" && $singleProductPreview["quantityToThePatner"] == "0"){
+          if($singleProductPreview["quantityToThePatner"] == "0"){
             $isAvailable = false;
           }
           $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
@@ -155,6 +130,23 @@
           if(!$isAvailable){
             endDivShowHideMultiple();
           }
+        }
+        endCardGrid();
+      }
+      //This artisan is suggests also theese products of other artisans
+      $numberProductsThisArtisanIsSponsoring = numberProductsThisArtisanIsSponsoringExceptOnesIsExchangeSelling($_GET["id"]);
+      if($numberProductsThisArtisanIsSponsoring > 0){
+        addParagraph(translate("This artisan suggests also these products of other artisans")." (".$numberProductsThisArtisanIsSponsoring."):");
+        $productsPreviewThisArtisanIsSponsoring = obtainProductsPreviewThisArtisanIsSponsoringExceptOnesIsExchangeSelling($_GET["id"]);
+        startCardGrid();
+        foreach($productsPreviewThisArtisanIsSponsoring as &$singleProductPreview){
+          $fileImageToVisualize = genericProductImage;
+          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+          }
+          $text1 = translate("Category").": ".translate($singleProductPreview["category"]);
+          $text2 = translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
         }
         endCardGrid();
       }

@@ -38,10 +38,7 @@
       $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
     }
     $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-    $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
-    if($singleProductPreview["quantity"] == "0"){
-      $text2 = translate("Not available");
-    }
+    $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"];
     addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
   }
   endCardGrid();

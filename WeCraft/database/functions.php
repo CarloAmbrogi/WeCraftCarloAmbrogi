@@ -542,7 +542,7 @@
   //Obtain a preview of products of an artisan
   function obtainProductsPreviewOfThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `artisan` = ? ORDER BY `id` DESC;";
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`, COALESCE(sum(`ExchangeProduct`.`quantity`),0) as quantityFromPatners from `Product` left join `ExchangeProduct` on `Product`.`id` = `ExchangeProduct`.`product` where `Product`.`artisan` = ? group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -555,7 +555,7 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name iconExtension icon price quantity category
+    //return an array of associative array with id name iconExtension icon price quantity category quantityFromPatners
     return $elements;
   }
 
@@ -795,9 +795,9 @@
   //Get the quantity of this product in the shopping cart by this user
   function getQuantityOfThisProductInShoppingCartByThisUser($productId,$userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select COALESCE(t.`quantity`,0) as 'quantity' from `User` left join (select * from `ShoppingCart` where `product` = ? and `customer` = ?) as t on `User`.`id` = t.`customer`;";
+    $sql = "select COALESCE(t.`quantity`,0) as 'quantity' from `User` left join (select * from `ShoppingCart` where `product` = ? and `customer` = ?) as t on `User`.`id` = t.`customer` where `id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("ii",$productId,$userId);
+      $statement->bind_param("iii",$productId,$userId,$userId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1014,7 +1014,7 @@
   //Obtain a preview of recent orders of this user (witch is a customer)
   function obtainPreviewRecentOrdersOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "SELECT t.`id`,t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? GROUP by `RecentOrders`.`id`) as t;";
+    $sql = "SELECT t.`id`,t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? GROUP by `RecentOrders`.`id`) as t order by t.`timestamp` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1221,12 +1221,12 @@
     }
   }
 
-  //Number of products this artisan is sponsoring
-  function numberProductsThisArtisanIsSponsoring($productId){
+  //Number of products this artisan is sponsoring (except the products is exchange selling)
+  function numberProductsThisArtisanIsSponsoringExceptOnesIsExchangeSelling($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsThisArtisanIsSponsoring from (select * from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
+    $sql = "select count(*) as numberProductsThisArtisanIsSponsoring from (select * from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$productId);
+      $statement->bind_param("ii",$productId,$productId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1240,10 +1240,30 @@
     return $elements[0]["numberProductsThisArtisanIsSponsoring"];
   }
 
+  //Obtain a preview of products this artisan is sponsoring (except the products is exchange selling)
+  function obtainProductsPreviewThisArtisanIsSponsoringExceptOnesIsExchangeSelling($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) ORDER BY `id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price category
+    return $elements;
+  }
+
   //Obtain a preview of products this artisan is sponsoring
   function obtainProductsPreviewThisArtisanIsSponsoring($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$artisanId);
       $statement->execute();
@@ -1256,7 +1276,7 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name iconExtension icon price quantity category
+    //return an array of associative array with id name iconExtension icon price category
     return $elements;
   }
 
@@ -1322,7 +1342,7 @@
     return $elements;
   }
 
-  //Return if a certain artisan is selling this product (witch is of another artisan) on him physical store
+  //Return if a certain artisan is selling this product (witch is of another artisan) on him store
   function isThisArtisanSellingThisExchangeProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select count(*) as 'isThisArtisanSellingThisExchangeProduct' from (select * from `ExchangeProduct` where `artisan` = ? and `product` = ?) as t;";

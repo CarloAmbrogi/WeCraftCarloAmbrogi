@@ -94,6 +94,9 @@
                 if(q > maxAvailableQuantity){
                   q = maxAvailableQuantity;
                 }
+                if(q < 0){
+                  q = 0;
+                }
                 insertedQuantity.value = q;
               }
               function decQuantityValue(){
@@ -102,6 +105,9 @@
                 }
                 let q = Number(insertedQuantity.value);
                 q = q - 1;
+                if(q > maxAvailableQuantity){
+                  q = maxAvailableQuantity;
+                }
                 if(q < 0){
                   q = 0;
                 }

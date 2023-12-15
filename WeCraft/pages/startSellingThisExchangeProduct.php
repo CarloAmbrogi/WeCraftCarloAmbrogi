@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Start selling this exchange product (sell a product of onother artisan in your physical shop) by the id of the product
+  //Start selling this exchange product (sell a product of onother artisan in your store) by the id of the product
   doInitialScripts();
 
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -56,8 +56,8 @@
         if($_SESSION["userId"] != $productInfos["artisan"]){
           if($kindOfTheAccountInUse == "Artisan"){
             //Content of this page
-            //Title Sell this product of another artisan in your physical shop
-            addTitle(translate("Sell this product of another artisan in your physical shop"));
+            //Title Sell this product of another artisan in your store
+            addTitle(translate("Sell this product of another artisan in your store"));
             $productInfos = obtainProductInfos($_GET["id"]);
             addParagraph(translate("Product").": ".$productInfos["name"]);
             //Form to insert data for start selling this exchange product or to change the quantity

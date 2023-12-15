@@ -15,7 +15,7 @@
   } else {
     upperPartOfThePage(translate("Cooperate"),"./cooperate.php");
     addTitle(translate("Exchange complementary products"));
-    addParagraph(translate("Here will be shown the products of other artisans you are selling in your physical shop"));
+    addParagraph(translate("Here will be shown the products of other artisans you are selling in your store"));
     //Show exchange products available to your store
     $exchangeProductsPreviewAvailableToYourStore = obtainExchangeProductsAvailableToYourStore($_SESSION["userId"]);
     startCardGrid();
@@ -29,7 +29,7 @@
       addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
-    addParagraph(translate("If you receive from an artisan an his product you can start sell it in your physical shop and you can notify this on WeCraft from the page of that product"));
+    addParagraph(translate("If you receive from an artisan an his product you can start sell it in your store and you can notify this on WeCraft from the page of that product"));
     addParagraph(translate("Here there are some suggestions of possible artisans who sell complemetary products to yours").":");
     //Show these suggested artisans
     $previewArtisansWhoCouldBeComplementaryToThisArtisan = obtainPreviewArtisansWhoCouldBeComplementaryToThisArtisan($_SESSION["userId"]);

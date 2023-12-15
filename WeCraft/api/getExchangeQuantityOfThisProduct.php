@@ -1,7 +1,7 @@
 <?php
   include dirname(__FILE__)."/../database/access.php";
 
-  //Get the exchange quantity of a product which is sold in the physical stor of another artisan
+  //Get the exchange quantity of a product which is sold in the store of another artisan
 
   if(isset($_GET["artisan"]) && isset($_GET["product"])){
 

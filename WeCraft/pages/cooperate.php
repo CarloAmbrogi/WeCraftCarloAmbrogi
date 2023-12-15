@@ -25,7 +25,7 @@
     endSquare();
     startSquare();
     addButtonLink(translate("Exchange complementary products"),"./exchangeComplementaryProducts.php");
-    addParagraph(translate("Artisans sell other artisans products at their physical stores and WeCrafts system helps by suggesting possible artisans who create complementary products"));
+    addParagraph(translate("Artisans sell other artisans products at their stores and WeCrafts system helps by suggesting possible artisans who create complementary products"));
     endSquare();
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());

@@ -19,8 +19,8 @@
   addShortTextField(translate("Max price"),"maxPrice",24);
   endSquare();
   startSquare();
-  addShortTextField(translate("Min quantity"),"minQuantity",24);
-  addShortTextField(translate("Max quantity"),"maxQuantity",24);
+  addShortTextField(translate("Min quantity from the owner"),"minQuantity",24);
+  addShortTextField(translate("Max quantity from the owner"),"maxQuantity",24);
   endSquare();
   ?>
     <label for="formCategory" class="form-label"><?= translate("Category") ?></label>
@@ -558,10 +558,7 @@
         $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
       }
       $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-      $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
-      if($singleProductPreview["quantity"] == "0"){
-        $text2 = translate("Not available");
-      }
+      $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"];
       addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();

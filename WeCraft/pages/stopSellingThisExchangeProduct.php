@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Stop selling this exchange product (stop selling a product of onother artisan in your physical shop) by the id of the product
+  //Stop selling this exchange product (stop selling a product of onother artisan in your store) by the id of the product
   doInitialScripts();
 
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -45,8 +45,8 @@
         if($_SESSION["userId"] != $productInfos["artisan"]){
           if($kindOfTheAccountInUse == "Artisan"){
             //Content of this page
-            //Title Stop selling this product of another artisan in your physical shop
-            addTitle(translate("Stop selling this product of another artisan in your physical shop"));
+            //Title Stop selling this product of another artisan in your store
+            addTitle(translate("Stop selling this product of another artisan in your store"));
             $productInfos = obtainProductInfos($_GET["id"]);
             addParagraph(translate("Product").": ".$productInfos["name"]);
             //Form to insert data for stop selling this exchange product or to change the quantity

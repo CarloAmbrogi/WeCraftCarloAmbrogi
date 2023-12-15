@@ -110,7 +110,7 @@
       //This product is available also from theese artisans
       $numberOtherArtisansWhoAreSellingThisExchangeProduct = obtainNumberOtherArtisansWhoAreSellingThisExchangeProduct($_GET["id"]);
       if($numberOtherArtisansWhoAreSellingThisExchangeProduct > 0){
-        addParagraph(translate("This product is sold also from the physical shop of theese artisans")." (".$numberOtherArtisansWhoAreSellingThisExchangeProduct."):");
+        addParagraph(translate("This product is sold also from the shop of theese artisans")." (".$numberOtherArtisansWhoAreSellingThisExchangeProduct."):");
         $previewOtherArtisansWhoAreSellingThisExchangeProduct = obtainPreviewOtherArtisansWhoAreSellingThisExchangeProduct($_GET["id"]);
         startCardGrid();
         foreach($previewOtherArtisansWhoAreSellingThisExchangeProduct as &$singleArtisanPreview){
@@ -118,7 +118,7 @@
           if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
             $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
           }
-          $text2 = translate("Quantity available from the physical shop of this artisan").": ".$singleArtisanPreview["quantity"];
+          $text2 = translate("Quantity available from the store of this artisan").": ".$singleArtisanPreview["quantity"];
           if($singleArtisanPreview["quantity"] == "0"){
             $text2 = translate("Not available from this artisan");
           }
@@ -169,7 +169,7 @@
           addParagraph(translate("You are selling this exchange product"));
           addButtonLink(translate("Stop selling this exchange product"),"./stopSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
           $quantityOfThisExchangeProduct = obtainQuantityExchangeProduct($_SESSION["userId"],$_GET["id"]);
-          addParagraph(translate("Quantity of this product available in your phisical store").": ".$quantityOfThisExchangeProduct,"exchangeQuantity");
+          addParagraph(translate("Quantity of this product available in your store").": ".$quantityOfThisExchangeProduct,"exchangeQuantity");
           startRow();
           startCol();
           addApiActionViaJsLink("-",WeCraftBaseUrl."api/changeQuantityOfAnExchangeProduct.php?kind=dec&productId=".urlencode($_GET["id"])."&token=".urlencode($_SESSION['csrftoken']),"dec","updateExchangeQuantityValue");
@@ -181,7 +181,7 @@
           endRow();
           ?>
             <script>
-              //When the artisan who is selling this exchange product click on button + or - to change the quantity of this exchange product available in his physica store,
+              //When the artisan who is selling this exchange product click on button + or - to change the quantity of this exchange product available in his store,
               //the quantity is changed without exiting from the page via an api
               //It is also changed the text of the quantity via innerHTML
               function updateExchangeQuantityValue(){
@@ -194,7 +194,7 @@
                 request.onload = function(){
                   const result = request.response;
                   let quantityOfThisProduct = result[0].quantity;
-                  exchangeQuantity.innerHTML = "<?= translate("Quantity of this product available in your phisical store").": " ?>"+quantityOfThisProduct;
+                  exchangeQuantity.innerHTML = "<?= translate("Quantity of this product available in your store").": " ?>"+quantityOfThisProduct;
                 }
               }
             </script>
@@ -202,6 +202,10 @@
           addButtonLink(translate("Change quantity"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
         } else {
           addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
+        }
+        //In case you both sponsor and sell this product
+        if($areYouSponsoringThisProduct && $areYouSellingThisExchangeProduct){
+          addParagraph(translate("In case you both sponsor and sell this product of another artisan on your artisan page it will be shown only as a product you sell"));
         }
       }
     } else {

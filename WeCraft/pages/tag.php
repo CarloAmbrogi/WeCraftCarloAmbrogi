@@ -9,7 +9,7 @@
   doInitialScripts();
   upperPartOfThePage(translate("Tag"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back to where
   addTitle("#".$_GET["tag"]);
-  addButtonOnOffShowHide(translate("Show hide not available products"),"notAvailableProduct");
+  addButtonOnOffShowHide(translate("Show hide not products not available from the owner"),"notAvailableProduct");
   //Products with this tag
   addTitle(translate("New products with this tag"));
   $productsPreviewWithThisTag = obtainProductsPreviewWithThisTag($_GET["tag"]);
@@ -22,10 +22,9 @@
       $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
     }
     $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-    $text2 = translate("Quantity available").": ".$singleProductPreview["quantity"];
+    $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"];
     $isAvailable = true;
     if($singleProductPreview["quantity"] == "0"){
-      $text2 = translate("Not available");
       $isAvailable = false;
     }
     if(!$isAvailable){
