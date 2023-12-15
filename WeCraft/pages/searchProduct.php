@@ -48,6 +48,7 @@
   addShortTextField(translate("Max number of sells"),"maxNumSells",24);
   endSquare();
   addSelector2Options(translate("All theese conditions"),translate("At least one of theese conditions"),"and","or","cond");
+  addSelector2Options(translate("Show products from most recent"),translate("Show products from most sold"),"rec","sold","ord");
   endFormGet(translate("SubmitSearch"));
   addButtonLink(translate("Clean research"),"./searchProduct.php");
   //input get params
@@ -194,6 +195,12 @@
       $cond = "or";
     }
   }
+  $ord = "rec";
+  if(isset($_GET["ord"])){
+    if($_GET["ord"] == "sold"){
+      $ord = "sold";
+    }
+  }
   //Load previous inserted values in the form
   ?>
     <script>
@@ -219,6 +226,7 @@
       const minNumSells = document.getElementById('minNumSells');
       const maxNumSells = document.getElementById('maxNumSells');
       const cond = document.getElementById('cond');
+      const ord = document.getElementById('ord');
 
       //Load form fields starting values
       name.value = "<?= $name ?>";
@@ -241,6 +249,7 @@
       minNumSells.value = "<?= $minNumSells ?>";
       maxNumSells.value = "<?= $maxNumSells ?>";
       cond.value = "<?= $cond ?>";
+      ord.value = "<?= $ord ?>";
 
       function isValidQuantity(quantity){
         const quantityRegex = /^[0-9]+$/;
@@ -255,61 +264,77 @@
 
       //prevent sending form with errors
       form.onsubmit = function(e){
-        if(minPrice.value !== ""){
+        let YouHaveToprevent = false;
+        let messagePrevent = "";
+        if(!YouHaveToprevent && minPrice.value !== ""){
           if(!isValidPrice(minPrice.value)){
-            e.preventDefault();
-            alert("<?= translate("The min price is not empty or is not in the format number plus dot plus two digits") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min price is not empty or is not in the format number plus dot plus two digits") ?>";
           }
-        } else if(maxPrice.value !== ""){
+        }
+        if(!YouHaveToprevent && maxPrice.value !== ""){
           if(!isValidPrice(maxPrice.value)){
-            e.preventDefault();
-            alert("<?= translate("The max price is not empty or is not in the format number plus dot plus two digits") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The max price is not empty or is not in the format number plus dot plus two digits") ?>";
           }
-        } else if(minPrice.value !== "" && maxPrice.value !== ""){
-          if(Number(minPrice) > Number(maxPrice)){
-            e.preventDefault();
-            alert("<?= translate("The min price is greater than the max price") ?>");
+        }
+        if(!YouHaveToprevent && minPrice.value !== "" && maxPrice.value !== ""){
+          if(Number(minPrice.value) > Number(maxPrice.value)){
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min price is greater than the max price") ?>";
           }
-        } else if(minQuantity.value !== ""){
+        }
+        if(!YouHaveToprevent && minQuantity.value !== ""){
           if(!isValidQuantity(minQuantity.value)){
-            e.preventDefault();
-            alert("<?= translate("The min quantity is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min quantity is not empty or is not a number") ?>";
           }
-        } else if(maxQuantity.value !== ""){
+        }
+        if(!YouHaveToprevent && maxQuantity.value !== ""){
           if(!isValidQuantity(maxQuantity.value)){
-            e.preventDefault();
-            alert("<?= translate("The max quantity is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The max quantity is not empty or is not a number") ?>";
           }
-        } else if(minQuantity.value !== "" && maxQuantity.value !== ""){
-          if(Number(minQuantity) > Number(maxQuantity)){
-            e.preventDefault();
-            alert("<?= translate("The min quantity is greater than the max quantity") ?>");
+        }
+        if(!YouHaveToprevent && minQuantity.value !== "" && maxQuantity.value !== ""){
+          if(Number(minQuantity.value) > Number(maxQuantity.value)){
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min quantity is greater than the max quantity") ?>";
           }
-        } else if(addedWhen.value !== ""){
+        }
+        if(!YouHaveToprevent && addedWhen.value !== ""){
           if(!isValidQuantity(addedWhen.value)){
-            e.preventDefault();
-            alert("<?= translate("The added on WeCraft value is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The added on WeCraft value is not empty or is not a number") ?>";
           }
-        } else if(lastSell.value !== ""){
+        }
+        if(!YouHaveToprevent && lastSell.value !== ""){
           if(!isValidQuantity(lastSell.value)){
-            e.preventDefault();
-            alert("<?= translate("The last sell value is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The last sell value is not empty or is not a number") ?>";
           }
-        } else if(minNumSells.value !== ""){
+        }
+        if(!YouHaveToprevent && minNumSells.value !== ""){
           if(!isValidQuantity(minNumSells.value)){
-            e.preventDefault();
-            alert("<?= translate("The min number of sells is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min number of sells is not empty or is not a number") ?>";
           }
-        } else if(maxNumSells.value !== ""){
+        }
+        if(!YouHaveToprevent && maxNumSells.value !== ""){
           if(!isValidQuantity(maxNumSells.value)){
-            e.preventDefault();
-            alert("<?= translate("The max number of sells is not empty or is not a number") ?>");
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The max number of sells is not empty or is not a number") ?>";
           }
-        } else if(minNumSells.value !== "" && maxNumSells.value !== ""){
-          if(Number(minNumSells) > Number(maxNumSells)){
-            e.preventDefault();
-            alert("<?= translate("The min number of sells is greater than the max number of sells") ?>");
+        }
+        if(!YouHaveToprevent && minNumSells.value !== "" && maxNumSells.value !== ""){
+          if(Number(minNumSells.value) > Number(maxNumSells.value)){
+            YouHaveToprevent = true;
+            messagePrevent = "<?= translate("The min number of sells is greater than the max number of sells") ?>";
           }
+        }
+        if(YouHaveToprevent){
+          e.preventDefault();
+          alert(messagePrevent);
         }
       }
     </script>
@@ -379,13 +404,20 @@
       </script>
     <?php
     //Prepare sql
-    $sqlInitialPart = "select id,name,iconExtension,icon,price,quantity,category from (select `Product`.`id` as id,`Product`.`name` as name,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`price` as price,`Product`.`quantity` as quantity,`Product`.`category` as category, COALESCE(sum(`ContentRecentOrder`.`quantity`),0) as numSells from `Product` left join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where ";
+    $sqlInitialPart = "select id,name,iconExtension,icon,price,quantity,category,numSells from (select `Product`.`id` as id,`Product`.`name` as name,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`price` as price,`Product`.`quantity` as quantity,`Product`.`category` as category, COALESCE(sum(`ContentRecentOrder`.`quantity`),0) as numSells from `Product` left join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where ";
     $sqlMidExample = "`Product`.`name` = 'PIPPO' and `Product`.`description` = 'PIPPO' and `Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where `ProductTags`.`tag` = 'PIPPO' or `ProductTags`.`tag` = 'PIPPO') and (`Product`.`price` >= 1111 and `Product`.`price` <= 9999) and (`Product`.`quantity` >= 1111 and `Product`.`quantity` <= 9999) and `Product`.`category` = 'PIPPO' and ((TIMESTAMPDIFF(SECOND, `Product`.`added`, CURRENT_TIMESTAMP()) <= 1000) and (TIMESTAMPDIFF(SECOND, `Product`.`added`, CURRENT_TIMESTAMP()) >= 1000)) and ((TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) <= 1000) and (TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) >= 1000)) ";
     $sqlFinalPartExample = "group by `Product`.`id` ORDER BY `id` DESC limit 100) as t where numSells >= 1111 and numSells <= 9999;";
-    $sqlFinalPart = "group by `Product`.`id` ORDER BY `id` DESC limit 100) as t";
+    $sqlFinalPart = "group by `Product`.`id` ORDER BY `id` DESC,numSells DESC limit 100) as t";
+    $sqlFinalPartPrecNumSells = "group by `Product`.`id` ORDER BY numSells DESC,`id` DESC limit 100) as t";
     $exampleOptionalFinalPart = " where numSells >= 1111 and numSells <= 9999";
     $endSemiColumn = ";";
-    $sql = "";
+    if($ord == "sold"){
+      $sqlFinalPart = $sqlFinalPartPrecNumSells;//Order from most sold instead of from most recent
+    }
+    $sql = "1 ";
+    if($cond == "or"){
+      $sql = "0 ";
+    }
     $optionalFinalPart = "";
     //name and description
     if($name != ""){
@@ -558,7 +590,7 @@
         $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
       }
       $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-      $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"];
+      $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"]." ".translate("Number of sells").": ".$singleProductPreview["numSells"];
       addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
     }
     endCardGrid();
