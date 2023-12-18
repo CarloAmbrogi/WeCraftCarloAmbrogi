@@ -8,6 +8,7 @@
   //This page permits to see a designer with its informations specifying the id of the designer with a get
   //If this page is viewed without a get by a designer, the designer automatically is redirected to its designer page
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(getKindOfThisAccount($_GET["id"]) != "Designer"){
@@ -15,7 +16,7 @@
       addParagraph(translate("This user is not a designer"));
     } else {
       //Page ok
-      upperPartOfThePage(translate("Designer"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back to the map or search (without this get the button will not be shown)
+      upperPartOfThePage(translate("Designer"),"cookieBack");
       //Show the designer
       $userInfos = obtainUserInfos($_GET["id"]);
       $designerInfos = obtainDesignerInfos($_GET["id"]);

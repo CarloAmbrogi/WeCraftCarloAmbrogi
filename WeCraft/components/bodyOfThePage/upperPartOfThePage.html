@@ -31,7 +31,7 @@
   <nav class="navbar navbar-expand-md fixed-top bg-body-tertiary">
     <!-- Back button (not in all pages it will be present) -->
       <?php
-        if($backButtonLink != "" && $backButtonLink != "jsBack"){
+        if($backButtonLink != "" && $backButtonLink != "jsBack" && $backButtonLink != "cookieBack"){
           ?>
             <button type="button" onclick="window.location='<?= $backButtonLink ?>';" class="btn btn-primary"
               style="margin:10px;">⬅️
@@ -45,10 +45,121 @@
               <?= translate("Back") ?>
             </button>
           <?php
+        } else if($backButtonLink == "cookieBack"){
+          //In this case visualize the back button if there is a cronology to return back
+          $cronology = "";
+          if(isset($_COOKIE['cronology'])){
+            $cronology = $_COOKIE['cronology'];
+          }
+          $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+          $langLenght = strlen("&language=en");
+          if($cronology == "" || $cronology == "{".$actual_link || $cronology == "{".substr($actual_link,0,-$langLenght)){
+            ?>
+              <div id="mySpacer"></div>
+            <?php
+          } else {
+            ?>
+              <button type="button" onclick="goBackPage();" class="btn btn-primary"
+                style="margin:10px;">⬅️
+                <?= translate("Back") ?>
+              </button>
+              <script>
+                function goBackPage(){
+                  function getCookie(cname) {
+                    let name = cname + "=";
+                    let decodedCookie = decodeURIComponent(document.cookie);
+                    let ca = decodedCookie.split(';');
+                    for(let i = 0; i <ca.length; i++) {
+                      let c = ca[i];
+                      while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                      }
+                      if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                      }
+                    }
+                    return "";
+                  }
+
+                  function returnToHome(){
+                    let WeCraftBaseUrl = "http://carloambrogipolimi.altervista.org/WeCraft/";
+                    document.cookie = "cronology="+escape("");
+                    document.cookie = "cronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                    window.location = WeCraftBaseUrl;
+                  }
+
+                  function isValidWeCraftUrl(weCraftUrl){
+                    let startingPart = "http://carloambrogipolimi.altervista.org/WeCraft";
+                    let pattern = ".php";
+                    let startingWeCraftUrl = weCraftUrl.substring(0,startingPart.length);
+                    if(startingWeCraftUrl != startingPart){
+                      return false;
+                    }
+                    if(!weCraftUrl.includes(pattern)){
+                      return false;
+                    }
+                    return true
+                  }
+
+                  let pageNow = window.location.href;
+                  let langEn = "&language=en";
+                  let langIt = "&language=it";
+                  let langLenght = langEn.length;
+                  if(pageNow.includes(langEn) || pageNow.includes(langIt)){
+                    pageNow = pageNow.slice(0, -langLenght);
+                  }
+                  let cronologyNow = unescape(getCookie("cronology"));
+                  let cronologyNowArray = cronologyNow.split("{");
+                  if(cronologyNowArray.length > 0){
+                    let lastElement = cronologyNowArray[cronologyNowArray.length - 1];
+                    cronologyNowArray.pop();
+                    if(lastElement == "" || !isValidWeCraftUrl(lastElement)){
+                      returnToHome();
+                    } else {
+                      let skipFixCronology = false;
+                      let prepareLocation = "";
+                      if(lastElement != pageNow){
+                        prepareLocation = lastElement;
+                      } else {
+                        if(cronologyNowArray.length > 0){
+                          let lastElement = cronologyNowArray[cronologyNowArray.length - 1];
+                          cronologyNowArray.pop();
+                          if(lastElement == "" || !isValidWeCraftUrl(lastElement)){
+                            skipFixCronology = true;
+                            returnToHome();
+                          } else {
+                            prepareLocation = lastElement;
+                          }
+                        } else {
+                          skipFixCronology = true;
+                          returnToHome();
+                        }
+                      }
+                      if(skipFixCronology == false){
+                        let newCronology = "";
+                        cronologyNowArray.filter((element) => element != "").forEach((element) => newCronology = newCronology + "{" + element);
+                        document.cookie = "cronology="+escape(newCronology);
+                      }
+                      if(prepareLocation != ""){
+                        window.location = prepareLocation;
+                      }
+                    }
+                  } else {
+                    returnToHome();
+                  }
+                }
+              </script>
+            <?php
+          }
         } else {
           ?>
             <!-- Little space instead of the back button -->
             <div id="mySpacer"></div>
+            <!-- In case there isn't the back button, remove cronology -->
+            <script>
+              document.cookie = "cronology="+escape("");
+              document.cookie = "cronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            </script>
           <?php
         }
       ?>

@@ -6,6 +6,7 @@
 
   //Global Search
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   upperPartOfThePage(translate("Search"),"./search.php");
   //Content of the page
   addTitle(translate("Global search"));

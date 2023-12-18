@@ -35,6 +35,7 @@
           } else {
             addParagraph(translate("Removed from shopping cart"));
           }
+          addButtonLink(translate("Continue with your purchases"),"./product.php?id=".urlencode($insertedProductId));
           addButtonLink(translate("Go to shopping cart"),"./shoppingCart.php");
         } else {
           addParagraph(translate("This page is visible only to customers"));

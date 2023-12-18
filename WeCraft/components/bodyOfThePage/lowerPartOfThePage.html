@@ -10,7 +10,7 @@
             <?php
               foreach($elementsForTheFooter as &$elementForTheFooter){
                 ?>
-                  <button type="button" class="btn btn-outline-primary" onclick="window.location='<?= $elementForTheFooter[1] ?>';">
+                  <button type="button" class="btn btn-outline-primary" onclick="continueToThisLocation('<?= $elementForTheFooter[1] ?>');">
                     <col>
                       <row>
                         <img src="<?= tabBarIconForThisTab($elementForTheFooter[0]) ?>" alt="<?= $elementForTheFooter[0] ?> width="25" height="25">
@@ -41,6 +41,13 @@ function addUrlParameter(name, value) {
   var searchParams = new URLSearchParams(window.location.search)
   searchParams.set(name, value)
   window.location.search = searchParams.toString()
+}
+
+//function to proceed in a location when clicking on the tab bar
+function continueToThisLocation(goLocation){
+  document.cookie = "cronology="+escape("");
+  document.cookie = "cronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  window.location = goLocation;
 }
 </script>
 

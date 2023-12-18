@@ -6,6 +6,7 @@
 
   //Search Product
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   upperPartOfThePage(translate("Search"),"./search.php");
   //Content of the page
   addTitle(translate("Search product"));

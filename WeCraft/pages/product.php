@@ -7,8 +7,9 @@
   //Visualize a product by id (the id is sent as a get)
   //The atisan owner of this product has more options on the page such as add image, add tags, change quantity, edit the product
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("Product"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back where (without this get the button will not be shown)
+  upperPartOfThePage(translate("Product"),"cookieBack");
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
       //Real content of this page

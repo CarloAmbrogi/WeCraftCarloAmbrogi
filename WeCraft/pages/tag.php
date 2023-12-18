@@ -7,7 +7,8 @@
   //Tag
   //This page is when you click on a tag, to see the products with that tag
   doInitialScripts();
-  upperPartOfThePage(translate("Tag"),"jsBack");//AAAAAAAA don't use jsback but the page that sent you here adds a get to let you know if you go back to where
+  addScriptAddThisPageToCronology();
+  upperPartOfThePage(translate("Tag"),"cookieBack");
   addTitle("#".$_GET["tag"]);
   addButtonOnOffShowHide(translate("Show hide not products not available from the owner"),"notAvailableProduct");
   //Products with this tag
