@@ -70,7 +70,7 @@
         endForm(translate("Pay")." ".floatToPrice($TotalPrice)." ".translate("and send order"));
         ?>
           <script>
-            //Your user user
+            //Your user id
             const userId = "<?= $_SESSION["userId"] ?>";
 
             //form inserted parameters
@@ -86,6 +86,7 @@
                 alert("<?= translate("You have missed to insert the address") ?>");
               } else if(!shoppingCartViolatingItemsCheck) {
                 //prevent sending form if the there is an item violating the max quantity available
+/*
                 e.preventDefault();
                 let requestUrl = "<?= WeCraftBaseUrl ?>api/numberOfViolatingItemsQ.php?userId=" + encodeURIComponent(userId);
                 let request = new XMLHttpRequest();
@@ -101,6 +102,7 @@
                     alert("<?= translate("You cant proceed with the order because one or more products of this oreder is not any more available with your selected quantity") ?>");
                   }
                 }
+*/
               }
             }
           </script>

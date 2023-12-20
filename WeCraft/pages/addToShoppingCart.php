@@ -13,30 +13,45 @@
     //Receive post request for adding a certain quantity of this product to the shopping cart
     $insertedProductId = $_POST['insertedProductId'];
     upperPartOfThePage(translate("Product"),"./product.php?id=".urlencode($insertedProductId));
-    $insertedQuantity = $_POST['insertedQuantity'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
-    } else if($insertedQuantity == ""){
-      addParagraph(translate("You have missed to insert the quantity"));
-    } else if(strlen($insertedQuantity) > 5){
-      addParagraph(translate("The quantity is too big"));
-    } else if(!isValidQuantity($insertedQuantity)){
-      addParagraph(translate("The quantity is not a number"));
     } else {
       //Check that this product exists and check that the user is a customer
       if(doesThisProductExists($insertedProductId)){
         if($kindOfTheAccountInUse == "Customer"){
           //Add a certain quantity of this product to the shopping cart
-          updateQuantityOfThisProductInShoppingCartForThisUser($insertedProductId,$insertedQuantity,$_SESSION["userId"]);
-          if($insertedQuantity > 0){
-            addParagraph(translate("Added to shopping cart"));
-          } else {
-            addParagraph(translate("Removed from shopping cart"));
+          $visualizeViewShoppingCartButton = false;
+          $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($insertedProductId,$_SESSION["userId"]);
+          foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+            $insertedThisQuantity = 0;
+            if(isset($_POST['insertedQuantity'.$value["artisanId"]])){
+              $insertedThisQuantity = $_POST['insertedQuantity'.$value["artisanId"]];
+            }
+            if($insertedThisQuantity == ""){
+              $insertedThisQuantity = 0;
+            }
+            //Check on this inserted quantity
+            if(strlen($insertedThisQuantity) > 5){
+              addParagraph(translate("Error on quantity from")." ".$value["shopName"].":");
+              addParagraph(translate("The quantity is too big"));
+            } else if(!isValidQuantity($insertedThisQuantity)){
+              addParagraph(translate("Error on quantity from")." ".$value["shopName"].":");
+              addParagraph(translate("The quantity is not a number"));
+            } else {
+              if($insertedThisQuantity > 0){
+                $visualizeViewShoppingCartButton = true;
+              }
+              //Update the quantity in the shopping cart
+              updateQuantityOfThisProductInShoppingCartForThisUser($insertedProductId,$insertedThisQuantity,$_SESSION["userId"],$value["artisanId"]);
+              addParagraph(translate("Now in the shopping cart")." ".$insertedThisQuantity." ".translate("froms")." ".$value["shopName"]);
+            }
           }
           addButtonLink(translate("Continue with your purchases"),"./product.php?id=".urlencode($insertedProductId));
-          addButtonLink(translate("Go to shopping cart"),"./shoppingCart.php");
+          if($visualizeViewShoppingCartButton){
+            addButtonLink(translate("Go to shopping cart"),"./shoppingCart.php");
+          }
         } else {
           addParagraph(translate("This page is visible only to customers"));
         }
@@ -55,30 +70,56 @@
           addParagraph(translate("Product").": ".$productInfos["name"]." (".translate("available")." ".$productInfos["quantity"].")");
           startForm1();
           startForm2($_SERVER['PHP_SELF']);
-          addShortTextField(translate("Quantity"),"insertedQuantity",5);
-          startRow();
-          startCol();
-          addApiActionViaJsLink("-","","dec","decQuantityValue");
-          endCol();
-          addColMiniSpacer();
-          startCol();
-          addApiActionViaJsLink("+","","inc","incQuantityValue");
-          endCol();
-          endRow();
+          $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
+          $isTheFirst = true;
+          foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+            if($isTheFirst){
+              addShortTextField(translate("Quantity from the owner")." ".$value["shopName"].": (".translate("max available").": ".$value["maxQuantityAvailable"].")","insertedQuantity".$value["artisanId"],5);
+            } else {
+              addShortTextField(translate("Quantity from")." ".$value["shopName"].": (".translate("max available").": ".$value["maxQuantityAvailable"].")","insertedQuantity".$value["artisanId"],5);
+            }
+            $isTheFirst = false;
+            startRow();
+            startCol();
+            addApiActionViaJsLink("-","","dec".$value["artisanId"],"decQuantityValue".$value["artisanId"]);
+            endCol();
+            addColMiniSpacer();
+            startCol();
+            addApiActionViaJsLink("+","","inc".$value["artisanId"],"incQuantityValue".$value["artisanId"]);
+            endCol();
+            endRow();
+          }
           addHiddenField("insertedProductId",$_GET["id"]);
           endForm(translate("Submit"));
-          $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
           ?>
             <script>
               //form inserted parameters
               const form = document.querySelector('form');
-              const insertedQuantity = document.getElementById('insertedQuantity');
+              <?php
+                foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+                  ?>
+                    const insertedQuantity<?= $value["artisanId"] ?> = document.getElementById('insertedQuantity<?= $value["artisanId"] ?>');
+                  <?php
+                }
+              ?>
   
               //Max available quantity
-              const maxAvailableQuantity = <?= $productInfos["quantity"] ?>;
+              <?php
+                foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+                  ?>
+                    const maxAvailableQuantity<?= $value["artisanId"] ?> = <?= $value["maxQuantityAvailable"] ?>;
+                  <?php
+                }
+              ?>
   
               //Load form fields starting values
-              insertedQuantity.value = "<?= $quantityOfThisProductInShoppingCartByThisUser ?>";
+              <?php
+                foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+                  ?>
+                    insertedQuantity<?= $value["artisanId"] ?>.value = "<?= $value["quantityInShoppingCart"] ?>";
+                  <?php
+                }
+              ?>
   
               function isValidQuantity(quantity){
                 const quantityRegex = /^[0-9]+$/;
@@ -86,47 +127,64 @@
               }
   
               //Functions fot + and - buttons
-              function incQuantityValue(){
-                if(!isValidQuantity(insertedQuantity.value)){
-                  insertedQuantity.value = "0";
+              <?php
+                foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+                  ?>
+                    function incQuantityValue<?= $value["artisanId"] ?>(){
+                      if(!isValidQuantity(insertedQuantity<?= $value["artisanId"] ?>.value)){
+                        insertedQuantity<?= $value["artisanId"] ?>.value = "0";
+                      }
+                      let q = Number(insertedQuantity<?= $value["artisanId"] ?>.value);
+                      q = q + 1;
+                      if(q > maxAvailableQuantity<?= $value["artisanId"] ?>){
+                        q = maxAvailableQuantity<?= $value["artisanId"] ?>;
+                      }
+                      if(q < 0){
+                        q = 0;
+                      }
+                      insertedQuantity<?= $value["artisanId"] ?>.value = q;
+                    }
+                    function decQuantityValue<?= $value["artisanId"] ?>(){
+                      if(!isValidQuantity(insertedQuantity<?= $value["artisanId"] ?>.value)){
+                        insertedQuantity<?= $value["artisanId"] ?>.value = "0";
+                      }
+                      let q = Number(insertedQuantity<?= $value["artisanId"] ?>.value);
+                      q = q - 1;
+                      if(q > maxAvailableQuantity<?= $value["artisanId"] ?>){
+                        q = maxAvailableQuantity<?= $value["artisanId"] ?>;
+                      }
+                      if(q < 0){
+                        q = 0;
+                      }
+                      insertedQuantity<?= $value["artisanId"] ?>.value = q;
+                    }
+                  <?php
                 }
-                let q = Number(insertedQuantity.value);
-                q = q + 1;
-                if(q > maxAvailableQuantity){
-                  q = maxAvailableQuantity;
-                }
-                if(q < 0){
-                  q = 0;
-                }
-                insertedQuantity.value = q;
-              }
-              function decQuantityValue(){
-                if(!isValidQuantity(insertedQuantity.value)){
-                  insertedQuantity.value = "0";
-                }
-                let q = Number(insertedQuantity.value);
-                q = q - 1;
-                if(q > maxAvailableQuantity){
-                  q = maxAvailableQuantity;
-                }
-                if(q < 0){
-                  q = 0;
-                }
-                insertedQuantity.value = q;
-              }
+              ?>
               
               //prevent sending form with errors
               form.onsubmit = function(e){
-                if(insertedQuantity.value === ""){
-                  e.preventDefault();
-                  alert("<?= translate("You have missed to insert the quantity") ?>");
-                } else if(!isValidQuantity(insertedQuantity.value)){
-                  e.preventDefault();
-                  alert("<?= translate("The quantity is not a number") ?>");
-                } else if(Number(insertedQuantity.value) > maxAvailableQuantity){
-                  e.preventDefault();
-                  alert("<?= translate("This quantity is not available") ?>");
-                }
+                <?php
+                  foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
+                    ?>
+                      if(insertedQuantity<?= $value["artisanId"] ?>.value === ""){
+                        e.preventDefault();
+                        alert("<?= translate("You have missed to insert the quantity") ?>");
+                        return;
+                      }
+                      if(!isValidQuantity(insertedQuantity<?= $value["artisanId"] ?>.value)){
+                        e.preventDefault();
+                        alert("<?= translate("The quantity is not a number") ?>");
+                        return;
+                      }
+                      if(Number(insertedQuantity<?= $value["artisanId"] ?>.value) > maxAvailableQuantity<?= $value["artisanId"] ?>){
+                        e.preventDefault();
+                        alert("<?= translate("This quantity is not available") ?>");
+                        return;
+                      }
+                    <?php
+                  }
+                ?>
               }
             </script>
           <?php

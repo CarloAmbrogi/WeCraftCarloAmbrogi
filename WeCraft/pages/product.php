@@ -104,7 +104,7 @@
       //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
       if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
         addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".urlencode($_GET["id"]));
-        $quantityOfThisProductInShoppingCartByThisUser = getQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
+        $quantityOfThisProductInShoppingCartByThisUser = getGeneralQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
         $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
         addParagraph($AddedToShoppingCartWritten);
       }
