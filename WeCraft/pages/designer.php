@@ -44,7 +44,7 @@
       endCol();
       endRow();
       startDivShowHide("moreInformationOnThisDesigner");
-      addParagraphWithoutMb3($designerInfos["description"]);
+      addParagraphWithoutMb3Unsafe(adjustTextWithYouTubeLinks($designerInfos["description"]));
       addCarouselImagesOfThisUser($_GET["id"]);
       endDivShowHide("moreInformationOnThisDesigner");
     }

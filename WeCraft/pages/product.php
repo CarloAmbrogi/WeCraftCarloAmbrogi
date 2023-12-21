@@ -83,7 +83,7 @@
       endCol();
       endRow();
       //Description and other information on this product
-      addParagraph($productInfos["description"]);
+      addParagraphUnsafe(adjustTextWithYouTubeLinks($productInfos["description"]));
       addParagraph(translate("Added when").": ".$productInfos["added"]);
       $lastSellString = $productInfos["lastSell"];
       if($lastSellString == null || $lastSellString == ""){

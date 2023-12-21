@@ -328,7 +328,7 @@
     return WeCraftBaseUrl."Icons/genericTabBarIcon.png";
   }
 
-  //convert a float number representing a price with 2 digits after the floating point
+  //Convert a float number representing a price with 2 digits after the floating point
   function floatToPrice($price){
     $numbers = explode(".", $price);
     $r1 = $numbers[0];
@@ -349,7 +349,7 @@
     return $result;
   }
 
-  //remove the quotes from this string (to prevent sql injection)
+  //Remove the quotes from this string (to prevent sql injection)
   function removeQuotes($str){
     $str = str_replace("'","",$str);
     $str = str_replace("\\","",$str);
@@ -358,6 +358,72 @@
     $str = str_replace("|","",$str);
     $str = str_replace("`","",$str);
     return $str;
+  }
+
+  //Adjust this text substituting YouTube links with string video clickable ref to the YouTube link
+  function adjustTextWithYouTubeLinks($text){
+    $possiblePrefix1 = "https://youtu.be/";
+    $possiblePrefix2 = "https://www.youtube.com/watch?v=";
+    $resultArr = [];
+    $remainingText = $text;
+    while($remainingText != ""){
+      $posFound = false;
+      $whitchPosFound = 0;
+      if($p = strpos(" ".$remainingText,$possiblePrefix1)){
+        $p = $p - 1;
+        $posFound = true;
+        $whitchPosFound = $p;
+      }
+      if($p = strpos(" ".$remainingText,$possiblePrefix2)){
+        $p = $p - 1;
+        $youCanUpdatePosition = false;
+        if($posFound == true){
+          if($p < $whitchPosFound){
+            $youCanUpdatePosition = true;
+          }
+        }
+        if($posFound == false){
+          $youCanUpdatePosition = true;
+        }
+        if($youCanUpdatePosition == true){
+          $posFound = true;
+          $whitchPosFound = $p;
+        }
+      }
+      if($posFound == false){
+        array_push($resultArr,$remainingText);
+        $remainingText = "";
+      } else {
+        if($whitchPosFound == 0){
+          $endLinkPos = 0;
+          if($p = strpos("x".$remainingText," ")){
+            $p = $p - 1;
+            $endLinkPos = $p;
+          }
+          if($endLinkPos == 0){
+            array_push($resultArr,$remainingText);
+            $remainingText = "";
+          } else {
+            $additiveString = substr($remainingText,0,$endLinkPos);
+            array_push($resultArr,$additiveString);
+            $remainingText = substr($remainingText,$endLinkPos);
+          }
+        } else {
+          $additiveString = substr($remainingText,0,$whitchPosFound);
+          array_push($resultArr,$additiveString);
+          $remainingText = substr($remainingText,$whitchPosFound);
+        }
+      }
+    }
+    $result = "";
+    foreach($resultArr as &$value){
+      if($possiblePrefix1 == substr($value,0,strlen($possiblePrefix1)) || $possiblePrefix2 == substr($value,0,strlen($possiblePrefix2))){
+        $result.='<a href="'.htmlspecialchars($value).'">'.htmlentities("[").translate("video").htmlentities("]").'</a>';
+      } else {
+        $result.=htmlentities($value);
+      }
+    }
+    return $result;
   }
 
 ?>

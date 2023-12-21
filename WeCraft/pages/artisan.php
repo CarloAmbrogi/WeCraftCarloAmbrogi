@@ -63,7 +63,7 @@
       addParagraphWithoutMb3(translate("Latitude").": ".$artisanInfos["latitude"]." ".translate("Longitude").": ".$artisanInfos["longitude"]);
       addIframeGoogleMap($artisanInfos["latitude"],$artisanInfos["longitude"]);
       addParagraphWithoutMb3Unsafe(translate("Openining hours").":<br>".str_replace("%","<br>",$analyzedOpeningHours["description"]));
-      addParagraphWithoutMb3($artisanInfos["description"]);
+      addParagraphWithoutMb3Unsafe(adjustTextWithYouTubeLinks($artisanInfos["description"]));
       addCarouselImagesOfThisUser($_GET["id"]);
       endDivShowHide("moreInformationOnThisArtisan");
       //Button to add a new products
