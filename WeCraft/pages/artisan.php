@@ -9,7 +9,6 @@
   //If this page is viewed without a get by an artisan, the artisan automatically is redirected to the page of its products
   //An atisan has more options on the page of its products such as add more products
   doInitialScripts();
-  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(getKindOfThisAccount($_GET["id"]) != "Artisan"){
@@ -19,11 +18,12 @@
       //Page ok
       if($_GET["id"] == $_SESSION["userId"]){
         //Products of this logged user witch is an artisan
-        upperPartOfThePage(translate("My products"),"");
+        upperPartOfThePage(translate("My products"),"cookieBack");
       } else {
         //Products of this artisan (of the specified id with the get)
         upperPartOfThePage(translate("Artisan"),"cookieBack");
       }
+      addScriptAddThisPageToCronology();
       //Show the artisan
       $userInfos = obtainUserInfos($_GET["id"]);
       $artisanInfos = obtainArtisanInfos($_GET["id"]);
@@ -158,6 +158,7 @@
   } else {
     if($kindOfTheAccountInUse == "Artisan"){
       //Redirect to this page of the artisan
+      resetCronology();
       header('Location: ./artisan.php?id='.urlencode($_SESSION["userId"]));
     } else {
       upperPartOfThePage(translate("Error"),"");

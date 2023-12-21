@@ -1466,11 +1466,12 @@
   }
 
   //Obtain a preview of other artisans who are sponsoring this product
+  //except products witch are sold by the same artisan
   function obtainPreviewOtherArtisansWhoAreSponsoringThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` where `Advertisement`.`product` = ?) group by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` where `Advertisement`.`product` = ?) and `User`.`id` not in (select `ExchangeProduct`.`artisan` from `ExchangeProduct` where `ExchangeProduct`.`product` = ?) group by `User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$productId);
+      $statement->bind_param("ii",$productId,$productId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1488,9 +1489,9 @@
   //Obtain number of other artisans who are sponsoring this product
   function obtainNumberOtherArtisansWhoAreSponsoringThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberOtherArtisansWhoAreSponsoringThisProduct from (select * from `Advertisement` where `product` = ?) as t;";
+    $sql = "select count(*) as numberOtherArtisansWhoAreSponsoringThisProduct from (select * from `Advertisement` where `product` = ? and `artisan` not in (select `artisan` from `ExchangeProduct` where `product` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$productId);
+      $statement->bind_param("ii",$productId,$productId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;

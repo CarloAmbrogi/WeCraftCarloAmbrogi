@@ -159,7 +159,7 @@
         if($numberOfTags > 0){
           addButtonLink(translate("Remove tags to this product"),"./removeTagsToThisProduct.php?id=".urlencode($_GET["id"]));
         }
-      } else if($kindOfTheAccountInUse == "Artisan"){//If you are not the owner butyou are another artisan, here there are some functions about the cooperation
+      } else if($kindOfTheAccountInUse == "Artisan"){//If you are not the owner but you are another artisan, here there are some functions about the cooperation
         //Cooperation for visibility and marketing
         $areYouSponsoringThisProduct = isThisArtisanSponsoringThisProduct($_SESSION["userId"],$_GET["id"]);
         $_SESSION['csrftoken'] = md5(uniqid(mt_rand(), true));
