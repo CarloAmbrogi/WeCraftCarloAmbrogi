@@ -28,8 +28,7 @@
         } else {
           //The order is sent and the payment is done
           //Move the current shopping cart in the recent orders
-          $price = totalPriceShoppingCartOfThisUser($_SESSION["userId"]);
-          moveCurrentShoppingCartOfThisUserInRecentOrders($_SESSION["userId"],$insertedAddress,$price);
+          moveCurrentShoppingCartOfThisUserInRecentOrders($_SESSION["userId"],$insertedAddress);
           //Update data last sell
           updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Notify the artisans about this sell
@@ -86,7 +85,6 @@
                 alert("<?= translate("You have missed to insert the address") ?>");
               } else if(!shoppingCartViolatingItemsCheck) {
                 //prevent sending form if the there is an item violating the max quantity available
-/*
                 e.preventDefault();
                 let requestUrl = "<?= WeCraftBaseUrl ?>api/numberOfViolatingItemsQ.php?userId=" + encodeURIComponent(userId);
                 let request = new XMLHttpRequest();
@@ -102,7 +100,6 @@
                     alert("<?= translate("You cant proceed with the order because one or more products of this oreder is not any more available with your selected quantity") ?>");
                   }
                 }
-*/
               }
             }
           </script>

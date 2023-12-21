@@ -11,9 +11,9 @@
 
     $userId = $_GET["userId"];
 
-    $sql = "select count(*) as numberOfViolatingItemsQ from (select `ShoppingCart`.`product` as r from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `Product`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?) as t;";
+    $sql = "select count(*) as numberOfViolatingItemsQ from ((select `ShoppingCart`.`product` as r from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`artisan` = `Product`.`artisan` where `Product`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?) union (select `ShoppingCart`.`product` as r from `ShoppingCart` join `ExchangeProduct` on `ShoppingCart`.`product` = `ExchangeProduct`.`product` and `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan` where `ExchangeProduct`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$userId);
+      $statement->bind_param("ii",$userId,$userId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;

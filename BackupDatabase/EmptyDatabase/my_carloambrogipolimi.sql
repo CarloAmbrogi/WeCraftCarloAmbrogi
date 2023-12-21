@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 13, 2023 alle 12:05
+-- Creato il: Dic 21, 2023 alle 17:20
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -58,6 +58,8 @@ CREATE TABLE `Artisan` (
 CREATE TABLE `ContentRecentOrder` (
   `recentOrder` int NOT NULL,
   `product` int NOT NULL,
+  `artisan` int NOT NULL,
+  `singleItemCost` float NOT NULL,
   `quantity` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -93,6 +95,14 @@ CREATE TABLE `ExchangeProduct` (
   `product` int NOT NULL,
   `quantity` int NOT NULL
 ) ;
+
+--
+-- Trigger `ExchangeProduct`
+--
+DELIMITER $$
+CREATE TRIGGER `whenDeleteExchangeProductDeleteAlsoRelatedShoppingCart` AFTER DELETE ON `ExchangeProduct` FOR EACH ROW DELETE FROM `ShoppingCart` WHERE `product` = old.`product` AND `artisan` = old.`artisan`
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -149,8 +159,7 @@ CREATE TABLE `RecentOrders` (
   `id` int NOT NULL,
   `customer` int NOT NULL,
   `timestamp` timestamp NOT NULL,
-  `address` varchar(50) NOT NULL,
-  `totalCost` float NOT NULL
+  `address` varchar(50) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -162,6 +171,7 @@ CREATE TABLE `RecentOrders` (
 CREATE TABLE `ShoppingCart` (
   `customer` int NOT NULL,
   `product` int NOT NULL,
+  `artisan` int NOT NULL,
   `quantity` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -233,7 +243,7 @@ ALTER TABLE `Artisan`
 -- Indici per le tabelle `ContentRecentOrder`
 --
 ALTER TABLE `ContentRecentOrder`
-  ADD PRIMARY KEY (`recentOrder`,`product`);
+  ADD PRIMARY KEY (`recentOrder`,`product`,`artisan`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -281,7 +291,7 @@ ALTER TABLE `RecentOrders`
 -- Indici per le tabelle `ShoppingCart`
 --
 ALTER TABLE `ShoppingCart`
-  ADD PRIMARY KEY (`customer`,`product`);
+  ADD PRIMARY KEY (`customer`,`product`,`artisan`);
 
 --
 -- Indici per le tabelle `User`

@@ -9,7 +9,7 @@
   //This page is visible only to customers
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("Recent orders"),"./myWeCraft.php");
+  upperPartOfThePage(translate("Recent orders"),"./recentOrders.php");
   if($kindOfTheAccountInUse == "Customer"){
     if(isset($_GET["id"])){
       $doesThisRecentOrederExists = doesThisRecentOrederExists($_SESSION["userId"],$_GET["id"]);
@@ -19,16 +19,40 @@
         addParagraph(translate("Total cost").": ".floatToPrice($recentOrderGeneralInfos["totalCost"]));
         addParagraphUnsafe(translate("Number of products").": ".htmlentities($recentOrderGeneralInfos["numberOfProducts"])."<br>".translate("Number of different products").": ".htmlentities($recentOrderGeneralInfos["numberOfDifferentProducts"]));
         addParagraph($recentOrderGeneralInfos["address"]);
-        $contentOfThisRecentOrder = obtainContentRecentOrder($_SESSION["userId"],$_GET["id"]);
-        foreach($contentOfThisRecentOrder as &$singleProductPreview){
-          $fileImageToVisualize = genericProductImage;
-          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
-            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+        startCardGrid();
+        $contentThisRecentOrder = obtainRecentOrder($_SESSION["userId"],$_GET["id"]);
+        $lastProductId = -1;
+        foreach($contentThisRecentOrder as &$singlePieceContentThisRecentOrder){
+          $thisProductId = $singlePieceContentThisRecentOrder["product"];
+          $singleItemCost = $singlePieceContentThisRecentOrder["singleItemCost"];
+          if($thisProductId != $lastProductId){
+            endCardGrid();
+            $lastProductId = $thisProductId;
+            addParagraph(translate("Product").":");
+            startCardGrid();
+            $productInfos = obtainProductInfos($thisProductId);
+            $fileImageToVisualize = genericProductImage;
+            if(isset($productInfos['icon']) && ($productInfos['icon'] != null)){
+              $fileImageToVisualize = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
+            }
+            $text1 = translate("Payed price per unit").": ".$singleItemCost;
+            addACardForTheGrid("./product.php?id=".urlencode($thisProductId),$fileImageToVisualize,htmlentities($productInfos["name"]),htmlentities($text1),"");
+            endCardGrid();
+            startCardGrid();
           }
-          $text1 = translate("From")." ".$singleProductPreview["shopName"]." (".$singleProductPreview["name"]." ".$singleProductPreview["surname"].")";
-          $subtotal = $singleProductPreview["price"] * $singleProductPreview["quantity"];
-          $text2 = translate("Quantity").": ".$singleProductPreview["quantity"]." x ".translate("today price").": ".floatToPrice($singleProductPreview["price"])." = ".floatToPrice($subtotal);
-          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["product"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),htmlentities($text1),htmlentities($text2));
+          $thisArtisan = $singlePieceContentThisRecentOrder["artisan"];
+          $quantityFromThisArtisan = $singlePieceContentThisRecentOrder["quantity"];
+          $userInfos = obtainUserInfos($thisArtisan);
+          $artisanInfos = obtainArtisanInfos($thisArtisan);
+          $fileImageToVisualize = genericUserImage;
+          if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
+            $fileImageToVisualize = blobToFile($userInfos["iconExtension"],$userInfos['icon']);
+          }
+          $artisanNameAndSurname = $userInfos["name"]." ".$userInfos["surname"];
+          $artisanShopName = $artisanInfos["shopName"];
+          $subTotal = $singleItemCost * $quantityFromThisArtisan;
+          $text2 = translate("Took")." ".$quantityFromThisArtisan." ".translate("units from this artisan")." (".floatToPrice($subTotal).")";
+          addACardForTheGrid("./artisan.php?id=".urlencode($thisArtisan),$fileImageToVisualize,htmlentities($artisanNameAndSurname),htmlentities($artisanShopName),htmlentities($text2));
         }
         endCardGrid();
       } else {

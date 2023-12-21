@@ -960,9 +960,9 @@
   //Show the number of items in the shopping cart of this user (given the user id) witch violates the condition of exceeding the available quantity
   function getNumberOfViolatingItemsQ($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberOfViolatingItemsQ from (select `ShoppingCart`.`product` as r from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `Product`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?) as t;";
+    $sql = "select count(*) as numberOfViolatingItemsQ from ((select `ShoppingCart`.`product` as r from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`artisan` = `Product`.`artisan` where `Product`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?) union (select `ShoppingCart`.`product` as r from `ShoppingCart` join `ExchangeProduct` on `ShoppingCart`.`product` = `ExchangeProduct`.`product` and `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan` where `ExchangeProduct`.`quantity` < `ShoppingCart`.`quantity` and `ShoppingCart`.`customer` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("i",$userId);
+      $statement->bind_param("ii",$userId,$userId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -996,12 +996,12 @@
   }
 
   //The current shopping cart of this user (witch is a customer) is moved in the recent orders
-  function moveCurrentShoppingCartOfThisUserInRecentOrders($userId,$address,$price){
+  function moveCurrentShoppingCartOfThisUserInRecentOrders($userId,$address){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql1 = "insert into `RecentOrders` (`id`,`customer`,`timestamp`,`address`,`totalCost`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?,?);";
-    $sql2 = "insert into `ContentRecentOrder` (`recentOrder`,`product`,`quantity`) select last_insert_id(),`product`,`quantity` from `ShoppingCart` where `customer` = ?;";
+    $sql1 = "insert into `RecentOrders` (`id`,`customer`,`timestamp`,`address`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?);";
+    $sql2 = "insert into `ContentRecentOrder` (`recentOrder`,`product`,`artisan`,`singleItemCost`,`quantity`) select last_insert_id(),`ShoppingCart`.`product`,`ShoppingCart`.`artisan`,`Product`.`price`,`ShoppingCart`.`quantity` from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `customer` = ?;";
     if($statement = $connectionDB->prepare($sql1)){
-      $statement->bind_param("isd",$userId,$address,$price);
+      $statement->bind_param("is",$userId,$address);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql1. " . $connectionDB->error;
@@ -1036,7 +1036,7 @@
   //Obtain a preview of recent orders of this user (witch is a customer)
   function obtainPreviewRecentOrdersOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "SELECT t.`id`,t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? GROUP by `RecentOrders`.`id`) as t order by t.`timestamp` DESC;";
+    $sql = "select t.`id`,t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,sum(`ContentRecentOrder`.`singleItemCost` * `ContentRecentOrder`.`quantity`) as totalCost, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(distinct `ContentRecentOrder`.`product`) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? group by `RecentOrders`.`id`) as t order by t.`timestamp` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1078,7 +1078,7 @@
   //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful both to semplify the query and to improve the security
   function recentOrderGeneralInfos($userId,$recentOrderId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "SELECT t.`timestamp`,t.`address`,t.`totalCost`,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`timestamp`,`RecentOrders`.`address`,`RecentOrders`.`totalCost`, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(*) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? and `RecentOrders`.`id` = ?) as t;";
+    $sql = "select t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,sum(`ContentRecentOrder`.`singleItemCost` * `ContentRecentOrder`.`quantity`) as totalCost, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(distinct `ContentRecentOrder`.`product`) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? and `RecentOrders`.`id` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$recentOrderId);
       $statement->execute();
@@ -1096,10 +1096,11 @@
     return $elements[0];
   }
 
-  //Obtain the content of a recent order
-  function obtainContentRecentOrder($userId,$recentOrderId){
+  //Obtain a specific recent order
+  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful to improve the security
+  function obtainRecentOrder($userId,$recentOrderId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select sc.`quantity`,sc.`product`,`User`.`name`,`User`.`surname`,`Artisan`.`shopName`,`Product`.`name` as 'productName',`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price` from ((((select `ContentRecentOrder`.`product`,`ContentRecentOrder`.`quantity` from `ContentRecentOrder` join `RecentOrders` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` where `ContentRecentOrder`.`recentOrder` = ? and `RecentOrders`.`customer` = ?) as sc join `Product` on sc.`product` = `Product`.`id`) join `User` on `Product`.`artisan` = `User`.`id`) join `Artisan` on `Product`.`artisan` = `Artisan`.`id`);";
+    $sql = "SELECT `product`,`artisan`,`singleItemCost`,`quantity` FROM `ContentRecentOrder` WHERE `recentOrder` = ? and `recentOrder` in (select `id` from `RecentOrders` where `customer` = ?) order by `product` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$recentOrderId,$userId);
       $statement->execute();
@@ -1112,8 +1113,8 @@
       $elements[] = $element;
     }
 
-    //return an array of associative arrays with the infos:
-    // quantity product (=the id of the product) name surname shopName productName iconExtension icon price
+    //return an array of associative arrays with:
+    // product (=the id of the product) artisan (=where you buy the product) singleItemCost quantity
     return $elements;
   }
 
@@ -1132,12 +1133,19 @@
   //Update the remaining quantity of a product based on the shopping cart of this user
   function updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "update `Product` set `Product`.`quantity` = `Product`.`quantity` - (select `ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`customer` = ?) where `Product`.`id` in (select `ShoppingCart`.`product` from `ShoppingCart` where `ShoppingCart`.`customer` = ?);";
-    if($statement = $connectionDB->prepare($sql)){
+    $sql1 = "update `Product` set `Product`.`quantity` = `Product`.`quantity` - (select `ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`product` = `Product`.`id` and `ShoppingCart`.`customer` = ? and `ShoppingCart`.`artisan` = `Product`.`artisan`) where `Product`.`id` in (select q from (select `ShoppingCart`.`product` as q from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `ShoppingCart`.`customer` = ? and `ShoppingCart`.`artisan` = `Product`.`artisan`) as t);";
+    $sql2 = "update `ExchangeProduct` set `ExchangeProduct`.`quantity` = `ExchangeProduct`.`quantity` - COALESCE((select `ShoppingCart`.`quantity` from `ShoppingCart` where `ShoppingCart`.`product` = `ExchangeProduct`.`product` and `ShoppingCart`.`customer` = ? and `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan`),0) where `ExchangeProduct`.`product` in (select q from (select `ShoppingCart`.`product` as q from `ShoppingCart` join `ExchangeProduct` on `ShoppingCart`.`product` = `ExchangeProduct`.`product` and `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan` where `ShoppingCart`.`customer` = ?) as t) and `ExchangeProduct`.`artisan` in (select qq from (select `ShoppingCart`.`artisan` as qq from `ShoppingCart` join `ExchangeProduct` on `ShoppingCart`.`product` = `ExchangeProduct`.`product` and `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan` where `ShoppingCart`.`customer` = ?) as tt);";
+    if($statement = $connectionDB->prepare($sql1)){
       $statement->bind_param("ii",$userId,$userId);
       $statement->execute();
     } else {
-      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+      echo "Error not possible execute the query: $sql1. " . $connectionDB->error;
+    }
+    if($statement = $connectionDB->prepare($sql2)){
+      $statement->bind_param("iii",$userId,$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql2. " . $connectionDB->error;
     }
   }
 
