@@ -1,4 +1,4 @@
-- Coofiliera
+- Coofiliera (tab collaborate also for designers)
 - Customized order
 - La chat
 - Map

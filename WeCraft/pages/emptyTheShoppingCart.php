@@ -5,10 +5,10 @@
   include "./../database/functions.php";
 
   //Empty the shopping cart
-  //This page is visible only to customers
+  //This page is visible only to customers and other users
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  if($kindOfTheAccountInUse == "Customer"){
+  if($kindOfTheAccountInUse != "Guest"){
     $numberOfItemsInTheShoppingCartOfThisUser = numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]);
     if($numberOfItemsInTheShoppingCartOfThisUser > 0){
       if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -37,7 +37,7 @@
     }
   } else {
     upperPartOfThePage(translate("Shopping cart"),"");
-    addParagraph(translate("This page is visible only to customers"));
+    addParagraph(translate("You have to be logged to see this page"));
   }
 
   lowerPartOfThePage(tabBarForTheAccountInUse());

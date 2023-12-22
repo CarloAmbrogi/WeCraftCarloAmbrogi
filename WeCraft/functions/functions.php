@@ -298,9 +298,17 @@
           return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
         }
       case "Artisan":
-        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+        if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+        } else {
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+        }
       case "Designer":
-        return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+        if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+        } else {
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+        }
       default://error
         return [];
     }

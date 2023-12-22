@@ -6,12 +6,12 @@
 
   //Purchase
   //See the content of a specific purchase
-  //This page is visible only to customers
+  //This page is visible only to customers and other users
   doInitialScripts();
   addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Purchase"),"./purchasesCronology.php");
-  if($kindOfTheAccountInUse == "Customer"){
+  if($kindOfTheAccountInUse != "Guest"){
     if(isset($_GET["id"])){
       $doesThisPurchaseExists = doesThisPurchaseExists($_SESSION["userId"],$_GET["id"]);
       if($doesThisPurchaseExists){
@@ -63,7 +63,7 @@
       addParagraph(translate("You have missed to specify the id of this purchase"));
     }
   } else {
-    addParagraph(translate("This page is visible only to customers"));
+    addParagraph(translate("You have to be logged to see this page"));
   }
 
   lowerPartOfThePage(tabBarForTheAccountInUse());

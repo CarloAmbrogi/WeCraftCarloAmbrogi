@@ -105,12 +105,15 @@
       addACard("./artisan.php?id=".urlencode($productInfos["artisan"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
       //Carousel with images of this product
       addCarouselImagesOfThisProduct($_GET["id"]);
-      //Add to shopping cart this product (if you are a customer) (in case the available quantity of this product is 0, this button is not shown)
-      if($kindOfTheAccountInUse == "Customer" && $productInfos["quantity"] > 0){
-        addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".urlencode($_GET["id"]));
-        $quantityOfThisProductInShoppingCartByThisUser = getGeneralQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
-        $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
-        addParagraph($AddedToShoppingCartWritten);
+      //Add to shopping cart this product (for customers and for other users) (in case the available quantity of this product is 0, this button is not shown)
+      if($kindOfTheAccountInUse != "Guest" && $productInfos["quantity"] > 0){
+        //Check that you can't buy a your product
+        if($_SESSION["userId"] != $productInfos["artisan"]){
+          addButtonLink(translate("Add to shopping cart"),"./addToShoppingCart.php?id=".urlencode($_GET["id"]));
+          $quantityOfThisProductInShoppingCartByThisUser = getGeneralQuantityOfThisProductInShoppingCartByThisUser($_GET["id"],$_SESSION["userId"]);
+          $AddedToShoppingCartWritten = translate("Added to shopping cart").": ".$quantityOfThisProductInShoppingCartByThisUser;
+          addParagraph($AddedToShoppingCartWritten);
+        }
       }
       //This product is available also from theese artisans
       $numberOtherArtisansWhoAreSellingThisExchangeProduct = obtainNumberOtherArtisansWhoAreSellingThisExchangeProduct($_GET["id"]);

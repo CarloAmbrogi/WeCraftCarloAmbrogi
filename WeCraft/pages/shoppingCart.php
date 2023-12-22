@@ -5,11 +5,11 @@
   include "./../database/functions.php";
 
   //Shopping cart
-  //This page is visible only to customers
+  //This page is visible only to customers and other users
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Shopping cart"),"");
-  if($kindOfTheAccountInUse == "Customer"){
+  if($kindOfTheAccountInUse != "Guest"){
     $numberOfItemsInTheShoppingCartOfThisUser = numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]);
     if($numberOfItemsInTheShoppingCartOfThisUser > 0){
       if($_SERVER["REQUEST_METHOD"] == "POST"){
@@ -31,7 +31,7 @@
           moveCurrentShoppingCartOfThisUserPurchasesCronology($_SESSION["userId"],$insertedAddress);
           //Update data last sell
           updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
-          //Notify the artisans about this sell
+          //Notify the artisans about this sell (remember also about the percentage resell)
           //AAAAAAAAAAAAAA
           //Update the remaining quantity of the products
           updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
@@ -109,7 +109,7 @@
       addParagraph(translate("You have no item in the shopping cart"));
     }
   } else {
-    addParagraph(translate("This page is visible only to customers"));
+    addParagraph(translate("You have to be logged to see this page"));
   }
 
   lowerPartOfThePage(tabBarForTheAccountInUse());

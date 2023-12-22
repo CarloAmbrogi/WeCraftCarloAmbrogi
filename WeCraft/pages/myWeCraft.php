@@ -56,8 +56,8 @@
       addButtonLink(translate("Remove images"),"./removeImages.php");
     }
   }
-  //For customers
-  if($kindOfTheAccountInUse == "Customer"){
+  //For customers and other users
+  if($kindOfTheAccountInUse != "Guest"){
     addButtonLink(translate("Purchases cronology"),"./purchasesCronology.php");
   }
   //For artisans

@@ -6,11 +6,11 @@
 
   //Purchases cronology
   //See the purchases cronology
-  //This page is visible only to customers
+  //This page is visible only to customers and other users
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Purchases cronology"),"./myWeCraft.php");
-  if($kindOfTheAccountInUse == "Customer"){
+  if($kindOfTheAccountInUse != "Guest"){
     $numberOfPurchasesOfThisUser = numberPurchasesOfThisUser($_SESSION["userId"]);
     if($numberOfPurchasesOfThisUser > 0){
       addParagraph(translate("Number of purchases").": ".$numberOfPurchasesOfThisUser);
@@ -28,7 +28,7 @@
       addParagraph(translate("You have no purchase"));
     }
   } else {
-    addParagraph(translate("This page is visible only to customers"));
+    addParagraph(translate("You have to be logged to see this page"));
   }
 
   lowerPartOfThePage(tabBarForTheAccountInUse());
