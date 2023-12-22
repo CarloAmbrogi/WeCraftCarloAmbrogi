@@ -6,6 +6,7 @@
 
   //Exchange complementary products
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if($kindOfTheAccountInUse != "Artisan"){
     //This page is visible only for artisans

@@ -7,15 +7,17 @@
   //Visualize a product by id (the id is sent as a get)
   //The atisan owner of this product has more options on the page such as add image, add tags, change quantity, edit the product
   doInitialScripts();
-  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
+      addScriptAddThisPageToCronology();
       //Real content of this page
       //General info of this product
       $productInfos = obtainProductInfos($_GET["id"]);
       if($_SESSION["userId"] == $productInfos["artisan"]){
         upperPartOfThePage(translate("Your product"),"cookieBack");
+      } else {
+        upperPartOfThePage(translate("Product"),"cookieBack");
       }
       $artisanInfosUser = obtainUserInfos($productInfos["artisan"]);
       $artisanInfosArtisan = obtainArtisanInfos($productInfos["artisan"]);
@@ -216,11 +218,11 @@
         }
       }
     } else {
-      upperPartOfThePage(translate("Error"),"cookieBack");
+      upperPartOfThePage(translate("Error"),"");
       addParagraph(translate("This product doesnt exists"));
     }
   } else {
-    upperPartOfThePage(translate("Error"),"cookieBack");
+    upperPartOfThePage(translate("Error"),"");
     //You have missed to specify the get param id of the product
     addParagraph(translate("You have missed to specify the get param id of the product"));
   }

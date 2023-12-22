@@ -6,6 +6,7 @@
 
   //Cooperation for visibility and marketing
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if($kindOfTheAccountInUse != "Artisan"){
     //This page is visible only for artisans
