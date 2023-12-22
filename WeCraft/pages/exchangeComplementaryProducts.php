@@ -47,6 +47,21 @@
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
+    //Show products of the artisan whitch are sold also by other artisans
+    addTitle(translate("Your products whitch are sold also by other artisans"));
+    addParagraph(translate("You can click on a product and then if you want you can stop the sell of that product from certains artisans"));
+    $exchangeProductsPreviewAvailableToYourStore = obtainYourProductsWitchAreSoldAlsoByOtherArtisans($_SESSION["userId"]);
+    startCardGrid();
+    foreach($exchangeProductsPreviewAvailableToYourStore as &$singleProductPreview){
+      $fileImageToVisualize = genericProductImage;
+      if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+        $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+      }
+      $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+      $text2 = translate("Quantity available").": ".translate("from the owner").": ".$singleProductPreview["quantity"]." ".translate("to the patner").": ".$singleProductPreview["quantityToThePatner"];
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+    }
+    endCardGrid();
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";

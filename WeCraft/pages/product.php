@@ -9,12 +9,14 @@
   doInitialScripts();
   addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("Product"),"cookieBack");
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
       //Real content of this page
       //General info of this product
       $productInfos = obtainProductInfos($_GET["id"]);
+      if($_SESSION["userId"] == $productInfos["artisan"]){
+        upperPartOfThePage(translate("Your product"),"cookieBack");
+      }
       $artisanInfosUser = obtainUserInfos($productInfos["artisan"]);
       $artisanInfosArtisan = obtainArtisanInfos($productInfos["artisan"]);
       startRow();
@@ -126,6 +128,10 @@
           addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),$text2);
         }
         endCardGrid();
+        if($_SESSION["userId"] == $productInfos["artisan"]){
+          //In case you are the owner of this product, you can stop the selling of your product from other artisans
+          addButtonLink(translate("Stop the sell of this product from certains artisans"),"./stopTheSellOfThisProductFromCertainsArtisans.php?id=".urlencode($_GET["id"]));
+        }
       }
       //This product is suggested also by theese artisans
       $numberOtherArtisansWhoAreSponsoringThisProduct = obtainNumberOtherArtisansWhoAreSponsoringThisProduct($_GET["id"]);
@@ -210,9 +216,11 @@
         }
       }
     } else {
+      upperPartOfThePage(translate("Error"),"cookieBack");
       addParagraph(translate("This product doesnt exists"));
     }
   } else {
+    upperPartOfThePage(translate("Error"),"cookieBack");
     //You have missed to specify the get param id of the product
     addParagraph(translate("You have missed to specify the get param id of the product"));
   }

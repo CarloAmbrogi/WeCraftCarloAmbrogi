@@ -1372,6 +1372,26 @@
     return $elements;
   }
 
+  //Obtain a preview of your products witch are sold also by other artisans
+  function obtainYourProductsWitchAreSoldAlsoByOtherArtisans($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,`ExchangeProduct`.`quantity` as quantityToThePatner from `Product` join `ExchangeProduct` on `Product`.`id` = `ExchangeProduct`.`product` where `Product`.`artisan` = ? ORDER BY `Product`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price quantity category quantityToThePatner
+    return $elements;
+  }
+
   //Return if a certain artisan is selling this product (witch is of another artisan) on him store
   function isThisArtisanSellingThisExchangeProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
