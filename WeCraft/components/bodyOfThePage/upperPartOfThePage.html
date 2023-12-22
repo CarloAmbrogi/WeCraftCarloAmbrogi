@@ -82,7 +82,7 @@
                   }
 
                   function returnToHome(){
-                    let WeCraftBaseUrl = "http://carloambrogipolimi.altervista.org/WeCraft/";
+                    let WeCraftBaseUrl = "<?= WeCraftBaseUrl ?>";
                     document.cookie = "cronology="+escape("");
                     document.cookie = "cronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                     window.location = WeCraftBaseUrl;

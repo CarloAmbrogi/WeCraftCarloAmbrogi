@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 21, 2023 alle 17:20
+-- Creato il: Dic 22, 2023 alle 17:17
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -121,7 +121,8 @@ CREATE TABLE `Product` (
   `quantity` int NOT NULL,
   `category` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `added` timestamp NOT NULL,
-  `lastSell` timestamp NULL DEFAULT NULL
+  `lastSell` timestamp NULL DEFAULT NULL,
+  `percentageResell` float DEFAULT NULL
 ) ;
 
 -- --------------------------------------------------------

@@ -515,7 +515,7 @@
   function addANewProductWithoutIcon($artisan,$name,$description,$price,$quantity,$category){
     //insert on Product
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`) VALUES (NULL, ?, ?, ?, NULL, NULL, ?, ?, ?, CURRENT_TIMESTAMP(), NULL);";
+    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`, `percentageResell`) VALUES (NULL, ?, ?, ?, NULL, NULL, ?, ?, ?, CURRENT_TIMESTAMP(), NULL, NULL);";
     if($statement = $connectionDB->prepare($sql)){
       //Add the new account to the database
       $statement->bind_param("issdis",$artisan,$name,$description,$price,$quantity,$category);
@@ -529,7 +529,7 @@
   function addANewProductWithIcon($artisan,$name,$description,$imgExtension,$imgData,$price,$quantity,$category){
     //insert on Product
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), NULL);";
+    $sql = "INSERT INTO `Product` (`id`, `artisan`, `name`, `description`, `iconExtension`, `icon`, `price`, `quantity`, `category`, `added`, `lastSell`, `percentageResell`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP(), NULL, NULL);";
     if($statement = $connectionDB->prepare($sql)){
       //Add the new account to the database
       $statement->bind_param("issssdis",$artisan,$name,$description,$imgExtension,$imgData,$price,$quantity,$category);
@@ -1808,6 +1808,72 @@
 
     //return an array of associative array with id name iconExtension icon price quantity category numSells
     return $elements;
+  }
+
+  //Return if this product is ready to be exchanged or not
+  //the product is ready to be exchanged if a percentage resell is set
+  function isThisProductReadyToBeExchanged($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as isThisProductReadyToBeExchanged from `Product` where `id` = ? and `percentageResell` is not null;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisProductReadyToBeExchanged"];
+  }
+
+  //Return the percentage resell of this product
+  function percentageResellOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `percentageResell` from `Product` where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return directly the percentageResell
+    return $elements[0]["percentageResell"];
+  }
+
+  //set the percentage resell of this product
+  function setPercentageResellOfThisProduct($percentageResell,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `percentageResell` = ? where `id` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("di",$percentageResell,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //remove the percentage resell of this product
+  function removePercentageResellOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `percentageResell` = NULL where `id` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
   }
 
 ?>

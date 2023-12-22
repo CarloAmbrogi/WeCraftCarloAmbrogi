@@ -153,6 +153,12 @@
       //Edit product (you can edit the product if you are the owner)
       if($_SESSION["userId"] == $productInfos["artisan"]){
         addButtonLink(translate("Edit product general info"),"./editProductGeneralInfo.php?id=".urlencode($_GET["id"]));
+        if(isThisProductReadyToBeExchanged($_GET["id"])){
+          addButtonLink(translate("Edit percentage resell"),"./editPercentageResell.php?id=".urlencode($_GET["id"]));
+          addButtonLink(translate("Remove percentage resell"),"./removePercentageResell.php?id=".urlencode($_GET["id"]));
+        } else {
+          addButtonLink(translate("Set percentage resell"),"./editPercentageResell.php?id=".urlencode($_GET["id"]));
+        }
         addButtonLink(translate("Edit product category"),"./editProductCategory.php?id=".urlencode($_GET["id"]));
         if($fileImageToVisualizeProduct != genericProductImage){
           addButtonLink(translate("Delete product icon"),"./deleteProductIcon.php?id=".urlencode($_GET["id"]));
@@ -210,7 +216,9 @@
           <?php
           addButtonLink(translate("Change quantity"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
         } else {
-          addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
+          if(isThisProductReadyToBeExchanged($_GET["id"])){
+            addButtonLink(translate("Start selling this exchange product"),"./startSellingThisExchangeProduct.php?id=".urlencode($_GET["id"]));
+          }
         }
         //In case you both sponsor and sell this product
         if($areYouSponsoringThisProduct && $areYouSellingThisExchangeProduct){

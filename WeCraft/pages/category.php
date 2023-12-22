@@ -7,6 +7,7 @@
   //Category
   //See products of the category from a get param
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   upperPartOfThePage(translate("Category"),"./index.php");
   //Content of the page
   if(isset($_GET["cat"])){

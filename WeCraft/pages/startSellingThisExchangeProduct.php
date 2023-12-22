@@ -29,13 +29,18 @@
         $productInfos = obtainProductInfos($insertedProductId);
         if($_SESSION["userId"] != $productInfos["artisan"]){
           if($kindOfTheAccountInUse == "Artisan"){
-            //Add this exchange product or change the quantity
-            if(isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$insertedProductId)){
-              updateQuantityExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
+            //Check if this product is ready to be sold by other artisans (= if the percentage resell is set)
+            if(isThisProductReadyToBeExchanged($insertedProductId)){
+              //Add this exchange product or change the quantity
+              if(isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$insertedProductId)){
+                updateQuantityExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
+              } else {
+                startSellingThisExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
+              }
+              addParagraph(translate("Done"));
             } else {
-              startSellingThisExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
+              addParagraph(translate("This product is not ready to be sold by other artisans because the owner hasnt set the percentage resell"));
             }
-            addParagraph(translate("Done"));
           } else {
             addParagraph(translate("You are not an artisan"));
           }
@@ -60,44 +65,53 @@
             addTitle(translate("Sell this product of another artisan in your store"));
             $productInfos = obtainProductInfos($_GET["id"]);
             addParagraph(translate("Product").": ".$productInfos["name"]);
-            //Form to insert data for start selling this exchange product or to change the quantity
-            startForm1();
-            startForm2($_SERVER['PHP_SELF']);
-            addShortTextField(translate("Quantity"),"insertedQuantity",5);
-            addHiddenField("insertedProductId",$_GET["id"]);
-            endForm(translate("Submit"));
-            ?>
-              <script>
-                //form inserted parameters
-                const form = document.querySelector('form');
-                const insertedQuantity = document.getElementById('insertedQuantity');
+            //Check if this product is ready to be sold by other artisans (= if the percentage resell is set)
+            if(isThisProductReadyToBeExchanged($_GET["id"])){
+              //Show the percentage resell
+              $percentageResell = percentageResellOfThisProduct($_GET["id"]);
+              addParagraph(translate("The current percentage resell for this product is").": ".$percentageResell."%");
+              addParagraph(translate("The percentage resell represents the part you have to give to the owner for each unit of this product you sell"));
+              //Form to insert data for start selling this exchange product or to change the quantity
+              startForm1();
+              startForm2($_SERVER['PHP_SELF']);
+              addShortTextField(translate("Quantity"),"insertedQuantity",5);
+              addHiddenField("insertedProductId",$_GET["id"]);
+              endForm(translate("Submit"));
+              ?>
+                <script>
+                  //form inserted parameters
+                  const form = document.querySelector('form');
+                  const insertedQuantity = document.getElementById('insertedQuantity');
 
-                //Load form fields starting values (only in case of change quantity)
-                <?php
-                  if(isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$_GET["id"])){
-                    ?>
-                      insertedQuantity.value = "<?= obtainQuantityExchangeProduct($_SESSION["userId"],$_GET["id"]) ?>";
-                    <?php
+                  //Load form fields starting values (only in case of change quantity)
+                  <?php
+                    if(isThisArtisanSellingThisExchangeProduct($_SESSION["userId"],$_GET["id"])){
+                      ?>
+                        insertedQuantity.value = "<?= obtainQuantityExchangeProduct($_SESSION["userId"],$_GET["id"]) ?>";
+                      <?php
+                    }
+                  ?>
+
+                  function isValidQuantity(quantity){
+                    const quantityRegex = /^[0-9]+$/;
+                    return quantityRegex.test(quantity);
                   }
-                ?>
-    
-                function isValidQuantity(quantity){
-                  const quantityRegex = /^[0-9]+$/;
-                  return quantityRegex.test(quantity);
-                }
-    
-                //prevent sending form with errors
-                form.onsubmit = function(e){
-                  if(insertedQuantity.value === ""){
-                    e.preventDefault();
-                    alert("<?= translate("You have missed to insert the quantity") ?>");
-                  } else if(!isValidQuantity(insertedQuantity.value)){
-                    e.preventDefault();
-                    alert("<?= translate("The quantity is not a number") ?>");
+
+                  //prevent sending form with errors
+                  form.onsubmit = function(e){
+                    if(insertedQuantity.value === ""){
+                      e.preventDefault();
+                      alert("<?= translate("You have missed to insert the quantity") ?>");
+                    } else if(!isValidQuantity(insertedQuantity.value)){
+                      e.preventDefault();
+                      alert("<?= translate("The quantity is not a number") ?>");
+                    }
                   }
-                }
-              </script>
-            <?php
+                </script>
+              <?php
+            } else {
+              addParagraph(translate("This product is not ready to be sold by other artisans because the owner hasnt set the percentage resell"));
+            }
             //End main content of this page
           } else {
             addParagraph(translate("You are not an artisan"));

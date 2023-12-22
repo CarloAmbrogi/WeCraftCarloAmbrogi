@@ -75,6 +75,13 @@
     return true;
   }
 
+  function isValidPercentage($number){
+    if(isValidFloatNumber($number)){
+      return true;
+    }
+    return isValidQuantity($number);
+  }
+
   //Check if this quantity is valid
   function isValidQuantity($quantity){
     $regex = "/^[0-9]+$/";
