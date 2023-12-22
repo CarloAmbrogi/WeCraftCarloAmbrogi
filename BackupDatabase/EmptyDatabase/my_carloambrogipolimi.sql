@@ -52,11 +52,11 @@ CREATE TABLE `Artisan` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `ContentRecentOrder`
+-- Struttura della tabella `ContentPurchase`
 --
 
-CREATE TABLE `ContentRecentOrder` (
-  `recentOrder` int NOT NULL,
+CREATE TABLE `ContentPurchase` (
+  `purchaseId` int NOT NULL,
   `product` int NOT NULL,
   `artisan` int NOT NULL,
   `singleItemCost` float NOT NULL,
@@ -152,10 +152,10 @@ CREATE TABLE `ProductTags` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `RecentOrders`
+-- Struttura della tabella `PurchasesCronology`
 --
 
-CREATE TABLE `RecentOrders` (
+CREATE TABLE `PurchasesCronology` (
   `id` int NOT NULL,
   `customer` int NOT NULL,
   `timestamp` timestamp NOT NULL,
@@ -240,10 +240,10 @@ ALTER TABLE `Artisan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `ContentRecentOrder`
+-- Indici per le tabelle `ContentPurchase`
 --
-ALTER TABLE `ContentRecentOrder`
-  ADD PRIMARY KEY (`recentOrder`,`product`,`artisan`);
+ALTER TABLE `ContentPurchase`
+  ADD PRIMARY KEY (`purchaseId`,`product`,`artisan`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -282,9 +282,9 @@ ALTER TABLE `ProductTags`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `RecentOrders`
+-- Indici per le tabelle `PurchasesCronology`
 --
-ALTER TABLE `RecentOrders`
+ALTER TABLE `PurchasesCronology`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -329,9 +329,9 @@ ALTER TABLE `ProductTags`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `RecentOrders`
+-- AUTO_INCREMENT per la tabella `PurchasesCronology`
 --
-ALTER TABLE `RecentOrders`
+ALTER TABLE `PurchasesCronology`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --

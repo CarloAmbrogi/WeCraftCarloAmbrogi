@@ -995,11 +995,11 @@
     return $elements[0]["totalPrice"];
   }
 
-  //The current shopping cart of this user (witch is a customer) is moved in the recent orders
-  function moveCurrentShoppingCartOfThisUserInRecentOrders($userId,$address){
+  //The current shopping cart of this user (witch is a customer) is moved in the purchases cronology
+  function moveCurrentShoppingCartOfThisUserPurchasesCronology($userId,$address){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql1 = "insert into `RecentOrders` (`id`,`customer`,`timestamp`,`address`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?);";
-    $sql2 = "insert into `ContentRecentOrder` (`recentOrder`,`product`,`artisan`,`singleItemCost`,`quantity`) select last_insert_id(),`ShoppingCart`.`product`,`ShoppingCart`.`artisan`,`Product`.`price`,`ShoppingCart`.`quantity` from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `customer` = ?;";
+    $sql1 = "insert into `PurchasesCronology` (`id`,`customer`,`timestamp`,`address`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?);";
+    $sql2 = "insert into `ContentPurchase` (`purchaseId`,`product`,`artisan`,`singleItemCost`,`quantity`) select last_insert_id(),`ShoppingCart`.`product`,`ShoppingCart`.`artisan`,`Product`.`price`,`ShoppingCart`.`quantity` from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `customer` = ?;";
     if($statement = $connectionDB->prepare($sql1)){
       $statement->bind_param("is",$userId,$address);
       $statement->execute();
@@ -1014,10 +1014,10 @@
     }
   }
 
-  //Get the number of recentOrders of this user (witch is a customer)
-  function numberOfRecentOrdersOfThisUser($userId){
+  //Get the number of purchases of this user (witch is a customer)
+  function numberPurchasesOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberOfRecentOrdersOfThisUser from (select * from `RecentOrders` where `customer` = ?) as t;";
+    $sql = "select count(*) as numberPurchasesOfThisUser from (select * from `PurchasesCronology` where `customer` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1030,13 +1030,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numberOfRecentOrdersOfThisUser"];
+    return $elements[0]["numberPurchasesOfThisUser"];
   }
 
-  //Obtain a preview of recent orders of this user (witch is a customer)
-  function obtainPreviewRecentOrdersOfThisUser($userId){
+  //Obtain a preview of purchases of this user (witch is a customer)
+  function obtainPreviewPurchasesCronologyOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.`id`,t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,sum(`ContentRecentOrder`.`singleItemCost` * `ContentRecentOrder`.`quantity`) as totalCost, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(distinct `ContentRecentOrder`.`product`) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? group by `RecentOrders`.`id`) as t order by t.`timestamp` DESC;";
+    $sql = "select t.`id`,t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesCronology`.`id`,`PurchasesCronology`.`timestamp`,`PurchasesCronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesCronology` join `ContentPurchase` on `PurchasesCronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesCronology`.`customer` = ? group by `PurchasesCronology`.`id`) as t order by t.`timestamp` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1054,13 +1054,13 @@
     return $elements;
   }
 
-  //Get if the recent order of this customer with this id exists or not
-  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful both to semplify the query and to improve the security
-  function doesThisRecentOrederExists($userId,$recentOrderId){
+  //Get if the purchase of this customer with this id exists or not
+  //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful both to semplify the query and to improve the security
+  function doesThisPurchaseExists($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as 'doesThisRecentOrederExists' from (select * from `RecentOrders` where `customer` = ? and `id` = ?) as t;";
+    $sql = "select count(*) as 'doesThisPurchaseExists' from (select * from `PurchasesCronology` where `customer` = ? and `id` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("ii",$userId,$recentOrderId);
+      $statement->bind_param("ii",$userId,$purchaseId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1071,16 +1071,16 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["doesThisRecentOrederExists"];
+    return $elements[0]["doesThisPurchaseExists"];
   }
 
-  //Obtain general infos of a recent order
-  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful both to semplify the query and to improve the security
-  function recentOrderGeneralInfos($userId,$recentOrderId){
+  //Obtain general infos of a purchase
+  //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful both to semplify the query and to improve the security
+  function purchaseGeneralInfos($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `RecentOrders`.`id`,`RecentOrders`.`timestamp`,`RecentOrders`.`address`,sum(`ContentRecentOrder`.`singleItemCost` * `ContentRecentOrder`.`quantity`) as totalCost, sum(`ContentRecentOrder`.`quantity`) as numberOfProducts, count(distinct `ContentRecentOrder`.`product`) as numberOfDifferentProducts from `RecentOrders` join `ContentRecentOrder` on `RecentOrders`.`id` = `ContentRecentOrder`.`recentOrder` WHERE `RecentOrders`.`customer` = ? and `RecentOrders`.`id` = ?) as t;";
+    $sql = "select t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesCronology`.`id`,`PurchasesCronology`.`timestamp`,`PurchasesCronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesCronology` join `ContentPurchase` on `PurchasesCronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesCronology`.`customer` = ? and `PurchasesCronology`.`id` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("ii",$userId,$recentOrderId);
+      $statement->bind_param("ii",$userId,$purchaseId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1091,18 +1091,18 @@
       $elements[] = $element;
     }
 
-    //return an associative array with the general infos of this recent order
+    //return an associative array with the general infos of this purchase
     // timestamp address totalCost numberOfProducts numberOfDifferentProducts
     return $elements[0];
   }
 
-  //Obtain a specific recent order
-  //$userId shouldn't be necessary because we can obtain the $userId from the $recentOrderId but it's useful to improve the security
-  function obtainRecentOrder($userId,$recentOrderId){
+  //Obtain a specific purchase
+  //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful to improve the security
+  function obtainPurchase($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "SELECT `product`,`artisan`,`singleItemCost`,`quantity` FROM `ContentRecentOrder` WHERE `recentOrder` = ? and `recentOrder` in (select `id` from `RecentOrders` where `customer` = ?) order by `product` DESC;";
+    $sql = "SELECT `product`,`artisan`,`singleItemCost`,`quantity` FROM `ContentPurchase` WHERE `purchaseId` = ? and `purchaseId` in (select `id` from `PurchasesCronology` where `customer` = ?) order by `product` DESC;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("ii",$recentOrderId,$userId);
+      $statement->bind_param("ii",$purchaseId,$userId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -1152,7 +1152,7 @@
   //Number of units sold of this product
   function numberOfUnitsSoldOfThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select COALESCE(sum(`quantity`),0) as numberOfUnitsSoldOfThisProduct from `ContentRecentOrder` where `product` = ?;";
+    $sql = "select COALESCE(sum(`quantity`),0) as numberOfUnitsSoldOfThisProduct from `ContentPurchase` where `product` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -1192,7 +1192,7 @@
   //We take the products wich has sold in last 14 days limit 100 and quantity > 0 ordered by number of sold
   function obtainMostSoldProductsPreviewInLastPeriod(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentRecentOrder`.`quantity`) as numSells from `Product` join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where `Product`.`lastSell` is not null and TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) < 1036800 and `Product`.`quantity` > 0 group by `Product`.`id` ORDER BY numSells DESC limit 100;";
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentPurchase`.`quantity`) as numSells from `Product` join `ContentPurchase` on `Product`.`id` = `ContentPurchase`.`product` where `Product`.`lastSell` is not null and TIMESTAMPDIFF(SECOND, `Product`.`lastSell`, CURRENT_TIMESTAMP()) < 1036800 and `Product`.`quantity` > 0 group by `Product`.`id` ORDER BY numSells DESC limit 100;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -1793,7 +1793,7 @@
   //Obtain a preview of most sold product with this tag (only product sold at least one time)
   function obtainMostSoldProductsWithThisTag($tag){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentRecentOrder`.`quantity`) as numSells from `Product` join `ContentRecentOrder` on `Product`.`id` = `ContentRecentOrder`.`product` where `Product`.`lastSell` is not null and `Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where `ProductTags`.`tag` = ?) group by `Product`.`id` ORDER BY numSells DESC limit 100;";
+    $sql = "select `Product`.`id`,`Product`.`name`,`Product`.`iconExtension`,`Product`.`icon`,`Product`.`price`,`Product`.`quantity`,`Product`.`category`,sum(`ContentPurchase`.`quantity`) as numSells from `Product` join `ContentPurchase` on `Product`.`id` = `ContentPurchase`.`product` where `Product`.`lastSell` is not null and `Product`.`id` in (select `ProductTags`.`productId` from `ProductTags` where `ProductTags`.`tag` = ?) group by `Product`.`id` ORDER BY numSells DESC limit 100;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("s",$tag);
       $statement->execute();

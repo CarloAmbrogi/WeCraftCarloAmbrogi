@@ -4,27 +4,28 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Recent orders
-  //See the content of a specific recent order
+  //Purchase
+  //See the content of a specific purchase
   //This page is visible only to customers
   doInitialScripts();
+  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("Recent orders"),"./recentOrders.php");
+  upperPartOfThePage(translate("Purchase"),"./purchasesCronology.php");
   if($kindOfTheAccountInUse == "Customer"){
     if(isset($_GET["id"])){
-      $doesThisRecentOrederExists = doesThisRecentOrederExists($_SESSION["userId"],$_GET["id"]);
-      if($doesThisRecentOrederExists){
-        $recentOrderGeneralInfos = recentOrderGeneralInfos($_SESSION["userId"],$_GET["id"]);
-        addParagraph($recentOrderGeneralInfos["timestamp"]);
-        addParagraph(translate("Total cost").": ".floatToPrice($recentOrderGeneralInfos["totalCost"]));
-        addParagraphUnsafe(translate("Number of products").": ".htmlentities($recentOrderGeneralInfos["numberOfProducts"])."<br>".translate("Number of different products").": ".htmlentities($recentOrderGeneralInfos["numberOfDifferentProducts"]));
-        addParagraph($recentOrderGeneralInfos["address"]);
+      $doesThisPurchaseExists = doesThisPurchaseExists($_SESSION["userId"],$_GET["id"]);
+      if($doesThisPurchaseExists){
+        $purchaseGeneralInfos = purchaseGeneralInfos($_SESSION["userId"],$_GET["id"]);
+        addParagraph($purchaseGeneralInfos["timestamp"]);
+        addParagraph(translate("Total cost").": ".floatToPrice($purchaseGeneralInfos["totalCost"]));
+        addParagraphUnsafe(translate("Number of products").": ".htmlentities($purchaseGeneralInfos["numberOfProducts"])."<br>".translate("Number of different products").": ".htmlentities($purchaseGeneralInfos["numberOfDifferentProducts"]));
+        addParagraph($purchaseGeneralInfos["address"]);
         startCardGrid();
-        $contentThisRecentOrder = obtainRecentOrder($_SESSION["userId"],$_GET["id"]);
+        $contentThisPurchase = obtainPurchase($_SESSION["userId"],$_GET["id"]);
         $lastProductId = -1;
-        foreach($contentThisRecentOrder as &$singlePieceContentThisRecentOrder){
-          $thisProductId = $singlePieceContentThisRecentOrder["product"];
-          $singleItemCost = $singlePieceContentThisRecentOrder["singleItemCost"];
+        foreach($contentThisPurchase as &$singlePieceContentThisPurchase){
+          $thisProductId = $singlePieceContentThisPurchase["product"];
+          $singleItemCost = $singlePieceContentThisPurchase["singleItemCost"];
           if($thisProductId != $lastProductId){
             endCardGrid();
             $lastProductId = $thisProductId;
@@ -40,8 +41,8 @@
             endCardGrid();
             startCardGrid();
           }
-          $thisArtisan = $singlePieceContentThisRecentOrder["artisan"];
-          $quantityFromThisArtisan = $singlePieceContentThisRecentOrder["quantity"];
+          $thisArtisan = $singlePieceContentThisPurchase["artisan"];
+          $quantityFromThisArtisan = $singlePieceContentThisPurchase["quantity"];
           $userInfos = obtainUserInfos($thisArtisan);
           $artisanInfos = obtainArtisanInfos($thisArtisan);
           $fileImageToVisualize = genericUserImage;
@@ -56,10 +57,10 @@
         }
         endCardGrid();
       } else {
-        addParagraph(translate("This recent order doesnt exists"));
+        addParagraph(translate("This purchase doesnt exists"));
       }
     } else {
-      addParagraph(translate("You have missed to specify the id of this recent order"));
+      addParagraph(translate("You have missed to specify the id of this purchase"));
     }
   } else {
     addParagraph(translate("This page is visible only to customers"));

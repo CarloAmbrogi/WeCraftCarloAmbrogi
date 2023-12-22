@@ -67,11 +67,11 @@ INSERT INTO `Artisan` (`id`, `shopName`, `openingHours`, `description`, `phoneNu
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `ContentRecentOrder`
+-- Struttura della tabella `ContentPurchase`
 --
 
-CREATE TABLE `ContentRecentOrder` (
-  `recentOrder` int NOT NULL,
+CREATE TABLE `ContentPurchase` (
+  `purchaseId` int NOT NULL,
   `product` int NOT NULL,
   `artisan` int NOT NULL,
   `singleItemCost` float NOT NULL,
@@ -79,10 +79,10 @@ CREATE TABLE `ContentRecentOrder` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dump dei dati per la tabella `ContentRecentOrder`
+-- Dump dei dati per la tabella `ContentPurchase`
 --
 
-INSERT INTO `ContentRecentOrder` (`recentOrder`, `product`, `artisan`, `singleItemCost`, `quantity`) VALUES
+INSERT INTO `ContentPurchase` (`purchaseId`, `product`, `artisan`, `singleItemCost`, `quantity`) VALUES
 (23, 39, 3, 4.44, 2);
 
 -- --------------------------------------------------------
@@ -231,10 +231,10 @@ INSERT INTO `ProductTags` (`id`, `productId`, `tag`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `RecentOrders`
+-- Struttura della tabella `PurchasesCronology`
 --
 
-CREATE TABLE `RecentOrders` (
+CREATE TABLE `PurchasesCronology` (
   `id` int NOT NULL,
   `customer` int NOT NULL,
   `timestamp` timestamp NOT NULL,
@@ -242,10 +242,10 @@ CREATE TABLE `RecentOrders` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Dump dei dati per la tabella `RecentOrders`
+-- Dump dei dati per la tabella `PurchasesCronology`
 --
 
-INSERT INTO `RecentOrders` (`id`, `customer`, `timestamp`, `address`) VALUES
+INSERT INTO `PurchasesCronology` (`id`, `customer`, `timestamp`, `address`) VALUES
 (23, 1, '2023-12-12 17:36:07', 'This is my address');
 
 -- --------------------------------------------------------
@@ -345,10 +345,10 @@ ALTER TABLE `Artisan`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `ContentRecentOrder`
+-- Indici per le tabelle `ContentPurchase`
 --
-ALTER TABLE `ContentRecentOrder`
-  ADD PRIMARY KEY (`recentOrder`,`product`,`artisan`);
+ALTER TABLE `ContentPurchase`
+  ADD PRIMARY KEY (`purchaseId`,`product`,`artisan`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -387,9 +387,9 @@ ALTER TABLE `ProductTags`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `RecentOrders`
+-- Indici per le tabelle `PurchasesCronology`
 --
-ALTER TABLE `RecentOrders`
+ALTER TABLE `PurchasesCronology`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -434,9 +434,9 @@ ALTER TABLE `ProductTags`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT per la tabella `RecentOrders`
+-- AUTO_INCREMENT per la tabella `PurchasesCronology`
 --
-ALTER TABLE `RecentOrders`
+ALTER TABLE `PurchasesCronology`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
