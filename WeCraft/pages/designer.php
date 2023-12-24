@@ -8,7 +8,6 @@
   //This page permits to see a designer with its informations specifying the id of the designer with a get
   //If this page is viewed without a get by a designer, the designer automatically is redirected to its designer page
   doInitialScripts();
-  addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(getKindOfThisAccount($_GET["id"]) != "Designer"){
@@ -17,6 +16,7 @@
     } else {
       //Page ok
       upperPartOfThePage(translate("Designer"),"cookieBack");
+      addScriptAddThisPageToCronology();
       //Show the designer
       $userInfos = obtainUserInfos($_GET["id"]);
       $designerInfos = obtainDesignerInfos($_GET["id"]);
@@ -47,6 +47,25 @@
       addParagraphWithoutMb3Unsafe(adjustTextWithYouTubeLinks($designerInfos["description"]));
       addCarouselImagesOfThisUser($_GET["id"]);
       endDivShowHide("moreInformationOnThisDesigner");
+      //Show the products in collaboration for the design with this designer
+      addParagraph(translate("Here will be shown the products for witch this designer is collaborating with other artisans and designers"));
+      $productsForWhitchThisDesignerIsCollaborating = obtainProductsPreviewCooperativeDesign($_GET["id"]);
+      $foundOne = false;
+      startCardGrid();
+      foreach($productsForWhitchThisDesignerIsCollaborating as &$singleProductPreview){
+        $foundOne = true;
+        $fileImageToVisualize = genericProductImage;
+        if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+          $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+        }
+        $text1 = translate("Owner").": ".$singleProductPreview["ownerName"]." ".$singleProductPreview["ownerSurname"];
+        $text2 = translate("Number of collaborators").": ".$singleProductPreview["numberOfCollaborators"];
+        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,$singleProductPreview["productName"],$text1,$text2);
+      }
+      endCardGrid();
+      if($foundOne == false){
+        addParagraph(translate("No result"));
+      }
     }
   } else {
     if($kindOfTheAccountInUse == "Designer"){

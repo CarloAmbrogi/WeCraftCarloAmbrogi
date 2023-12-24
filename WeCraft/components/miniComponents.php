@@ -492,13 +492,19 @@
   }
   
   //Add the final script for show / hide button multiple
-  function addScriptShowHideMultiple($id){
+  function addScriptShowHideMultiple($id,$skipInitialHiding=false){
     ?>
       <script>
         var showHideElements<?= $id ?> = document.getElementsByClassName("showHide<?= $id ?>");
-        for(var i = 0; i < showHideElements<?= $id ?>.length; i++){
-          showHideElements<?= $id ?>[i].style.display = "none";
-        }
+        <?php
+          if($skipInitialHiding == false){
+            ?>
+              for(var i = 0; i < showHideElements<?= $id ?>.length; i++){
+                showHideElements<?= $id ?>[i].style.display = "none";
+              }
+            <?php
+          }
+        ?>
         function showHide<?= $id ?>() {
           for(var i = 0; i < showHideElements<?= $id ?>.length; i++){
             if (showHideElements<?= $id ?>[i].style.display === "none") {

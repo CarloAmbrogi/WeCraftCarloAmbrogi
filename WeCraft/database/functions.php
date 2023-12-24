@@ -1876,4 +1876,143 @@
     }
   }
 
+  //Obtain a preview of products for which this user is collaborating for a cooperative design
+  function obtainProductsPreviewCooperativeDesign($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id` as productId,`Product`.`name` as productName,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`artisan` as ownerId,`User`.`name` as ownerName,`User`.`surname` as ownerSurname,count(`CooperativeDesign`.`user`) as numberOfCollaborators from (`Product` join `User` on `Product`.`artisan` = `User`.`id`) left join `CooperativeDesign` on `Product`.`id` = `CooperativeDesign`.`product` where `Product`.`id` in (select `CooperativeDesign`.`product` from `CooperativeDesign` where `CooperativeDesign`.`user` = ?) group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with productId productName iconExtension icon ownerId ownerName ownerSurname numberOfCollaborators
+    return $elements;
+  }
+
+  //Obtain number of collaborators for this product
+  function obtainNumberCollaboratorsForThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberCollaboratorsForThisProduct from (select * from `CooperativeDesign` where `product` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberCollaboratorsForThisProduct"];
+  }
+
+  //Obtain a preview of other artisans (who are not the owner) who have collaborated for the design of this product
+  function obtainPreviewArtisansCollaboratorsOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesign`.`user` from `CooperativeDesign` where `CooperativeDesign`.`product` = ?) and `User`.`id` not in (select `Product`.`artisan` from `Product` where `Product`.`id` = ?) group by `User`.`id`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$productId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    return $elements;
+  }
+
+  //Obtain a preview of other designers (who are not the owner) who have collaborated for the design of this product
+  function obtainPreviewDesignersCollaboratorsOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesign`.`user` from `CooperativeDesign` where `CooperativeDesign`.`product` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension
+    return $elements;
+  }
+
+  //Number of products for witch this user (artisan or designer) is collaborating for a cooperating design
+  //except, in case he is an artisan, its product, products he sells and products he is sponsoring
+  function numberOfOtherProductsThisUserIsCollaboratingFor($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfOtherProductsThisUserIsCollaboratingFor from (select * from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfOtherProductsThisUserIsCollaboratingFor"];
+  }
+
+  //Obtain a preview of products for witch this user (artisan or designer) is collaborating for a cooperating design
+  //except, in case he is an artisan, its product, products he sells and products he is sponsoring
+  function previewOtherProductsThisUserIsCollaboratingFor($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name iconExtension icon price category
+    return $elements;
+  }
+
+  //Number of products of this artisan whitch are in collaboration for the design (in groups of at least 2)
+  function numberProductsOfThisArtisanInCollaboration($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsOfThisArtisanInCollaboration from (select * from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` <> ?) and `artisan` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsOfThisArtisanInCollaboration"];
+  }
+
 ?>

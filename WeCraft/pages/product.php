@@ -138,6 +138,33 @@
           addButtonLink(translate("Stop the sell of this product from certains artisans"),"./stopTheSellOfThisProductFromCertainsArtisans.php?id=".urlencode($_GET["id"]));
         }
       }
+      //This product has been created in collaboration with
+      $numberCollaboratorsForThisProduct = obtainNumberCollaboratorsForThisProduct($_GET["id"]);
+      if($numberCollaboratorsForThisProduct >= 2){
+        $numberCollaboratorsForThisProductToShow = $numberCollaboratorsForThisProduct - 1;
+        addButtonOnOffShowHide(translate("This product has been created in collaboration with")." (".$numberCollaboratorsForThisProductToShow."):","moreInformationCollaborators");
+        startDivShowHide("moreInformationCollaborators");
+        addParagraph("");
+        $previewArtisansCollaboratorsOfThisProduct = obtainPreviewArtisansCollaboratorsOfThisProduct($_GET["id"]);
+        $previewDesignersCollaboratorsOfThisProduct = obtainPreviewDesignersCollaboratorsOfThisProduct($_GET["id"]);
+        startCardGrid();
+        foreach($previewArtisansCollaboratorsOfThisProduct as &$singleArtisanPreview){
+          $fileImageToVisualize = genericUserImage;
+          if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+          }
+          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+        }
+        foreach($previewDesignersCollaboratorsOfThisProduct as &$singleDesignerPreview){
+          $fileImageToVisualize = genericUserImage;
+          if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
+          }
+          addACardForTheGrid("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),htmlentities(translate("Designer")),"");
+        }
+        endCardGrid();
+        endDivShowHide("moreInformationCollaborators");
+      }
       //This product is suggested also by theese artisans
       $numberOtherArtisansWhoAreSponsoringThisProduct = obtainNumberOtherArtisansWhoAreSponsoringThisProduct($_GET["id"]);
       if($numberOtherArtisansWhoAreSponsoringThisProduct > 0){
@@ -227,6 +254,14 @@
         if($areYouSponsoringThisProduct && $areYouSellingThisExchangeProduct){
           addParagraph(translate("In case you both sponsor and sell this product of another artisan on your artisan page it will be shown only as a product you sell"));
         }
+      }
+      //Here there are the commands for the cooperating design (to collaborate with other artisans and designers)
+      if($_SESSION["userId"] == $productInfos["artisan"]){
+        //If you are the owner you can start or stop the collaboration for the cooperative design
+
+      } else if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
+        //If you are not the owner but you are an artisan or a designer, you have anyway some options related to the collaboration for the cooperative design
+
       }
     } else {
       upperPartOfThePage(translate("Error"),"");

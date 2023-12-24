@@ -107,6 +107,11 @@
         }
       }
       endCardGrid();
+      //Show a paragraph if at least a product of this artisan is in collaboration for the design
+      $numberProductsOfThisArtisanInCollaboration = numberProductsOfThisArtisanInCollaboration($_GET["id"]);
+      if($numberProductsOfThisArtisanInCollaboration > 0){
+        addParagraph(translate("Some of the products of this artisans are created in collaboration with other artisans or designers"));
+      }
       //This artisan sells also theese products of other artisans
       $numberExchangeProductsAvailableToThisStore = obtainNumberExchangeProductsAvailableToYourStore($_GET["id"]);
       if($numberExchangeProductsAvailableToThisStore > 0){
@@ -151,9 +156,28 @@
         }
         endCardGrid();
       }
+      //This artisan has collaborated for the design of theese other products
+      $numberOfOtherProductsThisUserIsCollaboratingFor = numberOfOtherProductsThisUserIsCollaboratingFor($_GET["id"]);
+      if($numberOfOtherProductsThisUserIsCollaboratingFor > 0){
+        addParagraph(translate("This artisan has collaborated for the design of theese other products")." (".$numberOfOtherProductsThisUserIsCollaboratingFor."):");
+        $productsPreviewOtherProductsThisUserIsCollaboratingFor = previewOtherProductsThisUserIsCollaboratingFor($_GET["id"]);
+        startCardGrid();
+        foreach($productsPreviewOtherProductsThisUserIsCollaboratingFor as &$singleProductPreview){
+          $fileImageToVisualize = genericProductImage;
+          if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+          }
+          $text1 = translate("Category").": ".translate($singleProductPreview["category"]);
+          $text2 = translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+        }
+        endCardGrid();
+      }
       //Manage visibility products quantity 0
       addScriptShowHideMultiple("notAvailableProduct");
       forceThisPageReloadWhenBrowserBackButton();
+      //Show button to see the collaborations for the design of this artisan
+      addButtonLink(translate("See products in collaboration for the design with this artisan"),"./cooperativeDesignThisArtisan.php?id=".urlencode($_GET["id"]));
     }
   } else {
     if($kindOfTheAccountInUse == "Artisan"){
