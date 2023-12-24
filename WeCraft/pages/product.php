@@ -258,10 +258,18 @@
       //Here there are the commands for the cooperating design (to collaborate with other artisans and designers)
       if($_SESSION["userId"] == $productInfos["artisan"]){
         //If you are the owner you can start or stop the collaboration for the cooperative design
-
+        if($numberCollaboratorsForThisProduct == 0){
+          addButtonLink(translate("Start collaboration for a cooperative design"),"./startCooperativeDesign.php?id=".urlencode($_GET["id"]));
+        } else {
+          addParagraph(translate("You are collaborating in group for the design of this product"));
+          addButtonLink(translate("See collaboration"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+        }
       } else if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
-        //If you are not the owner but you are an artisan or a designer, you have anyway some options related to the collaboration for the cooperative design
-
+        //If you are not the owner but you are an artisan or a designer that is collaborating for this product, you have anyway some options related to the collaboration for the cooperative design
+        if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"])){
+          addParagraph(translate("You are collaborating in group for the design of this product"));
+          addButtonLink(translate("See collaboration"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+        }
       }
     } else {
       upperPartOfThePage(translate("Error"),"");

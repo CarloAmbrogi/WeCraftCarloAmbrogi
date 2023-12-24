@@ -2015,4 +2015,36 @@
     return $elements[0]["numberProductsOfThisArtisanInCollaboration"];
   }
 
+  //Return if this user is collaborating for the design of this product
+  function isThisUserCollaboratingForTheDesignOfThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProduct from (select * from `CooperativeDesign` where `user` = ? and `product` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisUserCollaboratingForTheDesignOfThisProduct"];
+  }
+
+  //start the collaboration for the cooperating design for this product
+  function startCooperatingDesignForThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `CooperativeDesign` (`user`,`product`) VALUES (?,?);";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

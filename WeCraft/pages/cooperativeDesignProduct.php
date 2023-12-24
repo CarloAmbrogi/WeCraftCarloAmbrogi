@@ -1,0 +1,74 @@
+<?php
+  include "./../components/includes.php";
+  include "./../functions/includes.php";
+  include "./../database/access.php";
+  include "./../database/functions.php";
+
+  //Page for the collaboration for a product (get param id is te id of the product related to this collaboration)
+  //You need to be an artisan or a designer
+  //You can see this page only if you are collaborating for the design of this product
+  //If you are the owner of the product you can add partecipants and delete this collaboration
+  //In this page there is a collaboration sheet
+  doInitialScripts();
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  if(isset($_GET["id"])){
+    if(doesThisProductExists($_GET["id"])){
+      if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){        
+        //Check you are a collaborator
+        if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"])){
+          addScriptAddThisPageToCronology();
+          upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+          //Real content of this page
+          $productInfos = obtainProductInfos($_GET["id"]);
+          //Show in the left col the related product and in the right col some options related to the collaboration
+          startRow();
+          startCol();
+          //Show the related product
+          addParagraph(translate("Product").":");
+          startCardGrid();
+          $fileImageToVisualize = genericProductImage;
+          if(isset($productInfos['icon']) && ($productInfos['icon'] != null)){
+            $fileImageToVisualize = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
+          }
+          $text1 = translate("Category").": ".translate($productInfos["category"]).'<br>'.translate("Price").": ".floatToPrice($productInfos["price"]);
+          $text2 = translate("Quantity from the owner").": ".$productInfos["quantity"];
+          addACardForTheGrid("./product.php?id=".urlencode($productInfos["id"]),$fileImageToVisualize,$productInfos["name"],$text1,$text2);
+          endCardGrid();
+          endCol();
+          startCol();
+          //Show some options related to the collaboration
+          if($_SESSION["userId"] == $productInfos["artisan"]){
+            //Options in case you are the owner
+            addButtonLink(translate("Add partecipants"),"./addPartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Delete this collaboration"),"./deleteCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          } else {
+            //Options in case you aren't the owner
+            addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          }
+          //Options for evry collaborator
+          addButtonLink(translate("Send message"),"./AAAAAAAAAAAAAA");
+          addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id".urlencode($_GET["id"]));
+          endCol();
+          endRow();
+          //Show the sheet
+
+        } else {
+          upperPartOfThePage(translate("Error"),"");
+          addParagraph(translate("You are not a collaborator for the design of this product"));
+        }
+      } else {
+        upperPartOfThePage(translate("Error"),"");
+        addParagraph(translate("This page is visible only to artisans and designers"));
+      }
+    } else {
+      upperPartOfThePage(translate("Error"),"");
+      addParagraph(translate("This product doesnt exists"));
+    }
+  } else {
+    upperPartOfThePage(translate("Error"),"");
+    //You have missed to specify the get param id of the product
+    addParagraph(translate("You have missed to specify the get param id of the product"));
+  }
+  lowerPartOfThePage(tabBarForTheAccountInUse());
+  include "./../database/closeConnectionDB.php";
+?>

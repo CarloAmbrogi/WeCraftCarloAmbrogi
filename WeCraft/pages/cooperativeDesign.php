@@ -31,7 +31,7 @@
       if($_SESSION["userId"] != $singleProductPreview["ownerId"]){
         startDivShowHideMultiple("youArentTheOwner");
       }
-      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,$singleProductPreview["productName"],$text1,$text2);
+      addACardForTheGrid("./cooperativeDesignProduct.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,$singleProductPreview["productName"],$text1,$text2);
       if($_SESSION["userId"] != $singleProductPreview["ownerId"]){
         endDivShowHideMultiple();
       }
