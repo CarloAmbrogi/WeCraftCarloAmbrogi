@@ -2047,4 +2047,115 @@
     }
   }
 
+  //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this product)
+  function addSheetCooperatingDesignForThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `Sheet` (`product`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get if an user with this email address exists or not
+  function doesThisUserGivenEmailExists($emailAddress){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as doesThisUserExists from (select * from `User` where `email` = ? and `emailVerified` = 1) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("s",$emailAddress);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["doesThisUserExists"];
+  }
+
+  //delete the collaboration for the cooperating design for this product
+  function deleteCooperatingDesignForThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `CooperativeDesign` WHERE `product` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //delete the sheet of a collaboration for the cooperating design for this product
+  function deleteSheetCooperatingDesignForThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `Sheet` WHERE `product` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Obtain a preview of this artisan
+  function obtainPreviewThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` = ? group by `User`.`id`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    return $elements[0];
+  }
+
+  //Obtain the content of the sheet
+  function obtainSheetContent($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Sheet`.`content`,`Sheet`.`lastUpdateWhen`,`Sheet`.`lastUpdateFrom`,`User`.`name`,`User`.`surname`,`User`.`email` from `Sheet` left join `User` on `Sheet`.`lastUpdateFrom` = `User`.`id` where `Sheet`.`product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with content lastUpdateWhen lastUpdateFrom name surname email
+    return $elements[0];
+  }
+
+  //Update the sheet (cor the cooperative design)
+  function updateSheet($newContent,$lastUpdateFrom,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Sheet` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `product` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("sii",$newContent,$lastUpdateFrom,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

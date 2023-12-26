@@ -17,6 +17,11 @@
     }
   }
 
+  //This function is to add a p paragraph with newline capabilities
+  function addParagraphNewlineCapabilities($written,$identifier=""){
+    addParagraphUnsafe(newlineForPhpSafe($written));
+  }
+
   //This function is to add a p paragraph and without htmlentities
   function addParagraphUnsafe($written){
     ?>
@@ -799,6 +804,15 @@
   function addSubtopicIndex($id){
     ?>
       <a id="<?= $id ?>"></a>
+    <?php
+  }
+
+  //This function is to add a a redirect
+  function addRedirect($location){
+    ?>
+      <script>
+        window.location='<?= $location ?>';
+      </script>
     <?php
   }
 

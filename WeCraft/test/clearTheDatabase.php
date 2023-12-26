@@ -19,6 +19,8 @@
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ShoppingCart`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`User`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`UserImages`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesign`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Sheet`");
     
   }
 

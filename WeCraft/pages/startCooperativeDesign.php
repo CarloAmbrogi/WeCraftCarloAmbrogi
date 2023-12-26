@@ -27,6 +27,7 @@
           if($numberCollaboratorsForThisProduct == 0){
             //Start cooperative design for this product
             startCooperatingDesignForThisProduct($_SESSION["userId"],$insertedProductId);
+            addSheetCooperatingDesignForThisProduct($insertedProductId);
             addParagraph(translate("The collaboration for the design of this product has started"));
             addButtonLink(translate("See collaboration"),"./cooperativeDesignProduct.php?id=".urlencode($insertedProductId));
             addParagraph(translate("From the page of the collaboration youll be able to add partecipants to this collaboration"));

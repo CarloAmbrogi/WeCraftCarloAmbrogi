@@ -25,7 +25,6 @@
           startCol();
           //Show the related product
           addParagraph(translate("Product").":");
-          startCardGrid();
           $fileImageToVisualize = genericProductImage;
           if(isset($productInfos['icon']) && ($productInfos['icon'] != null)){
             $fileImageToVisualize = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
@@ -33,7 +32,6 @@
           $text1 = translate("Category").": ".translate($productInfos["category"]).'<br>'.translate("Price").": ".floatToPrice($productInfos["price"]);
           $text2 = translate("Quantity from the owner").": ".$productInfos["quantity"];
           addACardForTheGrid("./product.php?id=".urlencode($productInfos["id"]),$fileImageToVisualize,$productInfos["name"],$text1,$text2);
-          endCardGrid();
           endCol();
           startCol();
           //Show some options related to the collaboration
@@ -47,11 +45,35 @@
           }
           //Options for evry collaborator
           addButtonLink(translate("Send message"),"./AAAAAAAAAAAAAA");
-          addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id".urlencode($_GET["id"]));
+          addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();
           //Show the sheet
+          addTitle(translate("Sheet"));
+          $sheetContent = obtainSheetContent($_GET["id"]);
+          if(isset($sheetContent["lastUpdateFrom"]) && $sheetContent["lastUpdateFrom"] != null){
+            addParagraph(translate("Last update")." ".$sheetContent["lastUpdateWhen"]." ".translate("froms")." ".$sheetContent["name"]." ".$sheetContent["surname"]." (".$sheetContent["email"].")");
+          } else {
+            addParagraph(translate("Sheet created in")." ".$sheetContent["lastUpdateWhen"]);
+          }
+          startForm1();
+          startForm2("./sendDataToSheet.php");
+          addLongTextField("","insertedSheet",100000);
+          addHiddenField("insertedProductId",$_GET["id"]);
+          addHiddenField("insertedOldSheet",$sheetContent["content"]);
+          endForm(translate("Save changes"));
+          ?>
+            <script>
+              //form inserted parameters
+              const form = document.querySelector('form');
+              const insertedSheet = document.getElementById('insertedSheet');
 
+              //Load form fields starting values
+              insertedSheet.value = "<?= newlineForJs($sheetContent["content"]) ?>";
+            </script>
+          <?php
+          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          forceThisPageReloadWhenBrowserBackButton();
         } else {
           upperPartOfThePage(translate("Error"),"");
           addParagraph(translate("You are not a collaborator for the design of this product"));

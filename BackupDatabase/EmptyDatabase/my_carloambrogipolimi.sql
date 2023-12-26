@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 22, 2023 alle 17:17
+-- Creato il: Dic 26, 2023 alle 17:22
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -61,6 +61,17 @@ CREATE TABLE `ContentPurchase` (
   `artisan` int NOT NULL,
   `singleItemCost` float NOT NULL,
   `quantity` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `CooperativeDesign`
+--
+
+CREATE TABLE `CooperativeDesign` (
+  `user` int NOT NULL,
+  `product` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -166,6 +177,19 @@ CREATE TABLE `PurchasesCronology` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `Sheet`
+--
+
+CREATE TABLE `Sheet` (
+  `product` int NOT NULL,
+  `content` text NOT NULL,
+  `lastUpdateFrom` int DEFAULT NULL,
+  `lastUpdateWhen` timestamp NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `ShoppingCart`
 --
 
@@ -247,6 +271,12 @@ ALTER TABLE `ContentPurchase`
   ADD PRIMARY KEY (`purchaseId`,`product`,`artisan`);
 
 --
+-- Indici per le tabelle `CooperativeDesign`
+--
+ALTER TABLE `CooperativeDesign`
+  ADD PRIMARY KEY (`user`,`product`);
+
+--
 -- Indici per le tabelle `Customer`
 --
 ALTER TABLE `Customer`
@@ -287,6 +317,12 @@ ALTER TABLE `ProductTags`
 --
 ALTER TABLE `PurchasesCronology`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `Sheet`
+--
+ALTER TABLE `Sheet`
+  ADD PRIMARY KEY (`product`);
 
 --
 -- Indici per le tabelle `ShoppingCart`

@@ -85,7 +85,7 @@
 
               //Load form fields starting values
               insertedName.value = "<?= $productInfos["name"] ?>";
-              insertedDescription.value = "<?= $productInfos["description"] ?>";
+              insertedDescription.value = "<?= newlineForJs($productInfos["description"]) ?>";
               insertedPrice.value = "<?= floatToPrice($productInfos["price"]) ?>";
               insertedQuantity.value = "<?= $productInfos["quantity"] ?>";
     

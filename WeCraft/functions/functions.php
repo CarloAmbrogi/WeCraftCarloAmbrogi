@@ -377,6 +377,7 @@
 
   //Adjust this text substituting YouTube links with string video clickable ref to the YouTube link
   function adjustTextWithYouTubeLinks($text){
+    $text = newlineSpecificStringReplace($text);
     $possiblePrefix1 = "https://youtu.be/";
     $possiblePrefix2 = "https://www.youtube.com/watch?v=";
     $resultArr = [];
@@ -438,7 +439,69 @@
         $result.=htmlentities($value);
       }
     }
+    return replaceSpecificStringNewLine($result);
+  }
+
+  //Replace newline characeter in the string with \n
+  function newlineForJs($str){
+    $newline = "
+";
+    $strings = explode($newline,$str);
+    $result = "";
+    $firstTime = true;
+    foreach($strings as &$value){
+      if($firstTime == false){
+        $result.="\\n";
+      }
+      $result.=$value;
+      $firstTime = false;
+    }
+    $result = str_replace("\r", "", $result);
+    $result = str_replace("\n", "", $result);
     return $result;
+  }
+
+  //Replace newline characeter in the string with br and fix html special characters
+  function newlineForPhpSafe($str){
+    $newline = "
+";
+    $strings = explode($newline,$str);
+    $result = "";
+    $firstTime = true;
+    foreach($strings as &$value){
+      if($firstTime == false){
+        $result.="<br>";
+      }
+      $result.=htmlentities($value);
+      $firstTime = false;
+    }
+    $result = str_replace("\r", "", $result);
+    $result = str_replace("\n", "", $result);
+    return $result;
+  }
+
+  //Replace newline characeter in the string with a specific string of characters
+  function newlineSpecificStringReplace($str){
+    $newline = "
+";
+    $strings = explode($newline,$str);
+    $result = "";
+    $firstTime = true;
+    foreach($strings as &$value){
+      if($firstTime == false){
+        $result.=" ahreibeuwfbefbnFIERFBYRYNDSJSHnidebfebn ";
+      }
+      $result.=htmlentities($value);
+      $firstTime = false;
+    }
+    $result = str_replace("\r", "", $result);
+    $result = str_replace("\n", "", $result);
+    return $result;
+  }
+
+  //Replace a specific string of characters with br
+  function replaceSpecificStringNewLine($str){
+    return str_replace(" ahreibeuwfbefbnFIERFBYRYNDSJSHnidebfebn ","<br>",$str);
   }
 
 ?>
