@@ -16,8 +16,8 @@
     upperPartOfThePage(translate("Add new product"),"./artisan.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to add a new product
-      $insertedName = $_POST['insertedName'];
-      $insertedDescription = $_POST['insertedDescription'];
+      $insertedName = trim($_POST['insertedName']);
+      $insertedDescription = trim($_POST['insertedDescription']);
       $insertedPrice = $_POST['insertedPrice'];
       $insertedQuantity = $_POST['insertedQuantity'];
       $insertedCategory = $_POST['insertedCategory'];
@@ -162,13 +162,13 @@
             if(insertedName.value === ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the name") ?>");
-            } else if(insertedDescription.value === ""){
+            } else if(insertedDescription.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the description") ?>");
-            } else if(insertedPrice.value === ""){
+            } else if(insertedPrice.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the price") ?>");
-            } else if(insertedQuantity.value === ""){
+            } else if(insertedQuantity.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the quantity") ?>");
             } else if(!isValidQuantity(insertedQuantity.value)){

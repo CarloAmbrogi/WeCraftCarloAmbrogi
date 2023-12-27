@@ -16,7 +16,7 @@
     upperPartOfThePage(translate("Account"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to change the shop name
-      $insertedShopName = $_POST['insertedShopName'];
+      $insertedShopName = trim($_POST['insertedShopName']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       //Check on the input form data
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -47,7 +47,7 @@
 
           //prevent sending form with errors
           form.onsubmit = function(e){
-            if(insertedShopName.value === ""){
+            if(insertedShopName.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the shop name") ?>");
             }

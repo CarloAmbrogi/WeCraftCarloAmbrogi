@@ -183,7 +183,7 @@
                   <?php
                     foreach ($quantityOfThisProductInShoppingCartByThisUser as &$value){
                       ?>
-                        if(insertedQuantity<?= $value["artisanId"] ?>.value === ""){
+                        if(insertedQuantity<?= $value["artisanId"] ?>.value.trim() == ""){
                           e.preventDefault();
                           alert("<?= translate("You have missed to insert the quantity") ?>");
                           return;

@@ -16,7 +16,7 @@
     upperPartOfThePage(translate("Account"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to change name and surname
-      $insertedDescription = $_POST['insertedDescription'];
+      $insertedDescription = trim($_POST['insertedDescription']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       //Check on the input form data
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -52,7 +52,7 @@
 
           //prevent sending form with errors
           form.onsubmit = function(e){
-            if(insertedDescription.value === ""){
+            if(insertedDescription.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the description") ?>");
             }

@@ -14,7 +14,7 @@
     if($numberOfItemsInTheShoppingCartOfThisUser > 0){
       if($_SERVER["REQUEST_METHOD"] == "POST"){
         //Receive post request for sending the order
-        $insertedAddress = $_POST['insertedAddress'];
+        $insertedAddress = trim($_POST['insertedAddress']);
         $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
         //Check on the input form data
         if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -80,7 +80,7 @@
 
             //prevent sending form with errors
             form.onsubmit = function(e){
-              if(insertedAddress.value === ""){
+              if(insertedAddress.value.trim() == ""){
                 e.preventDefault();
                 alert("<?= translate("You have missed to insert the address") ?>");
               } else if(!shoppingCartViolatingItemsCheck) {

@@ -16,15 +16,15 @@
     $insertedPassword = $_POST['insertedPassword'];
     $insertedConfirmedPassword = $_POST['insertedConfirmedPassword'];
     $passwordHash = password_hash($insertedPassword, PASSWORD_DEFAULT);
-    $insertedName = $_POST['insertedName'];
-    $insertedSurname = $_POST['insertedSurname'];
-    $insertedShopName = $_POST['insertedShopName'];
+    $insertedName = trim($_POST['insertedName']);
+    $insertedSurname = trim($_POST['insertedSurname']);
+    $insertedShopName = trim($_POST['insertedShopName']);
     $insertedOpeningHours = $_POST['insertedOpeningHours'];
-    $insertedDescription = $_POST['insertedDescription'];
-    $insertedPhoneNumber = $_POST['insertedPhoneNumber'];
+    $insertedDescription = trim($_POST['insertedDescription']);
+    $insertedPhoneNumber = trim($_POST['insertedPhoneNumber']);
     $insertedLatitude = $_POST['insertedLatitude'];
     $insertedLongitude = $_POST['insertedLongitude'];
-    $insertedAddress = $_POST['insertedAddress'];
+    $insertedAddress = trim($_POST['insertedAddress']);
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -320,7 +320,7 @@
         form.onsubmit = function(e){
           prepareStringOpeningHours();
           insertedOpeningHours.value = preparedStringOpeningHours;
-          if(insertedEmail.value === ""){
+          if(insertedEmail.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the email address") ?>");
           } else if(!isValidEmail(insertedEmail.value)){
@@ -332,37 +332,37 @@
           } else if(insertedConfirmedPassword.value === ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the confirmed password") ?>");
-          } else if(insertedName.value === ""){
+          } else if(insertedName.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the name") ?>");
-          } else if(insertedSurname.value === ""){
+          } else if(insertedSurname.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the surname") ?>");
-          } else if(insertedShopName.value === ""){
+          } else if(insertedShopName.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the shop name") ?>");
-          } else if(insertedDescription.value === ""){
+          } else if(insertedDescription.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the description") ?>");
-          } else if(insertedPhoneNumber.value === ""){
+          } else if(insertedPhoneNumber.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the phone number") ?>");
           } else if(!isValidPhoneNumber(insertedPhoneNumber.value)){
             e.preventDefault();
             alert("<?= translate("Phone number not valid") ?>");
-          } else if(insertedLatitude.value === ""){
+          } else if(insertedLatitude.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the latitude") ?>");
           } else if(!isValidCoordinate(insertedLatitude.value)){
             e.preventDefault();
             alert("<?= translate("Latitude not valid") ?>");
-          } else if(insertedLongitude.value === ""){
+          } else if(insertedLongitude.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the longitude") ?>");
           } else if(!isValidCoordinate(insertedLongitude.value)){
             e.preventDefault();
             alert("<?= translate("Longitude not valid") ?>");
-          } else if(insertedAddress.value === ""){
+          } else if(insertedAddress.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the address") ?>");
           } else if(preparedStringOpeningHours == "error"){

@@ -56,13 +56,13 @@
 
         //prevent sending form with errors
         form.onsubmit = function(e){
-          if(insertedEmail.value === ""){
+          if(insertedEmail.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the email address") ?>");
           } else if(!isValidEmail(insertedEmail.value)){
             e.preventDefault();
             alert("<?= translate("Email address not valid") ?>");
-          } else if(insertedPassword.value === ""){
+          } else if(insertedPassword.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the password") ?>");
           }

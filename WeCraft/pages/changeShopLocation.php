@@ -18,7 +18,7 @@
       //Receive post request to change the shop location
       $insertedLatitude = $_POST['insertedLatitude'];
       $insertedLongitude = $_POST['insertedLongitude'];
-      $insertedAddress = $_POST['insertedAddress'];
+      $insertedAddress = trim($_POST['insertedAddress']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       //Check on the input form data
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -70,7 +70,7 @@
 
           //prevent sending form with errors
           form.onsubmit = function(e){
-            if(insertedLatitude.value === ""){
+            if(insertedLatitude.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the latitude") ?>");
             } else if(!isValidCoordinate(insertedLatitude.value)){

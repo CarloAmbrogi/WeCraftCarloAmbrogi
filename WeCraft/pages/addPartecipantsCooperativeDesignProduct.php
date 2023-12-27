@@ -17,7 +17,7 @@
       upperPartOfThePage(translate("Cooperative design"),"cookieBack");
       //Receive post request to add a new partecipant to the cooperative design for this product
       $insertedProductId = $_POST['insertedProductId'];
-      $insertedPartecipant = $_POST['insertedPartecipant'];
+      $insertedPartecipant = trim($_POST['insertedPartecipant']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
@@ -92,7 +92,7 @@
     
                   //prevent sending form with errors
                   form.onsubmit = function(e){
-                    if(insertedPartecipant.value === ""){
+                    if(insertedPartecipant.value.trim() == ""){
                       e.preventDefault();
                       alert("<?= translate("You have missed to insert the new partecipant") ?>");
                     } else if(!isValidEmail(insertedPartecipant.value)){

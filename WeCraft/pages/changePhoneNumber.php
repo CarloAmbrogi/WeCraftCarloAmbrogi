@@ -16,7 +16,7 @@
     upperPartOfThePage(translate("Account"),"./myWeCraft.php");
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Receive post request to change the phone number
-      $insertedPhoneNumber = $_POST['insertedPhoneNumber'];
+      $insertedPhoneNumber = trim($_POST['insertedPhoneNumber']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       //Check on the input form data
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -54,7 +54,7 @@
 
           //prevent sending form with errors
           form.onsubmit = function(e){
-            if(insertedPhoneNumber.value === ""){
+            if(insertedPhoneNumber.value.trim() == ""){
               e.preventDefault();
               alert("<?= translate("You have missed to insert the phone number") ?>");
             } else if(!isValidPhoneNumber(insertedPhoneNumber.value)){

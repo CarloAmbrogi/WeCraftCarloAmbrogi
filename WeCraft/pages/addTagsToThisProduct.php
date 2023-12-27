@@ -11,7 +11,7 @@
     //Receive post request for adding tags to this product
     $insertedProductId = $_POST['insertedProductId'];
     upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($insertedProductId));
-    $insertedTag = $_POST['insertedTag'];
+    $insertedTag = trim($_POST['insertedTag']);
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -69,7 +69,7 @@
 
               //prevent sending form with errors
               form.onsubmit = function(e){
-                if(insertedTag.value === ""){
+                if(insertedTag.value.trim() == ""){
                   e.preventDefault();
                   alert("<?= translate("You have missed to insert the tag") ?>");
                 } else if(!isValidTag(insertedTag.value)){

@@ -11,8 +11,8 @@
     //Receive post request for editing the general info of this product
     $insertedProductId = $_POST['insertedProductId'];
     upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($insertedProductId));
-    $insertedName = $_POST['insertedName'];
-    $insertedDescription = $_POST['insertedDescription'];
+    $insertedName = trim($_POST['insertedName']);
+    $insertedDescription = trim($_POST['insertedDescription']);
     $insertedPrice = $_POST['insertedPrice'];
     $insertedQuantity = $_POST['insertedQuantity'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
@@ -102,16 +102,16 @@
     
               //prevent sending form with errors
               form.onsubmit = function(e){
-                if(insertedName.value === ""){
+                if(insertedName.value.trim() == ""){
                   e.preventDefault();
                   alert("<?= translate("You have missed to insert the name") ?>");
-                } else if(insertedDescription.value === ""){
+                } else if(insertedDescription.value.trim() == ""){
                   e.preventDefault();
                   alert("<?= translate("You have missed to insert the description") ?>");
-                } else if(insertedPrice.value === ""){
+                } else if(insertedPrice.value.trim() == ""){
                   e.preventDefault();
                   alert("<?= translate("You have missed to insert the price") ?>");
-                } else if(insertedQuantity.value === ""){
+                } else if(insertedQuantity.value.trim() == ""){
                   e.preventDefault();
                   alert("<?= translate("You have missed to insert the quantity") ?>");
                 } else if(!isValidQuantity(insertedQuantity.value)){

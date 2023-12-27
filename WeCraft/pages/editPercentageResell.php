@@ -98,7 +98,7 @@
 
                 //prevent sending form with errors
                 form.onsubmit = function(e){
-                  if(insertedPercentageResell.value === ""){
+                  if(insertedPercentageResell.value.trim() == ""){
                     e.preventDefault();
                     alert("<?= translate("You have missed to insert the percentage resell") ?>");
                   } else if(!isValidPercentage(insertedPercentageResell.value)){

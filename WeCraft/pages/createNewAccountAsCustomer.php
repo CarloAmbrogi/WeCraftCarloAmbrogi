@@ -16,8 +16,8 @@
     $insertedPassword = $_POST['insertedPassword'];
     $insertedConfirmedPassword = $_POST['insertedConfirmedPassword'];
     $passwordHash = password_hash($insertedPassword, PASSWORD_DEFAULT);
-    $insertedName = $_POST['insertedName'];
-    $insertedSurname = $_POST['insertedSurname'];
+    $insertedName = trim($_POST['insertedName']);
+    $insertedSurname = trim($_POST['insertedSurname']);
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -124,7 +124,7 @@
 
         //prevent sending form with errors
         form.onsubmit = function(e){
-          if(insertedEmail.value === ""){
+          if(insertedEmail.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the email address") ?>");
           } else if(!isValidEmail(insertedEmail.value)){
@@ -136,10 +136,10 @@
           } else if(insertedConfirmedPassword.value === ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the confirmed password") ?>");
-          } else if(insertedName.value === ""){
+          } else if(insertedName.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the name") ?>");
-          } else if(insertedSurname.value === ""){
+          } else if(insertedSurname.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the surname") ?>");
           } else if(insertedPassword.value !== insertedConfirmedPassword.value){

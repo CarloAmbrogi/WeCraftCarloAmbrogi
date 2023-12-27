@@ -99,7 +99,7 @@
 
                   //prevent sending form with errors
                   form.onsubmit = function(e){
-                    if(insertedQuantity.value === ""){
+                    if(insertedQuantity.value.trim() == ""){
                       e.preventDefault();
                       alert("<?= translate("You have missed to insert the quantity") ?>");
                     } else if(!isValidQuantity(insertedQuantity.value)){
