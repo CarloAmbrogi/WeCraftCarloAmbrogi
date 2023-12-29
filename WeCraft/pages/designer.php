@@ -58,9 +58,9 @@
         if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
           $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
         }
-        $text1 = translate("Owner").": ".$singleProductPreview["ownerName"]." ".$singleProductPreview["ownerSurname"];
+        $text1 = translate("Owner").": ".htmlentities($singleProductPreview["ownerName"])." ".htmlentities($singleProductPreview["ownerSurname"]);
         $text2 = translate("Number of collaborators").": ".$singleProductPreview["numberOfCollaborators"];
-        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,$singleProductPreview["productName"],$text1,$text2);
+        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),$text1,$text2);
       }
       endCardGrid();
       if($foundOne == false){

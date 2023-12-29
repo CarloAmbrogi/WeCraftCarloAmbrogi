@@ -31,7 +31,7 @@
           }
           $text1 = translate("Category").": ".translate($productInfos["category"]).'<br>'.translate("Price").": ".floatToPrice($productInfos["price"]);
           $text2 = translate("Quantity from the owner").": ".$productInfos["quantity"];
-          addACardForTheGrid("./product.php?id=".urlencode($productInfos["id"]),$fileImageToVisualize,$productInfos["name"],$text1,$text2);
+          addACardForTheGrid("./product.php?id=".urlencode($productInfos["id"]),$fileImageToVisualize,htmlentities($productInfos["name"]),$text1,$text2);
           endCol();
           startCol();
           //Show some options related to the collaboration

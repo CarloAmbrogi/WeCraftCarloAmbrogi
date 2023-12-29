@@ -2158,4 +2158,329 @@
     }
   }
 
+  //Obtain a preview of projects of this designer not already assigned to an artisan
+  function obtainProjectsPreviewOfThisDesignerNotAssigned($designerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`id` not in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans`) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$designerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects of this designer not assigned to at least an artisan
+  function obtainProjectsPreviewOfThisDesignerAssigned($designerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`id` in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans`) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$designerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects of this designer claimed by an artisan
+  function obtainProjectsPreviewOfThisDesignerClaimed($designerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`claimedByThisArtisan` is not null and `Project`.`confirmedByTheCustomer` = 0 order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$designerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects of this designer confirmed by the customer
+  function obtainProjectsPreviewOfThisDesignerConfirmed($designerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`confirmedByTheCustomer` = 1 and `Project`.`timestampReady` is null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$designerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects of this designer completed and ready
+  function obtainProjectsPreviewOfThisDesignerCompleted($designerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`timestampReady` is not null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$designerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects assigned to this artisan
+  function obtainProjectsPreviewAssignedToThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`id` in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`artisan` = ?) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects claimed by this artisan
+  function obtainProjectsPreviewClaimedByThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` is not null and `Project`.`claimedByThisArtisan` = ? and `Project`.`confirmedByTheCustomer` = 0 order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects assigned to this artisan and confirmed
+  function obtainProjectsPreviewOfThisArtisanConfirmed($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` = ? and `Project`.`confirmedByTheCustomer` = 1 and `Project`.`timestampReady` is null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects completed and ready by this artisan
+  function obtainProjectsPreviewOfThisArtisanCompleted($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` = ? and `Project`.`timestampReady` is not null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects not yet claimed and created for this customer
+  function obtainProjectsPreviewNotClaimedThisCustomer($customerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` is null and `Project`.`customer` = ? order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$customerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of claimed projects and created for this customer
+  function obtainProjectsPreviewClaimedThisCustomer($customerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` is not null and `Project`.`confirmedByTheCustomer` = 0 and `Project`.`customer` = ? order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$customerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects confirmed by this customer
+  function obtainProjectsPreviewOfThisCustomerConfirmed($customerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`confirmedByTheCustomer` = 1 and `Project`.`timestampReady` is null and `Project`.`customer` = ? order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$customerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Obtain a preview of projects completed and ready for this customer
+  function obtainProjectsPreviewOfThisCustomerCompleted($customerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`timestampReady` is not and `Project`.`customer` = ? null order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$customerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //insert on Project a new project (without specifying an icon image)
+  function addANewProjectWithoutIcon($designerId,$customerId,$name,$description,$price,$percentageToDesigner){
+    //insert on Project
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, ?, ?, NULL, 0, NULL, NULL, NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iissdd",$designerId,$customerId,$name,$description,$price,$percentageToDesigner);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //insert on Project a new project (specifying an icon image)
+  function addANewProjectWithIcon($designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner){
+    //insert on Project
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, NULL, NULL, NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iissssdd",$designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Get if the project with this id exists or not
+  function doesThisProjectExists($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as 'doesThisProjectExists' from (select * from `Project` where `id` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["doesThisProjectExists"];
+  }
+
+  //Obtain a project infos of a project given the id
+  function obtainProjectInfos($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements[0];
+  }
+
 ?>

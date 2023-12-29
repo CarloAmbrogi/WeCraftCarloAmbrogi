@@ -101,7 +101,7 @@
         if(!$isAvailable){
           startDivShowHideMultiple("notAvailableProduct");
         }
-        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
         if(!$isAvailable){
           endDivShowHideMultiple();
         }
@@ -132,7 +132,7 @@
           if(!$isAvailable){
             startDivShowHideMultiple("notAvailableProduct");
           }
-          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
           if(!$isAvailable){
             endDivShowHideMultiple();
           }
@@ -152,7 +152,7 @@
           }
           $text1 = translate("Category").": ".translate($singleProductPreview["category"]);
           $text2 = translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
         }
         endCardGrid();
       }
@@ -169,7 +169,7 @@
           }
           $text1 = translate("Category").": ".translate($singleProductPreview["category"]);
           $text2 = translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+          addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
         }
         endCardGrid();
       }

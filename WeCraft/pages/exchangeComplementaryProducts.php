@@ -27,7 +27,7 @@
       }
       $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
       $text2 = translate("Quantity available").": ".translate("from the owner").": ".$singleProductPreview["quantity"]." ".translate("to the patner").": ".$singleProductPreview["quantityToThePatner"];
-      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
     }
     endCardGrid();
     addParagraph(translate("If you receive from an artisan an his product you can start sell it in your store and you can notify this on WeCraft from the page of that product"));
@@ -60,7 +60,7 @@
       }
       $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
       $text2 = translate("Quantity available").": ".translate("from the owner").": ".$singleProductPreview["quantity"]." ".translate("to the patner").": ".$singleProductPreview["quantityToThePatner"];
-      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
     }
     endCardGrid();
   }

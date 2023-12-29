@@ -19,9 +19,9 @@
     } else if($insertedPercentageResell == ""){
       addParagraph(translate("You have missed to insert the percentage resell"));
     } else if(strlen($insertedPercentageResell) > 5){
-      addParagraph(translate("The insert the percentage resell is too long"));
+      addParagraph(translate("The inserted percentage resell is too long"));
     } else if(!isValidPercentage($insertedPercentageResell)){
-      addParagraph(translate("The inserted the percentage resell is not valid"));
+      addParagraph(translate("The inserted percentage resell is not valid"));
     } else if($insertedPercentageResell < 0.0 || $insertedPercentageResell > 100.0){
       addParagraph(translate("The percentage is not between z and h"));
     } else {
@@ -103,7 +103,7 @@
                     alert("<?= translate("You have missed to insert the percentage resell") ?>");
                   } else if(!isValidPercentage(insertedPercentageResell.value)){
                     e.preventDefault();
-                    alert("<?= translate("The inserted the percentage resell is not valid") ?>");
+                    alert("<?= translate("The inserted percentage resell is not valid") ?>");
                   } else if(Number(insertedPercentageResell.value) < 0.0 || Number(insertedPercentageResell.value) > 100.0){
                     e.preventDefault();
                     alert("<?= translate("The percentage is not between z and h") ?>");

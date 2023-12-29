@@ -305,9 +305,9 @@
         }
       case "Designer":
         if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
         } else {
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./INSERTLINKAAAAAAAAA"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
         }
       default://error
         return [];

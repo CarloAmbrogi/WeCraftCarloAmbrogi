@@ -31,7 +31,7 @@
     if(!$isAvailable){
       startDivShowHideMultiple("notAvailableProduct");
     }
-    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
     if(!$isAvailable){
       endDivShowHideMultiple();
     }
@@ -60,7 +60,7 @@
     if(!$isAvailable){
       startDivShowHideMultiple("notAvailableProduct");
     }
-    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,$singleProductPreview["name"],$text1,$text2);
+    addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
     if(!$isAvailable){
       endDivShowHideMultiple();
     }

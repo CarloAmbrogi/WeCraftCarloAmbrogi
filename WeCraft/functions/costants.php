@@ -17,6 +17,9 @@
   //An image representing a generic product (for products without an image)
   define('genericProductImage', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/genericProduct.jpg");
 
+  //An image representing a generic project (for projects without an image)
+  define('genericProjectImage', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/genericProject.png");
+
   //An image representing a purchase
   define('purchaseIcon', "http://carloambrogipolimi.altervista.org/WeCraft/Icons/purchaseIcon.png");
 

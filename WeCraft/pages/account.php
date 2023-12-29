@@ -19,7 +19,7 @@
       header('Location: ./artisan.php');
       break;
     case "Designer":
-      header('Location: ./AAAAALOCATIONQUANDOADESIGNER.php');
+      header('Location: ./personalizedItems.php');
       break;
     default:
       header('Location: ./logout.php');
