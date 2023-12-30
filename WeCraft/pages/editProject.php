@@ -4,21 +4,16 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //This page is to create a project by the id of the customer
-  //This page is available only for designers
-  //This page is reachable from the chat with a customer
-  //A designer can create a project only for customer with witch has chatted before
+  //Edit general info of a project (if you are the designer of this project) by the id of the project
+  //Only for not confirmed projects which will become unclaimed
   doInitialScripts();
-  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //Receive post request for creating a project
-    $insertedCustomerId = $_POST['insertedCustomerId'];
-    upperPartOfThePage(translate("Create a project"),"./AAAAAAAA.php?id=");
+    //Receive post request for editing the general info of this project
+    $insertedProjectId = $_POST['insertedProjectId'];
+    upperPartOfThePage(translate("Edit project"),"./project.php?id=".urlencode($insertedProjectId));
     $insertedName = trim($_POST['insertedName']);
     $insertedDescription = trim($_POST['insertedDescription']);
-    $insertedIconExtension = $_POST['insertedIconExtension'];
-    $insertedIcon = $_POST['insertedIcon'];
     $insertedPrice = $_POST['insertedPrice'];
     $insertedPercentageToDesigner = $_POST['insertedPercentageToDesigner'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
@@ -33,7 +28,7 @@
       addParagraph(translate("You have missed to insert the description"));
     } else if(strlen($insertedDescription) > 2046){
       addParagraph(translate("The description is too long"));
-    } else if($insertedPrice == ""){
+    }  else if($insertedPrice == ""){
       addParagraph(translate("You have missed to insert the price"));
     } else if(strlen($insertedPrice) > 24){
       addParagraph(translate("The price is too long"));
@@ -48,78 +43,54 @@
     } else if($insertedPercentageToDesigner < 0.0 || $insertedPercentageToDesigner > 100.0){
       addParagraph(translate("The percentage is not between z and h"));
     } else {
-      //Verify that the user is a designer
-      if($kindOfTheAccountInUse == "Designer"){
-        //Verify that this user exists and it is a customer
-        if(getKindOfThisAccount($insertedCustomerId) == "Customer"){
-          //Verify you have a chat with this customer AAAAAAAA
-          if(true){
-            //Add the new project
-            if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
-              //You have chosen to send the file icon
-              $fileName = $_FILES["insertedIcon"]["name"];
-              $fileType = $_FILES["insertedIcon"]["type"];
-              $fileSize = $_FILES['insertedIcon']['size'];
-              $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-              $insertCorrectlyTheIcon = false;
-              if($fileSize > maxSizeForAFile){
-                addParagraph(translate("The file is too big"));
-              } else if(!array_key_exists($fileExtension, permittedExtensions)){
-                addParagraph(translate("The extension of the file is not an image"));
-              } else if(!in_array($fileType, permittedExtensions)){
-                addParagraph(translate("The file is not an image"));
-              } else {
-                $insertCorrectlyTheIcon = true;
-                //add the new project with file icon
-                $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-                addANewProjectWithIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedPercentageToDesigner);
-                addParagraph(translate("Your data has been loaded correctly"));
-              }
-              if($insertCorrectlyTheIcon == false){
-                //add the new product without file icon (because of error in the icon)
-                addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
-                addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change the icon later"));
-              }
-            } else {
-              //add the new product without file icon
-              addParagraph(translate("Your data has been loaded correctly"));
-              addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
-            }
-            //Show button to go to the personalized items page v1
-            addParagraph(translate("You can see the project you have created in the personalized item page and youll be able to assign artisans to this project"));
-            addButtonLink(translate("Go to personalized items page"),"./personalizedItems.php?insertedCategory=v1");
+      //Check that this project exists, the user is who has created the project, the project is not confirmed
+      if(doesThisProjectExists($insertedProjectId)){
+        $projectInfos = obtainProjectInfos($insertedProjectId);
+        if($_SESSION["userId"] == $projectInfos["designer"]){
+          $thisProjectIsConfirmed = false;
+          if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+            $thisProjectIsConfirmed = true;
+          }
+          if(!$thisProjectIsConfirmed){
+            //Edit general info of this project and make it unclaimed
+            updateGeneralInfoOfAProject($insertedProjectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
+            //Send notification to the customer and to the assigned artisans
+            //AAAAAAA
+            addParagraph(translate("Done"));
           } else {
-            //addParagraph(translate("You havent a chat with this customer"));//AAAAAAA
+            addParagraph(translate("This project is already confirmed"));
           }
         } else {
-          addParagraph(translate("This user is not a customer"));
+          addParagraph(translate("You cant modify this project"));
         }
       } else {
-        addParagraph(translate("This page is visible only to designers"));
+        addParagraph(translate("This project doesnt exists"));
       }
     }
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Create a project"),"./AAAAAAAA.php?id=");
-      //Verify that the user is a designer
-      if($kindOfTheAccountInUse == "Designer"){
-        //Verify that this user exists and it is a customer
-        if(getKindOfThisAccount($_GET["id"]) == "Customer"){
-          //Verify you have a chat with this customer AAAAAAAA
-          if(true){
+      upperPartOfThePage(translate("Edit project"),"./project.php?id=".urlencode($_GET["id"]));
+      if(doesThisProjectExists($_GET["id"])){
+        //Verify that the user is who has created the project and that the project is not confirmed
+        $projectInfos = obtainProjectInfos($_GET["id"]);
+        if($_SESSION["userId"] == $projectInfos["designer"]){
+          $thisProjectIsConfirmed = false;
+          if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+            $thisProjectIsConfirmed = true;
+          }
+          if(!$thisProjectIsConfirmed){
             //Content of this page
-            $userInfos = obtainUserInfos($_GET["id"]);
-            addParagraph(translate("Create a project for")." ".$userInfos["name"]." ".$userInfos["surname"]);
-            //Form to insert data edit product general info of this product
+            //Title Edit project
+            addTitle(translate("Edit project"));
+            //Form to insert data edit project general info
             startForm1();
             startForm2($_SERVER['PHP_SELF']);
             addShortTextField(translate("Name"),"insertedName",24);
             addLongTextField(translate("Description"),"insertedDescription",2046);
             addShortTextField(translate("Price"),"insertedPrice",24);
             addShortTextField(translate("Percentage to the designer"),"insertedPercentageToDesigner",5);
-            addHiddenField("insertedCustomerId",$_GET["id"]);
-            addFileField(translate("Icon optional"),"insertedIcon");
+            addHiddenField("insertedProjectId",$_GET["id"]);
             endForm(translate("Submit"));
             ?>
               <script>
@@ -129,6 +100,12 @@
                 const insertedDescription = document.getElementById('insertedDescription');
                 const insertedPrice = document.getElementById('insertedPrice');
                 const insertedPercentageToDesigner = document.getElementById('insertedPercentageToDesigner');
+
+                //Load form fields starting values
+                insertedName.value = "<?= $projectInfos["name"] ?>";
+                insertedDescription.value = "<?= newlineForJs($projectInfos["description"]) ?>";
+                insertedPrice.value = "<?= floatToPrice($projectInfos["price"]) ?>";
+                insertedPercentageToDesigner.value = "<?= $projectInfos["percentageToDesigner"] ?>";
       
                 function isValidPrice(price){
                   //The price shoud have at least an integer digit and exactly 2 digits after the floating point
@@ -176,37 +153,24 @@
                   } else if(Number(insertedPercentageToDesigner.value) < 0.0 || Number(insertedPercentageToDesigner.value) > 100.0){
                     e.preventDefault();
                     alert("<?= translate("The percentage is not between z and h") ?>");
-                  } else if(inputFile.files[0]){
-                    let file = inputFile.files[0];
-                    let fileSize = file.size;
-                    let fileName = file.name;
-                    let fileExtension = getFileExtension(fileName);
-                    const permittedExtensions = ["jpg","jpeg","gif","png","webp","heic"];
-                    if(fileSize > <?= maxSizeForAFile ?>){
-                      e.preventDefault();
-                      alert("<?= translate("The file is too big") ?>");
-                    } else if(!permittedExtensions.includes(fileExtension)){
-                      e.preventDefault();
-                      alert("<?= translate("The extension of the file is not an image") ?>");
-                    }
-                  }
+                  } 
                 }
               </script>
             <?php
             //End main content of this page
           } else {
-            //addParagraph(translate("You havent a chat with this customer"));//AAAAAAA
+            addParagraph(translate("This project is already confirmed"));
           }
         } else {
-          addParagraph(translate("This user is not a customer"));
+          addParagraph(translate("You cant modify this project"));
         }
       } else {
-        addParagraph(translate("This page is visible only to designers"));
+        addParagraph(translate("This project doesnt exists"));
       }
     } else {
-      //You have missed to specify the get param id of the customer
-      upperPartOfThePage(translate("Create a project"),"");
-      addParagraph(translate("You have missed to specify the get param id of the customer"));
+      //You have missed to specify the get param id of the project
+      upperPartOfThePage(translate("Edit project"),"");
+      addParagraph(translate("You have missed to specify the get param id of the project"));
     }
   }
   

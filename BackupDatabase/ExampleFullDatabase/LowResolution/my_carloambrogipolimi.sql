@@ -542,6 +542,12 @@ ALTER TABLE `Project`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `ProjectImages`
+--
+ALTER TABLE `ProjectImages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT per la tabella `PurchasesCronology`
 --
 ALTER TABLE `PurchasesCronology`

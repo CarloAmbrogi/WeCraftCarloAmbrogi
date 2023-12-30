@@ -2584,4 +2584,120 @@
     return $elements;
   }
 
+  //update the general info of a project
+  function updateGeneralInfoOfAProject($projectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `name` = ?, `description` = ?, `price` = ?, `percentageToDesigner` = ?, `claimedByThisArtisan` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssddi",$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Delete the icon of a project
+  function deleteIconOfAProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `icon` = null, `iconExtension` = null, `claimedByThisArtisan` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Change the icon of a project
+  function changeIconOfAProject($projectId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `icon` = ?, `iconExtension` = ?, `claimedByThisArtisan` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ssi",$imgData,$imgExtension,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Add an image to a project
+  function addImageToAProject($projectId,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `ProjectImages` (`id`, `projectId`, `imgExtension`, `image`) VALUES (NULL, ?, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$projectId,$imgExtension,$imgData);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Make this project unclaimed
+  function makeThisProjectUnclaimed($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `claimedByThisArtisan` = null where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Remove an image to its project specifying the id of the project (and also the projectId for security reason)
+  function removeThisImageToAProject($projectId,$imageId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ProjectImages` WHERE `projectId` = ? and `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$projectId,$imageId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Return if this user (which is an artisan) is assigned to this project
+  function isThisArtisanAssignedToThisProject($artisanId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as isThisArtisanAssignedToThisProject from (select * from `ProjectAssignArtisans` where `artisan` = ? and `project` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisArtisanAssignedToThisProject"];
+  }
+
+  //Assign this artisan to this project
+  function assignArtisanToThisProject($artisanId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `ProjectAssignArtisans` (`project`,`artisan`) VALUES (?,?);";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$projectId,$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Remove this artisan as a candidate for a project
+  function removeThisArtisanFromThisProject($artisanId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "DELETE FROM `ProjectAssignArtisans` WHERE `artisan` = ? and `project` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

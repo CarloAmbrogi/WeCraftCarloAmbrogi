@@ -65,7 +65,7 @@
           //Form to insert data to add an image to this product
           startForm1();
           startForm2($_SERVER['PHP_SELF']);
-          addFileField(translate("Icon"),"insertedImage");
+          addFileField(translate("Image"),"insertedImage");
           addHiddenField("insertedProductId",$_GET["id"]);
           endForm(translate("Submit"));
           ?>

@@ -41,7 +41,7 @@
         startCol();
         addTitle($projectInfos["name"]);
         addParagraph(translate("Price").": ".floatToPrice($projectInfos["price"]));
-        addParagraph(translate("Percentage to the designer").": ".floatToPrice($projectInfos["percentageToDesigner"]));
+        addParagraph(translate("Percentage to the designer").": ".$projectInfos["percentageToDesigner"]."%");
         endCol();
         endRow();
         addParagraphUnsafe(adjustTextWithYouTubeLinks($projectInfos["description"]));
@@ -62,8 +62,8 @@
         if(isset($customerUserInfos['icon']) && ($customerUserInfos['icon'] != null)){
           $fileImageToVisualize = blobToFile($customerUserInfos["iconExtension"],$customerUserInfos['icon']);
         }
-        addACard("./AAAAAAAAAAAAAA.php?id=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]),translate("Customer"),"");
-        //related artisans
+        addACard("./AAAAAAAAAAAAAA.php?id=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]." (".$customerUserInfos["email"].")"),translate("Customer"),"");
+        //Claimed artisan
         $isTheProjectClaimed = false;
         if(isset($projectInfos["claimedByThisArtisan"]) and $projectInfos["claimedByThisArtisan"] != null){
           $isTheProjectClaimed = true;
@@ -76,24 +76,6 @@
             $fileImageToVisualize = blobToFile($artisanUserInfos["iconExtension"],$artisanUserInfos['icon']);
           }
           addACardForTheGrid("./artisan.php?id=".urlencode($artisanUserInfos["id"]),$fileImageToVisualize,htmlentities($artisanUserInfos["name"]." ".$artisanUserInfos["surname"]),htmlentities($artisanArtisanInfos["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
-        } else {
-          $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($_GET["id"]);
-          if($numberArtisansAssignedThisProject > 0){
-            addParagraph(translate("This project is assigned to theese artisans").":");
-            $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($_GET["id"]);
-            startCardGrid();
-            $foundAResult = false;
-            foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
-              $fileImageToVisualize = genericUserImage;
-              if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
-                $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
-              }
-              addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
-            }
-            endCardGrid();
-          } else {
-            addParagraph(translate("The designer hasnt already assigned this project to artisans"));
-          }
         }
         //Confimation by the customer
         $thisProjectIsConfirmed = false;
@@ -102,6 +84,34 @@
           addParagraph(translate("This project is confirmed by the customer"));
           addParagraph(translate("Purchased")." ".$projectInfos["timestampPurchase"]);
           addParagraph(translate("Address")." ".$projectInfos["address"]);
+        }
+        //Other candidate artisans
+        $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($_GET["id"]);
+        if(!$thisProjectIsConfirmed){
+          if(($numberArtisansAssignedThisProject > 0 && !$isTheProjectClaimed) || ($numberArtisansAssignedThisProject >= 2 && $isTheProjectClaimed)){
+            if($isTheProjectClaimed){
+              addParagraph(translate("The other artisans which were candidate assigned to this project were").":");
+            } else {
+              addParagraph(translate("This project is assigned to theese artisans").":");
+            }
+            $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($_GET["id"]);
+            startCardGrid();
+            $foundAResult = false;
+            foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
+              if($singleArtisanPreview["id"] != $projectInfos["claimedByThisArtisan"]){
+                $fileImageToVisualize = genericUserImage;
+                if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+                  $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+                }
+                addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+              }            
+            }
+            endCardGrid();
+          } else {
+            if(!$isTheProjectClaimed){
+              addParagraph(translate("The designer hasnt already assigned this project to artisans"));
+            }
+          }
         }
         //Completed ready
         if(isset($projectInfos["timestampReady"]) and $projectInfos["timestampReady"] != null){
@@ -113,17 +123,21 @@
             addButtonLink(translate("Edit project"),"./editProject.php?id=".urlencode($_GET["id"]));
             if($isIconToThisProjectSetted){
               addButtonLink(translate("Delete project icon"),"./deleteProjectIcon.php?id=".urlencode($_GET["id"]));
-            } else {
-              addButtonLink(translate("Edit project icon"),"./editProjectIcon.php?id=".urlencode($_GET["id"]));
             }
+            addButtonLink(translate("Edit project icon"),"./editProjectIcon.php?id=".urlencode($_GET["id"]));
             addButtonLink(translate("Add images to this project"),"./addImagesToThisProject.php?id=".urlencode($_GET["id"]));
-            addButtonLink(translate("Remove images to this project"),"./removeImagesToThisProject.php?id=".urlencode($_GET["id"]));
+            $numberOfImages = getNumberImagesOfThisProject($_GET["id"]);
+            if($numberOfImages > 0){
+              addButtonLink(translate("Remove images to this project"),"./removeImagesToThisProject.php?id=".urlencode($_GET["id"]));
+            }
           }
           if(!$isTheProjectClaimed){
             addButtonLink(translate("Assign artisans to this project"),"./assignArtisansToThisProject.php?id=".urlencode($_GET["id"]));
           }
           if(!$thisProjectIsConfirmed){
-            addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+            if($numberArtisansAssignedThisProject > 0){
+              addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+            }
           }
         }
         //Commands for the artisans
@@ -138,8 +152,12 @@
         //Commands for the customer
         if($kindOfTheAccountInUse == "Customer"){
           if(!$thisProjectIsConfirmed){
-            addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
-            addButtonLink(translate("Confirm this project"),"./confirmThisProject.php?id=".urlencode($_GET["id"]));
+            if($numberArtisansAssignedThisProject > 0){
+              addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+            }
+            if($isTheProjectClaimed){
+              addButtonLink(translate("Confirm this project"),"./confirmThisProject.php?id=".urlencode($_GET["id"]));
+            }
           }
         }
         //End main content of this page
