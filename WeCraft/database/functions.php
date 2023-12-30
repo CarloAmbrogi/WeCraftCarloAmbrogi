@@ -2483,4 +2483,105 @@
     return $elements[0];
   }
 
+  //Obtain a preview of the artisans to witch is assigned this project
+  function obtainPreviewArtisansToWitchIsAssignedThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `ProjectAssignArtisans`.`artisan` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`project` = ?) group by `User`.`id`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    return $elements;
+  }
+
+  //Number of artisans who are assigned to this project
+  function numberArtisansAssignedThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberArtisansAssignedThisProject from (select * from `ProjectAssignArtisans` where `project` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberArtisansAssignedThisProject"];
+  }
+
+  //Return if this user can see this project
+  //Designer: only the designer creator of the project
+  //Customer: only the customer for which is the project
+  //Artisans: only the artisan who has claimed the project and the artisans who are assigned to this project
+  //AAAAAAAA add also artisans and designers who are cooperating for the designer of this project
+  function doesThisUserCanSeeThisProject($userId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `project` as e from `ProjectAssignArtisans` where `artisan` = ? and `project` = ?) limit 1) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiiiiiii",$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["doesThisUserCanSeeThisProject"];
+  }
+
+  //Get the number of images of this project
+  function getNumberImagesOfThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberImagesOfThisProject from (select * from `ProjectImages` where `projectId` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberImagesOfThisProject"];
+  }
+
+  //Get the images of this project
+  function getImagesOfThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `id`,`imgExtension`,`image` from `ProjectImages` where `projectId` = ? ORDER BY `id` ASC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative arrays with the images of this project (id, imgExtension, image)
+    return $elements;
+  }
+
 ?>

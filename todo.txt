@@ -1,4 +1,3 @@
-- Customized order
 - La chat
 - Map
 
@@ -9,3 +8,5 @@ Fai customized order (con dati finti pagamento online e spedizione)
 Magari customized big order
 
 Dove sta scritto AAA
+
+Magari rimpicciolire un pochino le carte

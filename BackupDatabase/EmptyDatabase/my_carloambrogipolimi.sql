@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 26, 2023 alle 17:22
+-- Creato il: Dic 30, 2023 alle 14:23
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -164,6 +164,53 @@ CREATE TABLE `ProductTags` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `Project`
+--
+
+CREATE TABLE `Project` (
+  `id` int NOT NULL,
+  `designer` int NOT NULL,
+  `customer` int NOT NULL,
+  `name` varchar(25) NOT NULL,
+  `description` text NOT NULL,
+  `iconExtension` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `icon` longblob,
+  `price` float NOT NULL,
+  `percentageToDesigner` float NOT NULL,
+  `claimedByThisArtisan` tinyint(1) DEFAULT NULL,
+  `confirmedByTheCustomer` tinyint(1) NOT NULL,
+  `timestampPurchase` timestamp NULL DEFAULT NULL,
+  `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `timestampReady` timestamp NULL DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ProjectAssignArtisans`
+--
+
+CREATE TABLE `ProjectAssignArtisans` (
+  `project` int NOT NULL,
+  `artisan` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ProjectImages`
+--
+
+CREATE TABLE `ProjectImages` (
+  `id` int NOT NULL,
+  `projectId` int NOT NULL,
+  `imgExtension` varchar(7) NOT NULL,
+  `image` longblob NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `PurchasesCronology`
 --
 
@@ -313,6 +360,24 @@ ALTER TABLE `ProductTags`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `Project`
+--
+ALTER TABLE `Project`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indici per le tabelle `ProjectAssignArtisans`
+--
+ALTER TABLE `ProjectAssignArtisans`
+  ADD PRIMARY KEY (`project`,`artisan`);
+
+--
+-- Indici per le tabelle `ProjectImages`
+--
+ALTER TABLE `ProjectImages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `PurchasesCronology`
 --
 ALTER TABLE `PurchasesCronology`
@@ -363,6 +428,12 @@ ALTER TABLE `ProductImages`
 -- AUTO_INCREMENT per la tabella `ProductTags`
 --
 ALTER TABLE `ProductTags`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `Project`
+--
+ALTER TABLE `Project`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
