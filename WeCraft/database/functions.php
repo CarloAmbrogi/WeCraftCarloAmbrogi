@@ -1879,7 +1879,7 @@
   //Obtain a preview of products for which this user is collaborating for a cooperative design
   function obtainProductsPreviewCooperativeDesign($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Product`.`id` as productId,`Product`.`name` as productName,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`artisan` as ownerId,`User`.`name` as ownerName,`User`.`surname` as ownerSurname,count(`CooperativeDesign`.`user`) as numberOfCollaborators from (`Product` join `User` on `Product`.`artisan` = `User`.`id`) left join `CooperativeDesign` on `Product`.`id` = `CooperativeDesign`.`product` where `Product`.`id` in (select `CooperativeDesign`.`product` from `CooperativeDesign` where `CooperativeDesign`.`user` = ?) group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
+    $sql = "select `Product`.`id` as productId,`Product`.`name` as productName,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`artisan` as ownerId,`User`.`name` as ownerName,`User`.`surname` as ownerSurname,count(`CooperativeDesignProducts`.`user`) as numberOfCollaborators from (`Product` join `User` on `Product`.`artisan` = `User`.`id`) left join `CooperativeDesignProducts` on `Product`.`id` = `CooperativeDesignProducts`.`product` where `Product`.`id` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?) group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1899,7 +1899,7 @@
   //Obtain number of collaborators for this product
   function obtainNumberCollaboratorsForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberCollaboratorsForThisProduct from (select * from `CooperativeDesign` where `product` = ?) as t;";
+    $sql = "select count(*) as numberCollaboratorsForThisProduct from (select * from `CooperativeDesignProducts` where `product` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -1918,7 +1918,7 @@
   //Obtain a preview of other artisans (who are not the owner) who have collaborated for the design of this product
   function obtainPreviewArtisansCollaboratorsOfThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesign`.`user` from `CooperativeDesign` where `CooperativeDesign`.`product` = ?) and `User`.`id` not in (select `Product`.`artisan` from `Product` where `Product`.`id` = ?) group by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesignProducts`.`user` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`product` = ?) and `User`.`id` not in (select `Product`.`artisan` from `Product` where `Product`.`id` = ?) group by `User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$productId,$productId);
       $statement->execute();
@@ -1938,7 +1938,7 @@
   //Obtain a preview of other designers (who are not the owner) who have collaborated for the design of this product
   function obtainPreviewDesignersCollaboratorsOfThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesign`.`user` from `CooperativeDesign` where `CooperativeDesign`.`product` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesignProducts`.`user` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`product` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -1959,7 +1959,7 @@
   //except, in case he is an artisan, its product, products he sells and products he is sponsoring
   function numberOfOtherProductsThisUserIsCollaboratingFor($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberOfOtherProductsThisUserIsCollaboratingFor from (select * from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
+    $sql = "select count(*) as numberOfOtherProductsThisUserIsCollaboratingFor from (select * from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
@@ -1979,7 +1979,7 @@
   //except, in case he is an artisan, its product, products he sells and products he is sponsoring
   function previewOtherProductsThisUserIsCollaboratingFor($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
@@ -1999,7 +1999,7 @@
   //Number of products of this artisan whitch are in collaboration for the design (in groups of at least 2)
   function numberProductsOfThisArtisanInCollaboration($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsOfThisArtisanInCollaboration from (select * from `Product` where `id` in (select `product` from `CooperativeDesign` where `user` <> ?) and `artisan` = ?) as t;";
+    $sql = "select count(*) as numberProductsOfThisArtisanInCollaboration from (select * from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` <> ?) and `artisan` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$artisanId,$artisanId);
       $statement->execute();
@@ -2018,7 +2018,7 @@
   //Return if this user is collaborating for the design of this product
   function isThisUserCollaboratingForTheDesignOfThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProduct from (select * from `CooperativeDesign` where `user` = ? and `product` = ?) as t;";
+    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProduct from (select * from `CooperativeDesignProducts` where `user` = ? and `product` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
       $statement->execute();
@@ -2037,7 +2037,7 @@
   //start the collaboration for the cooperating design for this product
   function startCooperatingDesignForThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "insert into `CooperativeDesign` (`user`,`product`) VALUES (?,?);";
+    $sql = "insert into `CooperativeDesignProducts` (`user`,`product`) VALUES (?,?);";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
@@ -2050,7 +2050,7 @@
   //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this product)
   function addSheetCooperatingDesignForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "insert into `Sheet` (`product`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
+    $sql = "insert into `SheetProducts` (`product`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
@@ -2082,7 +2082,7 @@
   //delete the collaboration for the cooperating design for this product
   function deleteCooperatingDesignForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `CooperativeDesign` WHERE `product` = ?;";
+    $sql = "delete from `CooperativeDesignProducts` WHERE `product` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
@@ -2095,7 +2095,7 @@
   //delete the sheet of a collaboration for the cooperating design for this product
   function deleteSheetCooperatingDesignForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `Sheet` WHERE `product` = ?;";
+    $sql = "delete from `SheetProducts` WHERE `product` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
@@ -2128,7 +2128,7 @@
   //Obtain the content of the sheet
   function obtainSheetContent($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Sheet`.`content`,`Sheet`.`lastUpdateWhen`,`Sheet`.`lastUpdateFrom`,`User`.`name`,`User`.`surname`,`User`.`email` from `Sheet` left join `User` on `Sheet`.`lastUpdateFrom` = `User`.`id` where `Sheet`.`product` = ?;";
+    $sql = "select `SheetProducts`.`content`,`SheetProducts`.`lastUpdateWhen`,`SheetProducts`.`lastUpdateFrom`,`User`.`name`,`User`.`surname`,`User`.`email` from `SheetProducts` left join `User` on `SheetProducts`.`lastUpdateFrom` = `User`.`id` where `SheetProducts`.`product` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -2148,7 +2148,7 @@
   //Update the sheet (cor the cooperative design)
   function updateSheet($newContent,$lastUpdateFrom,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "update `Sheet` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `product` = ?;";
+    $sql = "update `SheetProducts` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `product` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("sii",$newContent,$lastUpdateFrom,$productId);

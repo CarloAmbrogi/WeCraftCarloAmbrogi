@@ -41,7 +41,7 @@
           addParagraph(translate("Your content").":");
           addParagraphNewlineCapabilities($insertedSheet);
           startForm1();
-          startForm2("./sendDataToSheet.php");
+          startForm2("./sendDataToSheetForProducts.php");
           addLongTextField(translate("Edit the incoming sheet"),"insertedSheet",100000);
           addHiddenField("insertedProductId",$insertedProductId);
           addHiddenField("insertedOldSheet",$sheetContent["content"]);

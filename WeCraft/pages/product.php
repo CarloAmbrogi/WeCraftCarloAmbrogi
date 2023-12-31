@@ -259,7 +259,7 @@
       if($_SESSION["userId"] == $productInfos["artisan"]){
         //If you are the owner you can start or stop the collaboration for the cooperative design
         if($numberCollaboratorsForThisProduct == 0){
-          addButtonLink(translate("Start collaboration for a cooperative design"),"./startCooperativeDesign.php?id=".urlencode($_GET["id"]));
+          addButtonLink(translate("Start collaboration for a cooperative design"),"./startCooperativeDesignForProducts.php?id=".urlencode($_GET["id"]));
         } else {
           addParagraph(translate("You are collaborating in group for the design of this product"));
           addButtonLink(translate("See collaboration"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));

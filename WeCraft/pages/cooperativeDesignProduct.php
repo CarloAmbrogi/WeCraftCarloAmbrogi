@@ -57,7 +57,7 @@
             addParagraph(translate("Sheet created in")." ".$sheetContent["lastUpdateWhen"]);
           }
           startForm1();
-          startForm2("./sendDataToSheet.php");
+          startForm2("./sendDataToSheetForProducts.php");
           addLongTextField("","insertedSheet",100000);
           addHiddenField("insertedProductId",$_GET["id"]);
           addHiddenField("insertedOldSheet",$sheetContent["content"]);

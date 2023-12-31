@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 30, 2023 alle 14:23
+-- Creato il: Dic 31, 2023 alle 17:15
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -66,12 +66,23 @@ CREATE TABLE `ContentPurchase` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `CooperativeDesign`
+-- Struttura della tabella `CooperativeDesignProducts`
 --
 
-CREATE TABLE `CooperativeDesign` (
+CREATE TABLE `CooperativeDesignProducts` (
   `user` int NOT NULL,
   `product` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `CooperativeDesignProjects`
+--
+
+CREATE TABLE `CooperativeDesignProjects` (
+  `user` int NOT NULL,
+  `project` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -224,11 +235,24 @@ CREATE TABLE `PurchasesCronology` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `Sheet`
+-- Struttura della tabella `SheetProducts`
 --
 
-CREATE TABLE `Sheet` (
+CREATE TABLE `SheetProducts` (
   `product` int NOT NULL,
+  `content` text NOT NULL,
+  `lastUpdateFrom` int DEFAULT NULL,
+  `lastUpdateWhen` timestamp NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `SheetProjects`
+--
+
+CREATE TABLE `SheetProjects` (
+  `project` int NOT NULL,
   `content` text NOT NULL,
   `lastUpdateFrom` int DEFAULT NULL,
   `lastUpdateWhen` timestamp NOT NULL
@@ -318,10 +342,16 @@ ALTER TABLE `ContentPurchase`
   ADD PRIMARY KEY (`purchaseId`,`product`,`artisan`);
 
 --
--- Indici per le tabelle `CooperativeDesign`
+-- Indici per le tabelle `CooperativeDesignProducts`
 --
-ALTER TABLE `CooperativeDesign`
+ALTER TABLE `CooperativeDesignProducts`
   ADD PRIMARY KEY (`user`,`product`);
+
+--
+-- Indici per le tabelle `CooperativeDesignProjects`
+--
+ALTER TABLE `CooperativeDesignProjects`
+  ADD PRIMARY KEY (`user`,`project`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -384,10 +414,16 @@ ALTER TABLE `PurchasesCronology`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `Sheet`
+-- Indici per le tabelle `SheetProducts`
 --
-ALTER TABLE `Sheet`
+ALTER TABLE `SheetProducts`
   ADD PRIMARY KEY (`product`);
+
+--
+-- Indici per le tabelle `SheetProjects`
+--
+ALTER TABLE `SheetProjects`
+  ADD PRIMARY KEY (`project`);
 
 --
 -- Indici per le tabelle `ShoppingCart`

@@ -1,9 +1,6 @@
-- La chat
+- La chat e le notifiche (vedi anche dove sta scritto AAA)
 - Map
 
-
-
-Fai customized order (con dati finti pagamento online e spedizione)
 
 Magari customized big order
 
