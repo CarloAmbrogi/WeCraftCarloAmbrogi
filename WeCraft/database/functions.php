@@ -2401,7 +2401,7 @@
   //Obtain a preview of projects completed and ready for this customer
   function obtainProjectsPreviewOfThisCustomerCompleted($customerId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`timestampReady` is not and `Project`.`customer` = ? null order by `Project`.`id` DESC;";
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`timestampReady` is not null and `Project`.`customer` = ? order by `Project`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$customerId);
       $statement->execute();
@@ -2525,11 +2525,11 @@
   //Return if this user can see this project
   //Designer: only the designer creator of the project
   //Customer: only the customer for which is the project
-  //Artisans: only the artisan who has claimed the project and the artisans who are assigned to this project
+  //Artisans: only the artisan who has claimed the project and, in case the project is not confirmed, also the artisans who are assigned to this project
   //AAAAAAAA add also artisans and designers who are cooperating for the designer of this project
   function doesThisUserCanSeeThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `project` as e from `ProjectAssignArtisans` where `artisan` = ? and `project` = ?) limit 1) as t;";
+    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `ProjectAssignArtisans`.`project` as e from `ProjectAssignArtisans` join `Project` on `ProjectAssignArtisans`.`project` = `Project`.`id` where `ProjectAssignArtisans`.`artisan` = ? and `ProjectAssignArtisans`.`project` = ? and `Project`.`confirmedByTheCustomer` = 0) limit 1) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiiiii",$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId);
       $statement->execute();
@@ -2694,6 +2694,42 @@
     $sql = "DELETE FROM `ProjectAssignArtisans` WHERE `artisan` = ? and `project` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$artisanId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //This user (which is an artisan assigned to this project) claims this project
+  function claimThisProject($artisanId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `claimedByThisArtisan` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$artisanId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Confirm this project sending the order
+  function confirmThisProject($address,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `confirmedByTheCustomer` = 1, `timestampPurchase` = CURRENT_TIMESTAMP(), `address` = ? where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("si",$address,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Confirm this project sending the order
+  function setReadyThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `timestampReady` = CURRENT_TIMESTAMP() where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;

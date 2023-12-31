@@ -67,13 +67,17 @@
         $isTheProjectClaimed = false;
         if(isset($projectInfos["claimedByThisArtisan"]) and $projectInfos["claimedByThisArtisan"] != null){
           $isTheProjectClaimed = true;
-          addParagraph(translate("This project has been claimed by this artisan"));
           $artisanUserInfos = obtainUserInfos($projectInfos["claimedByThisArtisan"]);
           $artisanArtisanInfos = obtainArtisanInfos($projectInfos["claimedByThisArtisan"]);
           $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($projectInfos["claimedByThisArtisan"]);
           $fileImageToVisualize = genericUserImage;
           if(isset($artisanUserInfos['icon']) && ($artisanUserInfos['icon'] != null)){
             $fileImageToVisualize = blobToFile($artisanUserInfos["iconExtension"],$artisanUserInfos['icon']);
+          }
+          if($_SESSION["userId"] == $artisanUserInfos["id"]){
+            addParagraph(translate("This project has been claimed by you").":");
+          } else {
+            addParagraph(translate("This project has been claimed by this artisan").":");
           }
           addACardForTheGrid("./artisan.php?id=".urlencode($artisanUserInfos["id"]),$fileImageToVisualize,htmlentities($artisanUserInfos["name"]." ".$artisanUserInfos["surname"]),htmlentities($artisanArtisanInfos["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
         }
@@ -83,7 +87,7 @@
           $thisProjectIsConfirmed = true;
           addParagraph(translate("This project is confirmed by the customer"));
           addParagraph(translate("Purchased")." ".$projectInfos["timestampPurchase"]);
-          addParagraph(translate("Address")." ".$projectInfos["address"]);
+          addParagraph(translate("Address").": ".$projectInfos["address"]);
         }
         //Other candidate artisans
         $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($_GET["id"]);
@@ -114,7 +118,9 @@
           }
         }
         //Completed ready
+        $thisProjectIsReady = false;
         if(isset($projectInfos["timestampReady"]) and $projectInfos["timestampReady"] != null){
+          $thisProjectIsReady = true;
           addParagraph(translate("This project is completed and ready from")." ".$projectInfos["timestampReady"]);
         }
         //Commands for the designer
@@ -148,6 +154,9 @@
           if(!$thisProjectIsConfirmed){
             addButtonLink(translate("Refuse this project"),"./refuseThisProject.php?id=".urlencode($_GET["id"]));
           }
+          if($thisProjectIsConfirmed && $projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && !$thisProjectIsReady){
+            addButtonLink(translate("Annunce that this personalized item is ready"),"./annunceProjectReady.php?id=".urlencode($_GET["id"]));
+          }
         }
         //Commands for the customer
         if($kindOfTheAccountInUse == "Customer"){
@@ -155,7 +164,7 @@
             if($numberArtisansAssignedThisProject > 0){
               addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
             }
-            if($isTheProjectClaimed){
+            if($isTheProjectClaimed && !$thisProjectIsConfirmed){
               addButtonLink(translate("Confirm this project"),"./confirmThisProject.php?id=".urlencode($_GET["id"]));
             }
           }

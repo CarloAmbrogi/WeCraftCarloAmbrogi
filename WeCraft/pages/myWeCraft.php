@@ -74,10 +74,6 @@
     addButtonLink(translate("Change description"),"./changeDescription.php");
     //AAAAAAAAAAAAA
   }
-  //For customers and artisans
-  if($kindOfTheAccountInUse == "Customer" || $kindOfTheAccountInUse == "Artisan"){
-    addButtonLink(translate("Personalized items"),"./personalizedItems.php");
-  }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
 ?>

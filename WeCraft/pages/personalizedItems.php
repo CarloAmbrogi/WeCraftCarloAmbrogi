@@ -35,11 +35,7 @@
   // a section for projects completed ready
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  if($kindOfTheAccountInUse == "Customer" || $kindOfTheAccountInUse == "Artisan"){
-    upperPartOfThePage(translate("Personalized items"),"./myWeCraft.php");
-  } else {
-    upperPartOfThePage(translate("Personalized items"),"");
-  }
+  upperPartOfThePage(translate("Personalized items"),"");
   //Check you are not a guest
   if($kindOfTheAccountInUse != "Guest"){
     addScriptAddThisPageToCronology();
@@ -114,7 +110,7 @@
         <select id="insertedCategory" name="insertedCategory">
           <option value="v1" <?php if($_GET["insertedCategory"] == "v1"){echo "selected";} ?>><?= translate("Projects assigned to you") ?></option>
           <option value="v2" <?php if($_GET["insertedCategory"] == "v2"){echo "selected";} ?>><?= translate("Projects claimed by you") ?></option>
-          <option value="v2" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects confirmed by the customer") ?></option>
+          <option value="v3" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects confirmed by the customer") ?></option>
           <option value="v4" <?php if($_GET["insertedCategory"] == "v4"){echo "selected";} ?>><?= translate("Projects completed ready") ?></option>
         </select>
       <?php
@@ -169,7 +165,7 @@
         <select id="insertedCategory" name="insertedCategory">
           <option value="v1" <?php if($_GET["insertedCategory"] == "v1"){echo "selected";} ?>><?= translate("Projects not yet claimed") ?></option>
           <option value="v2" <?php if($_GET["insertedCategory"] == "v2"){echo "selected";} ?>><?= translate("Claimed projects") ?></option>
-          <option value="v2" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects confirmed by you") ?></option>
+          <option value="v3" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects confirmed by you") ?></option>
           <option value="v4" <?php if($_GET["insertedCategory"] == "v4"){echo "selected";} ?>><?= translate("Projects completed ready") ?></option>
         </select>
       <?php

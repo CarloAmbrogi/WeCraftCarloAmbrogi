@@ -177,7 +177,7 @@ CREATE TABLE `Project` (
   `icon` longblob,
   `price` float NOT NULL,
   `percentageToDesigner` float NOT NULL,
-  `claimedByThisArtisan` tinyint(1) DEFAULT NULL,
+  `claimedByThisArtisan` int DEFAULT NULL,
   `confirmedByTheCustomer` tinyint(1) NOT NULL,
   `timestampPurchase` timestamp NULL DEFAULT NULL,
   `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,

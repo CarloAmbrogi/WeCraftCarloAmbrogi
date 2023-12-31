@@ -293,15 +293,15 @@
         return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
       case "Customer":
         if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
         } else {
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
         }
       case "Artisan":
         if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"],[translate("Shopping cart"),"./shoppingCart.php"]];
         } else {
-          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
+          return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My products"),"./artisan.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Cooperate"),"./cooperate.php"],[translate("Chats"),"./chats.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
         }
       case "Designer":
         if(numberOfItemsInTheShoppingCartOfThisUser($_SESSION["userId"]) > 0){
