@@ -635,14 +635,14 @@
                     <?php
                       if($text1 != ""){
                     ?>
-                      <p class="card-text"><?= $text1 ?></p>
+                      <p class="card-text" style="font-size:17px;"><?= $text1 ?></p>
                     <?php
                       }
                     ?>
                     <?php
                       if($text2 != ""){
                     ?>
-                      <p class="card-text"><small class="text-body-secondary"><?= $text2 ?></small></p>
+                      <p class="card-text" style="font-size:17px;"><small class="text-body-secondary"><?= $text2 ?></small></p>
                     <?php
                       }
                     ?>
