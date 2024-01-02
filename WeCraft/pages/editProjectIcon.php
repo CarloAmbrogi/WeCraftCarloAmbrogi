@@ -22,7 +22,7 @@
         $projectInfos = obtainProjectInfos($insertedProjectId);
         if($_SESSION["userId"] == $projectInfos["designer"]){
           $thisProjectIsConfirmed = false;
-          if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+          if($projectInfos["confirmedByTheCustomer"] == 1){
             $thisProjectIsConfirmed = true;
           }
           if(!$thisProjectIsConfirmed){
@@ -69,7 +69,7 @@
         $projectInfos = obtainProjectInfos($_GET["id"]);
         if($_SESSION["userId"] == $projectInfos["designer"]){
           $thisProjectIsConfirmed = false;
-          if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+          if($projectInfos["confirmedByTheCustomer"] == 1){
             $thisProjectIsConfirmed = true;
           }
           if(!$thisProjectIsConfirmed){

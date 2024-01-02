@@ -21,7 +21,7 @@
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         $thisProjectIsReady = false;
@@ -56,7 +56,7 @@
         //Verify that the user is the artisan of this project, the project is confirmed, the project is not yet ready
         $projectInfos = obtainProjectInfos($_GET["id"]);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         $thisProjectIsReady = false;

@@ -27,7 +27,7 @@
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         $isTheProjectClaimed = false;
@@ -62,7 +62,7 @@
         //Verify that the user is the customer to which is this project, the project is not confirmed, the project is claimed
         $projectInfos = obtainProjectInfos($_GET["id"]);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         $isTheProjectClaimed = false;

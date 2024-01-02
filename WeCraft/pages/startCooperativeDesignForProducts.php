@@ -14,7 +14,6 @@
     upperPartOfThePage(translate("Start cooperative design"),"./product.php?id=".urlencode($insertedProductId));
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
-    $possibleCategories = categories;
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
     } else {
@@ -45,7 +44,7 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Edit product"),"./product.php?id=".urlencode($_GET["id"]));
+      upperPartOfThePage(translate("Start cooperative design"),"./product.php?id=".urlencode($_GET["id"]));
       if(doesThisProductExists($_GET["id"])){
         //Verify to be the owner of this product
         $productInfos = obtainProductInfos($_GET["id"]);
@@ -76,7 +75,7 @@
       }
     } else {
       //You have missed to specify the get param id of the product
-      upperPartOfThePage(translate("Edit product"),"");
+      upperPartOfThePage(translate("Start cooperative design"),"");
       addParagraph(translate("You have missed to specify the get param id of the product"));
     }
   }

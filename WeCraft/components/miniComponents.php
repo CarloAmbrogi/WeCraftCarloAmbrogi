@@ -163,6 +163,54 @@
     <?php
   }
 
+  //Add a card (optionally for the grid) ($fileImageToVisualize and $title mandatory; also $functionToCallAfter) with a function to call after instead of a link
+  function addACardFunctionToCallAfter($link,$fileImageToVisualize,$title,$text1,$text2,$functionToCallAfter,$paramFunctionToCallAfter){
+    ?>
+      <div class="col">
+        <?php
+          if($link != ""){
+        ?>
+          <a onclick="<?= $functionToCallAfter ?>('<?= $paramFunctionToCallAfter ?>');" style="text-decoration:none">
+        <?php
+          }
+        ?>
+          <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="<?= $fileImageToVisualize ?>" class="img-fluid rounded-start" alt="<?= $title ?>" style="max-height:165px;">
+              </div>
+              <div class="col-md-8">
+                <div class="card-body">
+                  <h5 class="card-title"><?= $title ?></h5>
+                    <?php
+                      if($text1 != ""){
+                    ?>
+                      <p class="card-text" style="font-size:17px;"><?= $text1 ?></p>
+                    <?php
+                      }
+                    ?>
+                    <?php
+                      if($text2 != ""){
+                    ?>
+                      <p class="card-text" style="font-size:17px;"><small class="text-body-secondary"><?= $text2 ?></small></p>
+                    <?php
+                      }
+                    ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php
+          if($link != ""){
+        ?>
+        </a>
+        <?php
+          }
+        ?>
+      </div>
+    <?php
+  }
+
   //Add button on off for an api action witch is called via js
   function addButtonOnOffApiActionViaJsLink($startingStatus,$written,$link,$id,$functionToCallAfter=""){
     //$startingStatus of the button is true or false: on or off

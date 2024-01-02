@@ -2047,6 +2047,19 @@
     }
   }
 
+  //remove partecipant collaboration for the cooperating design for this product
+  function removePartecipantCooperatingDesignForThisProduct($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `CooperativeDesignProducts` where `user` = ? and `product` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
   //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this product)
   function addSheetCooperatingDesignForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
@@ -2125,8 +2138,8 @@
     return $elements[0];
   }
 
-  //Obtain the content of the sheet
-  function obtainSheetContent($productId){
+  //Obtain the content of the sheet (products)
+  function obtainSheetContentProducts($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `SheetProducts`.`content`,`SheetProducts`.`lastUpdateWhen`,`SheetProducts`.`lastUpdateFrom`,`User`.`name`,`User`.`surname`,`User`.`email` from `SheetProducts` left join `User` on `SheetProducts`.`lastUpdateFrom` = `User`.`id` where `SheetProducts`.`product` = ?;";
     if($statement = $connectionDB->prepare($sql)){
@@ -2145,8 +2158,8 @@
     return $elements[0];
   }
 
-  //Update the sheet (cor the cooperative design)
-  function updateSheet($newContent,$lastUpdateFrom,$productId){
+  //Update the sheet (for the cooperative design for a product)
+  function updateSheetProduct($newContent,$lastUpdateFrom,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "update `SheetProducts` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `product` = ?;";
     
@@ -2486,7 +2499,7 @@
   //Obtain a preview of the artisans to witch is assigned this project
   function obtainPreviewArtisansToWitchIsAssignedThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `ProjectAssignArtisans`.`artisan` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`project` = ?) group by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `ProjectAssignArtisans`.`artisan` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`project` = ?) group by `User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
       $statement->execute();
@@ -2499,7 +2512,7 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    //return an array of associative array with id name surname email icon iconExtension shopName numberOfProductsOfThisArtisan
     return $elements;
   }
 
@@ -2526,12 +2539,12 @@
   //Designer: only the designer creator of the project
   //Customer: only the customer for which is the project
   //Artisans: only the artisan who has claimed the project and, in case the project is not confirmed, also the artisans who are assigned to this project
-  //AAAAAAAA add also artisans and designers who are cooperating for the designer of this project
+  //Designer and Artisans: also the ones who are collaborating fo the design of the project
   function doesThisUserCanSeeThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `ProjectAssignArtisans`.`project` as e from `ProjectAssignArtisans` join `Project` on `ProjectAssignArtisans`.`project` = `Project`.`id` where `ProjectAssignArtisans`.`artisan` = ? and `ProjectAssignArtisans`.`project` = ? and `Project`.`confirmedByTheCustomer` = 0) limit 1) as t;";
+    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `ProjectAssignArtisans`.`project` as e from `ProjectAssignArtisans` join `Project` on `ProjectAssignArtisans`.`project` = `Project`.`id` where `ProjectAssignArtisans`.`artisan` = ? and `ProjectAssignArtisans`.`project` = ? and `Project`.`confirmedByTheCustomer` = 0) union (select `user` as e from `CooperativeDesignProjects` where `user` = ? and `project` = ?) limit 1) as t;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("iiiiiiii",$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId);
+      $statement->bind_param("iiiiiiiiii",$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -2734,6 +2747,202 @@
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
     }
+  }
+
+  //Obtain number of collaborators for this project
+  function obtainNumberCollaboratorsForThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberCollaboratorsForThisProject from (select * from `CooperativeDesignProjects` where `project` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberCollaboratorsForThisProject"];
+  }
+
+  //Obtain a preview of other artisans (who are not the claimed artisan) who have collaborated for the design of this customized product
+  function obtainPreviewArtisansCollaboratorsOfThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesignProjects`.`user` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`project` = ?) and `User`.`id` not in (select `Project`.`claimedByThisArtisan` from `Project` where `Project`.`id` = ?) group by `User`.`id`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$projectId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension shopName numberOfProductsOfThisArtisan
+    return $elements;
+  }
+
+  //Obtain a preview of other designers (ho are not the claimed artisan) who have collaborated for the design of this customized product
+  function obtainPreviewDesignersCollaboratorsOfThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesignProjects`.`user` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`project` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname icon iconExtension
+    return $elements;
+  }
+
+  //start the collaboration for the cooperating design for this project
+  function startCooperatingDesignForThisProject($userId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `CooperativeDesignProjects` (`user`,`project`) VALUES (?,?);";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this project)
+  function addSheetCooperatingDesignForThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `SheetProjects` (`project`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Return if this user is collaborating for the design of this project
+  function isThisUserCollaboratingForTheDesignOfThisProject($userId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProject from (select * from `CooperativeDesignProjects` where `user` = ? and `project` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisUserCollaboratingForTheDesignOfThisProject"];
+  }
+
+  //Obtain the content of the sheet (projects)
+  function obtainSheetContentProjects($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `SheetProjects`.`content`,`SheetProjects`.`lastUpdateWhen`,`SheetProjects`.`lastUpdateFrom`,`User`.`name`,`User`.`surname`,`User`.`email` from `SheetProjects` left join `User` on `SheetProjects`.`lastUpdateFrom` = `User`.`id` where `SheetProjects`.`project` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with content lastUpdateWhen lastUpdateFrom name surname email
+    return $elements[0];
+  }
+
+  //delete the collaboration for the cooperating design for this project
+  function deleteCooperatingDesignForThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `CooperativeDesignProjects` WHERE `project` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //delete the sheet of a collaboration for the cooperating design for this project
+  function deleteSheetCooperatingDesignForThisProject($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `SheetProjects` WHERE `project` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //remove partecipant collaboration for the cooperating design for this project
+  function removePartecipantCooperatingDesignForThisProject($userId,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `CooperativeDesignProjects` where `user` = ? and `project` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Update the sheet (for the cooperative design for a project)
+  function updateSheetProject($newContent,$lastUpdateFrom,$projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `SheetProjects` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `project` = ?;";
+    
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("sii",$newContent,$lastUpdateFrom,$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Obtain a preview of projects for which this user is collaborating for a cooperative design
+  function obtainProductsPreviewCooperativeDesignPersonalizedProducts($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id` as projectId,`Project`.`name` as projectName, `Project`.`timestampReady` as timestampReady,`Project`.`iconExtension` as iconExtension,`Project`.`icon` as icon,count(`CooperativeDesignProjects`.`user`) as numberOfCollaborators from `Project` left join `CooperativeDesignProjects` on `Project`.`id` = `CooperativeDesignProjects`.`project` where `Project`.`id` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?) group by `Project`.`id` ORDER BY `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with projectId projectName timestampReady iconExtension icon numberOfCollaborators
+    return $elements;
   }
 
 ?>

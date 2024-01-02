@@ -6,7 +6,7 @@
 
   //Send a modfication of the sheet here
   //You need to be an artisan or a designer
-  //You can use this page only if you are collaborating for the design of this product
+  //You can use this page only if you are collaborating for the design of this project
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
 
@@ -16,23 +16,23 @@
       upperPartOfThePage(translate("Cooperative design"),"cookieBack");
       //Receive post request from the sheet to update it
       $insertedSheet = $_POST['insertedSheet'];
-      $insertedProductId = $_POST['insertedProductId'];
+      $insertedProjectId = $_POST['insertedProjectId'];
       $insertedOldSheet = $_POST['insertedOldSheet'];
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
-      } else if(!doesThisProductExists($insertedProductId)){
-        addParagraph(translate("This product doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedProductId)){
-        addParagraph(translate("You are not a collaborator for the design of this product"));
+      } else if(!doesThisProjectExists($insertedProjectId)){
+        addParagraph(translate("This project doesnt exists"));
+      } else if(!isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
+        addParagraph(translate("You are not a collaborator for the design of this project"));
       } else {
         //Real content of the page
         //Check if the sheet is sendable
-        $sheetContent = obtainSheetContentProducts($insertedProductId);
+        $sheetContent = obtainSheetContentProjects($insertedProjectId);
         if($sheetContent["content"] == $insertedOldSheet || $sheetContent["content"] == $insertedSheet){
           //Send the sheet and redirect
-          updateSheetProduct($insertedSheet,$_SESSION["userId"],$insertedProductId);
-          addRedirect("./cooperativeDesignProduct.php?id=".urlencode($insertedProductId));
+          updateSheetProject($insertedSheet,$_SESSION["userId"],$insertedProjectId);
+          addRedirect("./cooperativeDesignProject.php?id=".urlencode($insertedProjectId));
         } else {
           //Show merge page
           addTitle(translate("Merge the sheet"));
@@ -41,9 +41,9 @@
           addParagraph(translate("Your content").":");
           addParagraphNewlineCapabilities($insertedSheet);
           startForm1();
-          startForm2("./sendDataToSheetForProducts.php");
+          startForm2("./sendDataToSheetForProjects.php");
           addLongTextField(translate("Edit the incoming sheet"),"insertedSheet",100000);
-          addHiddenField("insertedProductId",$insertedProductId);
+          addHiddenField("insertedProjectId",$insertedProjectId);
           addHiddenField("insertedOldSheet",$sheetContent["content"]);
           endForm(translate("Save changes"));
           ?>
@@ -56,7 +56,7 @@
               insertedSheet.value = "<?= newlineForJs($sheetContent["content"]) ?>";
             </script>
           <?php
-          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
         }
       }  
     } else {

@@ -22,7 +22,7 @@
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         if(!$thisProjectIsConfirmed){
@@ -50,7 +50,7 @@
         //Verify that the user is assigned to this project and that the project is not confirmed
         $projectInfos = obtainProjectInfos($_GET["id"]);
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
         }
         if(!$thisProjectIsConfirmed){

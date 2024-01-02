@@ -157,6 +157,7 @@
     //Page for customers
     if($kindOfTheAccountInUse == "Customer"){
       addParagraph(translate("In this page there are the projects about the personalized items that the designers has created for you"));
+      addParagraph(translate("To request a personalized item ask a designer via chat to create a project for you"));
       addParagraph(translate("If a project is claimed by an artisan you can confirm it and pay"));
       addParagraph(translate("Select witch category of projects you want to see").":");
       startFormGet($_SERVER['PHP_SELF']);

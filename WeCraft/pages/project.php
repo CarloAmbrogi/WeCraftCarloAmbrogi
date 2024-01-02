@@ -83,7 +83,7 @@
         }
         //Confimation by the customer
         $thisProjectIsConfirmed = false;
-        if(isset($projectInfos["confirmedByTheCustomer"]) and $projectInfos["confirmedByTheCustomer"] != null){
+        if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
           addParagraph(translate("This project is confirmed by the customer"));
           addParagraph(translate("Purchased")." ".$projectInfos["timestampPurchase"]);
@@ -100,7 +100,6 @@
             }
             $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($_GET["id"]);
             startCardGrid();
-            $foundAResult = false;
             foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
               if($singleArtisanPreview["id"] != $projectInfos["claimedByThisArtisan"]){
                 $fileImageToVisualize = genericUserImage;
@@ -116,6 +115,33 @@
               addParagraph(translate("The designer hasnt already assigned this project to artisans"));
             }
           }
+        }
+        //This customized item has been created in collaboration with
+        $numberCollaboratorsForThisProject = obtainNumberCollaboratorsForThisProject($_GET["id"]);
+        if($numberCollaboratorsForThisProject >= 2){
+          $numberCollaboratorsForThisProjectToShow = $numberCollaboratorsForThisProject - 1;
+          addButtonOnOffShowHide(translate("This customized product has been created in collaboration with")." (".$numberCollaboratorsForThisProjectToShow."):","moreInformationCollaborators");
+          startDivShowHide("moreInformationCollaborators");
+          addParagraph("");
+          $previewArtisansCollaboratorsOfThisProject = obtainPreviewArtisansCollaboratorsOfThisProject($_GET["id"]);
+          $previewDesignersCollaboratorsOfThisProject = obtainPreviewDesignersCollaboratorsOfThisProject($_GET["id"]);
+          startCardGrid();
+          foreach($previewArtisansCollaboratorsOfThisProject as &$singleArtisanPreview){
+            $fileImageToVisualize = genericUserImage;
+            if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+              $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+            }
+            addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+          }
+          foreach($previewDesignersCollaboratorsOfThisProject as &$singleDesignerPreview){
+            $fileImageToVisualize = genericUserImage;
+            if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
+              $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
+            }
+            addACardForTheGrid("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),htmlentities(translate("Designer")),"");
+          }
+          endCardGrid();
+          endDivShowHide("moreInformationCollaborators");
         }
         //Completed ready
         $thisProjectIsReady = false;
@@ -156,6 +182,19 @@
           }
           if($thisProjectIsConfirmed && $projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && !$thisProjectIsReady){
             addButtonLink(translate("Annunce that this personalized item is ready"),"./annunceProjectReady.php?id=".urlencode($_GET["id"]));
+            //If you are the artisan who has claimed this project and the project is confirmed you can start or stop the collaboration for the cooperative design
+            if($numberCollaboratorsForThisProject == 0){
+              addButtonLink(translate("Start collaboration for a cooperative design"),"./startCooperativeDesignForProjects.php?id=".urlencode($_GET["id"]));
+            } else {
+              addParagraph(translate("You are collaborating in group for the design of this customized product"));
+              addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+            }
+          }
+          if($projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && $thisProjectIsReady){
+            if($numberCollaboratorsForThisProject > 0){
+              addParagraph(translate("You have collaborated in group for the design of this customized product"));
+              addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+            }
           }
         }
         //Commands for the customer

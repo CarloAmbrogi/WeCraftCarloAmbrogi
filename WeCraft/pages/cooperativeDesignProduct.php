@@ -43,14 +43,14 @@
             //Options in case you aren't the owner
             addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           }
-          //Options for evry collaborator
+          //Options for every collaborator
           addButtonLink(translate("Send message"),"./AAAAAAAAAAAAAA");
           addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();
           //Show the sheet
           addTitle(translate("Sheet"));
-          $sheetContent = obtainSheetContent($_GET["id"]);
+          $sheetContent = obtainSheetContentProducts($_GET["id"]);
           if(isset($sheetContent["lastUpdateFrom"]) && $sheetContent["lastUpdateFrom"] != null){
             addParagraph(translate("Last update")." ".$sheetContent["lastUpdateWhen"]." ".translate("froms")." ".$sheetContent["name"]." ".$sheetContent["surname"]." (".$sheetContent["email"].")");
           } else {
