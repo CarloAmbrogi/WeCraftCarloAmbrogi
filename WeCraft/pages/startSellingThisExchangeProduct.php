@@ -36,6 +36,8 @@
                 updateQuantityExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
               } else {
                 startSellingThisExchangeProduct($_SESSION["userId"],$insertedProductId,$insertedQuantity);
+                //Send a notification to the artisan owner of this product
+                sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$productInfos["artisan"],"This artisan has started to sell this your product","product",$insertedProductId);
               }
               addParagraph(translate("Done"));
             } else {

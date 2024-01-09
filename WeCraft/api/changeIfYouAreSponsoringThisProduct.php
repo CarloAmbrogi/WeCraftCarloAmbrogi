@@ -24,6 +24,9 @@
                   stopSponsoringThisProduct($_GET["artisan"],$_GET["product"]);
                 } else {
                   startSponsoringThisProduct($_GET["artisan"],$_GET["product"]);
+                  //Also send a notification to the artisan owner of this product
+
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$ownerOfThisProduct,"This artisan has started to sponsor this your product","product",$_GET["product"]);
                 }
               }
             }
