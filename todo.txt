@@ -1,4 +1,4 @@
-- La chat e le notifiche (vedi anche dove sta scritto AAA)
+- La chat che sia ordinata con i nuovi messaggi in basso
 - Map
 
 

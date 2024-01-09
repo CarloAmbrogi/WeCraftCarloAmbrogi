@@ -53,7 +53,7 @@
         //Verify that this user exists and it is a customer
         if(getKindOfThisAccount($insertedCustomerId) == "Customer"){
           //Verify you have a chat with this customer AAAAAAAA
-          if(true){
+          if(canYouSendMessagesToThisCustomer($_SESSION["userId"],$insertedCustomerId)){
             //Add the new project
             if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
               //You have chosen to send the file icon
@@ -89,7 +89,7 @@
             addParagraph(translate("You can see the project you have created in the personalized item page and youll be able to assign artisans to this project"));
             addButtonLink(translate("Go to personalized items page"),"./personalizedItems.php?insertedCategory=v1");
           } else {
-            //addParagraph(translate("You havent a chat with this customer"));//AAAAAAA
+            addParagraph(translate("You cant create a project for a customer who hasnt started a chat with you"));
           }
         } else {
           addParagraph(translate("This user is not a customer"));
@@ -107,7 +107,7 @@
         //Verify that this user exists and it is a customer
         if(getKindOfThisAccount($_GET["id"]) == "Customer"){
           //Verify you have a chat with this customer AAAAAAAA
-          if(true){
+          if(canYouSendMessagesToThisCustomer($_SESSION["userId"],$_GET["id"])){
             //Content of this page
             $userInfos = obtainUserInfos($_GET["id"]);
             addParagraph(translate("Create a project for")." ".$userInfos["name"]." ".$userInfos["surname"]);
@@ -195,7 +195,7 @@
             <?php
             //End main content of this page
           } else {
-            //addParagraph(translate("You havent a chat with this customer"));//AAAAAAA
+            addParagraph(translate("You cant create a project for a customer who hasnt started a chat with you"));
           }
         } else {
           addParagraph(translate("This user is not a customer"));

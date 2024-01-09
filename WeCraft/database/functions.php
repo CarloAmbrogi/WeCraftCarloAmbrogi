@@ -2945,4 +2945,118 @@
     return $elements;
   }
 
+  //Obtain a preview chat list for this user
+  function obtainPreviewChatList($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select t.chatWith as chatWith, t.chatKind as chatKind from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t group by t.chatWith, t.chatKind order by t.messageId;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiii",$userId,$userId,$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with chatWith chatKind (personal product project)
+    return $elements;
+  }
+
+  //Number messages to read in this chat
+  function numberMessagesToReadInThisChat($userId,$chatWith,$chatKind){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberMessagesToReadInThisChat from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ? and t.fromWho <> ? and t.messageId not in (select `messageId` from `ReadMessage` where `readBy` = ?)) as tt;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiiiisii",$userId,$userId,$userId,$userId,$chatWith,$chatKind,$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberMessagesToReadInThisChat"];
+  }
+
+  //Obtain a preview of this chat with all messages (we pass user for security reason)
+  function obtainPreviewChat($userId,$chatWith,$chatKind){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Messages`.`id`, `Messages`.`fromWho`, `Messages`.`toKind`, `Messages`.`toWho`, `Messages`.`timestamp`, `Messages`.`isANotification`, `Messages`.`text`, `Messages`.`imgExtension`, `Messages`.`image`, `Messages`.`linkKind`, `Messages`.`linkTo` from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?) as tt join `Messages` on tt.messageId = `Messages`.`id` order by `Messages`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiiiis",$userId,$userId,$userId,$userId,$chatWith,$chatKind);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with 
+    return $elements;
+  }
+
+  //You can send messages to a customer only if the customer has started first to send messages to you
+  function canYouSendMessagesToThisCustomer($userId,$customerId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as canYouSendMessagesToThisCustomer from (select * from `Messages` where `Messages`.`toWho` = ? and `Messages`.`fromWho` = ? and `Messages`.`toKind` = 'personal' limit 1) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$customerId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["canYouSendMessagesToThisCustomer"];
+  }
+
+  //Mark all message of this chat as read
+  function markMessagesInThisChatRead($userId,$chatWith,$chatKind){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "insert into `ReadMessage` (`readBy`,`messageId`) select ?, `Messages`.`id` from `Messages` where `Messages`.`id` not in (select `ReadMessage`.`messageId` from `ReadMessage` where `ReadMessage`.`readBy` = ?) and `Messages`.`id` in (select t.messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiiiiiis",$userId,$userId,$userId,$userId,$userId,$userId,$chatWith,$chatKind);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //send this message with an image
+  function sendMessageWithImage($fromWho,$toKind,$toWho,$text,$imgExtension,$imgData){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 0, ?, ?, ?, NULL, NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isisss",$fromWho,$toKind,$toWho,$text,$imgExtension,$imgData);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //send this message without an image
+  function sendMessageWithoutImage($fromWho,$toKind,$toWho,$text){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 0, ?, NULL, NULL, NULL, NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isis",$fromWho,$toKind,$toWho,$text);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
 ?>

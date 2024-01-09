@@ -55,7 +55,7 @@
       addButtonOnOffShowHide($textButtonShowHide,"moreInformationOnThisArtisan");
       if($kindOfTheAccountInUse != "Guest" && $_GET["id"] != $_SESSION["userId"]){
         //Send message to this artisan
-        addButtonLink(translate("Send message"),"./sendMessage.php?to=".urlencode($_GET["id"]));
+        addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($_GET["id"]));
       }
       endCol();
       endRow();

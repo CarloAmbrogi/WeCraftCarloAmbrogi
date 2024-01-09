@@ -44,7 +44,7 @@
             addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           }
           //Options for every collaborator
-          addButtonLink(translate("Send message"),"./AAAAAAAAAAAAAA");
+          addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("product")."&chatWith=".urlencode($_GET["id"]));
           addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();

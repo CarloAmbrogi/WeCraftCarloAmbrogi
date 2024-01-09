@@ -51,7 +51,7 @@
             }
           }
           //Options for every collaborator
-          addButtonLink(translate("Send message"),"./AAAAAAAAAAAAAA");
+          addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("project")."&chatWith=".urlencode($_GET["id"]));
           addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();

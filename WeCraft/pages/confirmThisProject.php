@@ -38,7 +38,7 @@
           if(!$thisProjectIsConfirmed){
             if($isTheProjectClaimed){
               confirmThisProject($insertedAddress,$insertedProjectId);
-              //Send a notification to the artisan who has calimed the project and also to the designer of this project
+              //Send a notification to the artisan who has claimed the project and also to the designer of this project
               //AAAAAAAA
               addParagraph(translate("Done"));
             } else {

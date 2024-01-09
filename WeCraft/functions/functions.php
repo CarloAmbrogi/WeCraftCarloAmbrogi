@@ -442,6 +442,73 @@
     return replaceSpecificStringNewLine($result);
   }
 
+  //Adjust this text substituting links with clickable ref to the link
+  function adjustTextWithLinks($text){
+    $text = newlineSpecificStringReplace($text);
+    $possiblePrefix1 = "https://";
+    $possiblePrefix2 = "http://";
+    $resultArr = [];
+    $remainingText = $text;
+    while($remainingText != ""){
+      $posFound = false;
+      $whitchPosFound = 0;
+      if($p = strpos(" ".$remainingText,$possiblePrefix1)){
+        $p = $p - 1;
+        $posFound = true;
+        $whitchPosFound = $p;
+      }
+      if($p = strpos(" ".$remainingText,$possiblePrefix2)){
+        $p = $p - 1;
+        $youCanUpdatePosition = false;
+        if($posFound == true){
+          if($p < $whitchPosFound){
+            $youCanUpdatePosition = true;
+          }
+        }
+        if($posFound == false){
+          $youCanUpdatePosition = true;
+        }
+        if($youCanUpdatePosition == true){
+          $posFound = true;
+          $whitchPosFound = $p;
+        }
+      }
+      if($posFound == false){
+        array_push($resultArr,$remainingText);
+        $remainingText = "";
+      } else {
+        if($whitchPosFound == 0){
+          $endLinkPos = 0;
+          if($p = strpos("x".$remainingText," ")){
+            $p = $p - 1;
+            $endLinkPos = $p;
+          }
+          if($endLinkPos == 0){
+            array_push($resultArr,$remainingText);
+            $remainingText = "";
+          } else {
+            $additiveString = substr($remainingText,0,$endLinkPos);
+            array_push($resultArr,$additiveString);
+            $remainingText = substr($remainingText,$endLinkPos);
+          }
+        } else {
+          $additiveString = substr($remainingText,0,$whitchPosFound);
+          array_push($resultArr,$additiveString);
+          $remainingText = substr($remainingText,$whitchPosFound);
+        }
+      }
+    }
+    $result = "";
+    foreach($resultArr as &$value){
+      if($possiblePrefix1 == substr($value,0,strlen($possiblePrefix1)) || $possiblePrefix2 == substr($value,0,strlen($possiblePrefix2))){
+        $result.='<a href="'.htmlspecialchars($value).'">'.htmlentities("[").htmlentities($value).htmlentities("]").'</a>';
+      } else {
+        $result.=htmlentities($value);
+      }
+    }
+    return replaceSpecificStringNewLine($result);
+  }
+
   //Replace newline characeter in the string with \n
   function newlineForJs($str){
     $newline = "

@@ -62,7 +62,7 @@
         if(isset($customerUserInfos['icon']) && ($customerUserInfos['icon'] != null)){
           $fileImageToVisualize = blobToFile($customerUserInfos["iconExtension"],$customerUserInfos['icon']);
         }
-        addACard("./AAAAAAAAAAAAAA.php?id=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]." (".$customerUserInfos["email"].")"),translate("Customer"),"");
+        addACard("./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]." (".$customerUserInfos["email"].")"),translate("Customer"),"");
         //Claimed artisan
         $isTheProjectClaimed = false;
         if(isset($projectInfos["claimedByThisArtisan"]) and $projectInfos["claimedByThisArtisan"] != null){
