@@ -15,15 +15,21 @@
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
     } else {
-      $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
-      //$isLoginValid = true;//Uncomment to force log in valid
-      if($isLoginValid){
-        //log in done
-        $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
-        header('Location: ./account.php');
+      if($insertedEmail == "admin" && $insertedPassword == "a"){
+        //Log in as profile anlytics administrator
+        $_SESSION["userId"] = "admin";
+        header('Location: ./anlyticsAdministrator.php');
       } else {
-        addParagraph(translate("Wrong password or inexistent account or email not yet verified for this account"));
-        addButtonLink(translate("Return to home"),"./index.php");
+        $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
+        //$isLoginValid = true;//Uncomment to force log in valid
+        if($isLoginValid){
+          //log in done
+          $_SESSION["userId"] = idUserWithThisEmail($insertedEmail);
+          header('Location: ./account.php');
+        } else {
+          addParagraph(translate("Wrong password or inexistent account or email not yet verified for this account"));
+          addButtonLink(translate("Return to home"),"./index.php");
+        }
       }
     }
   } else {

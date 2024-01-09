@@ -11,6 +11,9 @@
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   switch($kindOfTheAccountInUse){
     case "Guest":
+      if($_SESSION["userId"] == "admin"){
+        header('Location: ./logout.php');
+      }
       break;
     case "Customer":
       header('Location: ./map.php');
@@ -59,7 +62,7 @@
           if(insertedEmail.value.trim() == ""){
             e.preventDefault();
             alert("<?= translate("You have missed to insert the email address") ?>");
-          } else if(!isValidEmail(insertedEmail.value)){
+          } else if(!isValidEmail(insertedEmail.value) && insertedEmail.value != "admin"){
             e.preventDefault();
             alert("<?= translate("Email address not valid") ?>");
           } else if(insertedPassword.value.trim() == ""){

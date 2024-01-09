@@ -279,6 +279,9 @@
     if(!isset($_SESSION["userId"])){//guest
       return "Guest";
     }
+    if($_SESSION["userId"] == "admin"){
+      return "Guest";
+    }
     $kindOfThisAccount = getKindOfThisAccount($_SESSION["userId"]);
     if($kindOfThisAccount == "error"){
       header('Location: '.WeCraftBaseUrl.'pages/logout.php');
@@ -288,6 +291,9 @@
 
   //Load the tab bar for the account in use
   function tabBarForTheAccountInUse(){
+    if($_SESSION["userId"] == "admin"){
+      return [[translate("Analytics administrator"),"./anlyticsAdministrator.php"],[translate("Log out"),"./logout.php"]];
+    }
     switch(getKindOfTheAccountInUse()){
       case "Guest":
         return [[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("My WeCraft"),"./myWeCraft.php"]];
@@ -339,6 +345,12 @@
     }
     if($tabTitle == translate("Shopping cart")){
       return WeCraftBaseUrl."Icons/shoppingCartIcon.png";
+    }
+    if($tabTitle == translate("Analytics administrator")){
+      return WeCraftBaseUrl."Icons/analyticsAdministratorIcon.png";
+    }
+    if($tabTitle == translate("Log out")){
+      return WeCraftBaseUrl."Icons/logoutIcon.png";
     }
     return WeCraftBaseUrl."Icons/genericTabBarIcon.png";
   }

@@ -1,7 +1,3 @@
-- La chat che sia ordinata con i nuovi messaggi in basso
-- Map
+Map
 
-
-Magari customized big order
-
-Dove sta scritto AAA
+Magari request big order
