@@ -55,7 +55,11 @@
             //Edit general info of this project and make it unclaimed
             updateGeneralInfoOfAProject($insertedProjectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
             //Send notification to the customer and to the assigned artisans
-            //AAAAAAA
+            sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has applied some modifications to the project","project",$insertedProjectId);
+            $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($insertedProjectId);
+            foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
+              sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$singleArtisanPreview["id"],"The designer has applied some modifications to the project","project",$insertedProjectId);
+            }
             addParagraph(translate("Done"));
           } else {
             addParagraph(translate("This project is already confirmed"));

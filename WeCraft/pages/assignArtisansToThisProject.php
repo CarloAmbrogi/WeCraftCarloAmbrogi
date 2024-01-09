@@ -45,7 +45,8 @@
                   $userInfos = obtainUserInfos($userToAdd);
                   addParagraph(translate("The user")." ".$userInfos["name"]." ".$userInfos["surname"]." (".$userInfos["email"].") ".translate("has been added"));
                   //Send notification to the customer and to the new artisan
-                  //AAAAAAA
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has assigned a new artisan to this project","project",$insertedProjectId);
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"The designer has assigned you to this project","project",$insertedProjectId);
                 } else {
                   addParagraph(translate("The user is already assigned to this project"));
                 }

@@ -29,7 +29,8 @@
             //Claim this project
             claimThisProject($_SESSION["userId"],$insertedProjectId);
             //Send notification to the customer and to the designer
-            //AAAAAAA
+            sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"This artisan has claimed this project","project",$insertedProjectId);
+            sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["designer"],"This artisan has claimed this project","project",$insertedProjectId);
             addParagraph(translate("Done"));
           } else {
             addParagraph(translate("You are not assigned to this project"));

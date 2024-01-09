@@ -33,7 +33,8 @@
             if(!$thisProjectIsReady){
               setReadyThisProject($insertedProjectId);
               //Send a notification to the customer and also to the designer of this project
-              //AAAAAAAA
+              sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The personalized product is ready","project",$insertedProjectId);
+              sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["designer"],"The personalized product is ready","project",$insertedProjectId);
               addParagraph(translate("Done"));
             } else {
               addParagraph(translate("The project is already ready"));

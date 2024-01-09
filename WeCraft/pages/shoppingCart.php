@@ -32,7 +32,7 @@
           //Update data last sell
           updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Notify the artisans about this sell (remember also about the percentage resell)
-          //AAAAAAAAAAAAAA
+          notifyArtisansSellContentShoppingCartOfThisUser($_SESSION["userId"]);
           //Update the remaining quantity of the products
           updateRemainingQuantityOfTheProductsBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Empty the current shopping cart

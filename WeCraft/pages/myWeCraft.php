@@ -67,12 +67,10 @@
     addButtonLink(translate("Change opening hours"),"./changeOpeningHours.php");
     addButtonLink(translate("Change phone number"),"./changePhoneNumber.php");
     addButtonLink(translate("Change shop location"),"./changeShopLocation.php");
-    //AAAAAAAAAAAAA
   }
   //For Designers
   if($kindOfTheAccountInUse == "Designer"){
     addButtonLink(translate("Change description"),"./changeDescription.php");
-    //AAAAAAAAAAAAA
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";

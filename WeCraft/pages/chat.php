@@ -103,10 +103,10 @@
             showHideElementsendNewMessage.style.display = "block";
 
             //Periodically check if are there new messages
-            let intervalId = setInterval(checkIfNewMessages, 5000);
+            let intervalIdCheckIfNewMessages = setInterval(checkIfNewMessages, 5000);
 
             function checkIfNewMessages(){
-              let requestUrl = "<?= WeCraftBaseUrl ?>api/numberUnreadMessagesInThisChat.php?chatWith=" + encodeURIComponent(<?= $_GET["chatWith"] ?>) + "&chatKind=" + encodeURIComponent(<?= $_GET["chatKind"] ?>);
+              let requestUrl = "<?= WeCraftBaseUrl ?>api/numberUnreadMessagesInThisChat.php?chatWith=" + encodeURIComponent(<?= $_GET["chatWith"] ?>) + "&chatKind=" + encodeURIComponent('<?= $_GET["chatKind"] ?>');
               let request = new XMLHttpRequest();
               request.open("GET", requestUrl);
               request.responseType = "json";
@@ -116,7 +116,7 @@
                 if(result[0].numberMessagesToReadInThisChat > 0){
                   showHideElementsendNewMessage.style.display = "none";
                   showHideElementreloadThisChat.style.display = "block";
-                  clearInterval(intervalId);
+                  clearInterval(intervalIdCheckIfNewMessages);
                 }
               }
             }
@@ -138,7 +138,11 @@
           }
           addParagraphWithoutMb3($textParagraphWhen);
           if($singleMessagePreview["text"] != ""){
-            addParagraphWithoutMb3Unsafe(adjustTextWithLinks($singleMessagePreview["text"]));
+            if($singleMessagePreview["isANotification"] == 1){
+              addParagraphWithoutMb3(translate($singleMessagePreview["text"]));
+            } else {
+              addParagraphWithoutMb3Unsafe(adjustTextWithLinks($singleMessagePreview["text"]));
+            }
           }
           if(isset($singleMessagePreview["image"]) && $singleMessagePreview["image"] != null){
             addImage(blobToFile($singleMessagePreview["imgExtension"],$singleMessagePreview['image']),"Image");

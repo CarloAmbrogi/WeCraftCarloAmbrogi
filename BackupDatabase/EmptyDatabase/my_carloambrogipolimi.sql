@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Dic 31, 2023 alle 17:15
+-- Creato il: Gen 09, 2024 alle 12:22
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -129,6 +129,26 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `Messages`
+--
+
+CREATE TABLE `Messages` (
+  `id` int NOT NULL,
+  `fromWho` int NOT NULL,
+  `toKind` varchar(25) NOT NULL,
+  `toWho` int NOT NULL,
+  `timestamp` timestamp NOT NULL,
+  `isANotification` tinyint(1) NOT NULL,
+  `text` text NOT NULL,
+  `imgExtension` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `image` longblob,
+  `linkKind` varchar(25) DEFAULT NULL,
+  `linkTo` int DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `Product`
 --
 
@@ -230,6 +250,17 @@ CREATE TABLE `PurchasesCronology` (
   `customer` int NOT NULL,
   `timestamp` timestamp NOT NULL,
   `address` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `ReadMessage`
+--
+
+CREATE TABLE `ReadMessage` (
+  `readBy` int NOT NULL,
+  `messageId` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -372,6 +403,12 @@ ALTER TABLE `ExchangeProduct`
   ADD PRIMARY KEY (`artisan`,`product`);
 
 --
+-- Indici per le tabelle `Messages`
+--
+ALTER TABLE `Messages`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `Product`
 --
 ALTER TABLE `Product`
@@ -414,6 +451,12 @@ ALTER TABLE `PurchasesCronology`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indici per le tabelle `ReadMessage`
+--
+ALTER TABLE `ReadMessage`
+  ADD PRIMARY KEY (`readBy`,`messageId`);
+
+--
 -- Indici per le tabelle `SheetProducts`
 --
 ALTER TABLE `SheetProducts`
@@ -447,6 +490,12 @@ ALTER TABLE `UserImages`
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
+
+--
+-- AUTO_INCREMENT per la tabella `Messages`
+--
+ALTER TABLE `Messages`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Product`

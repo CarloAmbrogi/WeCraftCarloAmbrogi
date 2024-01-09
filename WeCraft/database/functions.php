@@ -2948,7 +2948,7 @@
   //Obtain a preview chat list for this user
   function obtainPreviewChatList($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.chatWith as chatWith, t.chatKind as chatKind from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t group by t.chatWith, t.chatKind order by t.messageId;";
+    $sql = "select t.chatWith as chatWith, t.chatKind as chatKind from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t group by t.chatWith, t.chatKind order by MAX(t.messageId) DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$userId,$userId,$userId,$userId);
       $statement->execute();
@@ -3056,6 +3056,49 @@
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //send this automatic message with a link
+  function sendAutomaticMessageWithLink($fromWho,$toKind,$toWho,$text,$linkKind,$linkTo){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 1, ?, NULL, NULL, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isissi",$fromWho,$toKind,$toWho,$text,$linkKind,$linkTo);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //send this automatic message without a link
+  function sendAutomaticMessageWithoutLink($fromWho,$toKind,$toWho,$text){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 1, ?, NULL, NULL, NULL, NULL);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isis",$fromWho,$toKind,$toWho,$text);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Notify the artisans about this sell based on the content of the shopping cart of this user (remembering also of the percentage resell)
+  function notifyArtisansSellContentShoppingCartOfThisUser($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql1 = "insert into `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) select NULL, ?, 'personal', `ShoppingCart`.`artisan`, CURRENT_TIMESTAMP(), 1, 'This user has bought this product from you', NULL, NULL, 'product', `ShoppingCart`.`product` from `ShoppingCart` where `customer` = ?;";
+    $sql2 = "insert into `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) select NULL, ?, 'personal', `Product`.`artisan`, CURRENT_TIMESTAMP(), 1, 'This user has bought this your product from another artisan', NULL, NULL, 'product', `ShoppingCart`.`product` from (`ShoppingCart` join `ExchangeProduct` on `ShoppingCart`.`artisan` = `ExchangeProduct`.`artisan`) join `Product` on `ExchangeProduct`.`product` = `Product`.`id` where `ShoppingCart`.`customer` = ? and `ShoppingCart`.`product` = `ExchangeProduct`.`product`;";
+    if($statement = $connectionDB->prepare($sql1)){
+      $statement->bind_param("ii",$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql1. " . $connectionDB->error;
+    }
+    if($statement = $connectionDB->prepare($sql2)){
+      $statement->bind_param("ii",$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql2. " . $connectionDB->error;
     }
   }
 

@@ -14,7 +14,7 @@
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     //Receive post request for creating a project
     $insertedCustomerId = $_POST['insertedCustomerId'];
-    upperPartOfThePage(translate("Create a project"),"./AAAAAAAA.php?id=");
+    upperPartOfThePage(translate("Create a project"),"./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($insertedCustomerId));
     $insertedName = trim($_POST['insertedName']);
     $insertedDescription = trim($_POST['insertedDescription']);
     $insertedIconExtension = $_POST['insertedIconExtension'];
@@ -52,7 +52,7 @@
       if($kindOfTheAccountInUse == "Designer"){
         //Verify that this user exists and it is a customer
         if(getKindOfThisAccount($insertedCustomerId) == "Customer"){
-          //Verify you have a chat with this customer AAAAAAAA
+          //Verify you have a chat with this customer
           if(canYouSendMessagesToThisCustomer($_SESSION["userId"],$insertedCustomerId)){
             //Add the new project
             if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
@@ -101,12 +101,12 @@
   } else {
     //Page without post request
     if(isset($_GET["id"])){
-      upperPartOfThePage(translate("Create a project"),"./AAAAAAAA.php?id=");
+      upperPartOfThePage(translate("Create a project"),"./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($_GET["id"]));
       //Verify that the user is a designer
       if($kindOfTheAccountInUse == "Designer"){
         //Verify that this user exists and it is a customer
         if(getKindOfThisAccount($_GET["id"]) == "Customer"){
-          //Verify you have a chat with this customer AAAAAAAA
+          //Verify you have a chat with this customer
           if(canYouSendMessagesToThisCustomer($_SESSION["userId"],$_GET["id"])){
             //Content of this page
             $userInfos = obtainUserInfos($_GET["id"]);

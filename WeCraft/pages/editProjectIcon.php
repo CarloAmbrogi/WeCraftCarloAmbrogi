@@ -44,7 +44,11 @@
                 $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
                 changeIconOfAProject($insertedProjectId,$fileExtension,$imgData);
                 //Send notification to the customer and to the assigned artisans
-                //AAAAAAA
+                sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has applied some modifications to the project","project",$insertedProjectId);
+                $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($insertedProjectId);
+                foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$singleArtisanPreview["id"],"The designer has applied some modifications to the project","project",$insertedProjectId);
+                }
                 addParagraph(translate("Done"));
               }
             } else {

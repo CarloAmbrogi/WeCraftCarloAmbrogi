@@ -210,7 +210,7 @@
         }
         //End main content of this page
       } else {
-        upperPartOfThePage(translate("Error"),"");
+        upperPartOfThePage(translate("Project"),"cookieBack");
         addParagraph(translate("You havent access to this project"));
       }
     } else {

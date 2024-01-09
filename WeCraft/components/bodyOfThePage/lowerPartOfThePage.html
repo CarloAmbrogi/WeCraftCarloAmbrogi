@@ -9,20 +9,60 @@
           <div class="btn-group" role="group" aria-label="Basic outlined example">
             <?php
               foreach($elementsForTheFooter as &$elementForTheFooter){
-                ?>
-                  <button type="button" class="btn btn-outline-primary" onclick="continueToThisLocation('<?= $elementForTheFooter[1] ?>');">
-                    <col>
-                      <row>
-                        <img src="<?= tabBarIconForThisTab($elementForTheFooter[0]) ?>" alt="<?= $elementForTheFooter[0] ?> width="25" height="25">
-                      </row>
-                      <row>
-                        <p class="paragraphForTabBar">
-                          <?= $elementForTheFooter[0] ?>
-                        </p>
-                      </row>
-                    </col>
-                  </button>
-                <?php
+                if($elementForTheFooter[1] != "./chats.php"){
+                  ?>
+                    <button type="button" class="btn btn-outline-primary" onclick="continueToThisLocation('<?= $elementForTheFooter[1] ?>');">
+                      <col>
+                        <row>
+                          <img src="<?= tabBarIconForThisTab($elementForTheFooter[0]) ?>" alt="<?= $elementForTheFooter[0] ?> width="25" height="25">
+                        </row>
+                        <row>
+                          <p class="paragraphForTabBar">
+                            <?= $elementForTheFooter[0] ?>
+                          </p>
+                        </row>
+                      </col>
+                    </button>
+                  <?php
+                } else {
+                  ?>
+                    <button type="button" class="btn btn-outline-primary" onclick="continueToThisLocation('<?= $elementForTheFooter[1] ?>');">
+                      <col>
+                        <row>
+                          <img id="imageChatsIcon" src="<?= tabBarIconForThisTab($elementForTheFooter[0]) ?>" alt="<?= $elementForTheFooter[0] ?> width="25" height="25">
+                        </row>
+                        <row>
+                          <p class="paragraphForTabBar">
+                            <?= $elementForTheFooter[0] ?>
+                          </p>
+                        </row>
+                      </col>
+                    </button>
+                    <script>
+                      //Get the imageChatsIcon
+                      const imageChatsIcon = document.getElementById('imageChatsIcon');
+
+                      //Periodically check if are there new chats and check also at the beginning
+                      let intervalIdCheckIfNewChats = setInterval(checkIfNewChats, 5000);
+                      checkIfNewChats();
+
+                      function checkIfNewChats(){
+                        let requestUrl = "<?= WeCraftBaseUrl ?>api/numberUnreadMessagesOfTheUser.php";
+                        let request = new XMLHttpRequest();
+                        request.open("GET", requestUrl);
+                        request.responseType = "json";
+                        request.send();
+                        request.onload = function(){
+                          const result = request.response;
+                          if(result[0].numberUnreadMessagesOfTheUser > 0){
+                            imageChatsIcon.src = "<?= WeCraftBaseUrl ?>Icons/chatIconNotification.png";
+                            clearInterval(intervalIdCheckIfNewMessages);
+                          }
+                        }
+                      }
+                    </script>
+                  <?php
+                }
               }
             ?>
           </div>

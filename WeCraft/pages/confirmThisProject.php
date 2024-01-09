@@ -39,7 +39,8 @@
             if($isTheProjectClaimed){
               confirmThisProject($insertedAddress,$insertedProjectId);
               //Send a notification to the artisan who has claimed the project and also to the designer of this project
-              //AAAAAAAA
+              sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["designer"],"The customer has confirmed this project","project",$insertedProjectId);
+              sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["claimedByThisArtisan"],"The customer has confirmed this project and you can start to realize the personalized item","project",$insertedProjectId);
               addParagraph(translate("Done"));
             } else {
               addParagraph(translate("The project is not claimed by an artisan"));

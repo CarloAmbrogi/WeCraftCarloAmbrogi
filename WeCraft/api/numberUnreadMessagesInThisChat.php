@@ -1,5 +1,10 @@
 <?php
   include dirname(__FILE__)."/../database/access.php";
+  include "./../database/functions.php";
+
+  //Load session var
+  include "./../components/includes.php";
+  doInitialScripts();
 
   //Show the number of unread messages of this user in this chat
   //GET params: chatWith chatKind
