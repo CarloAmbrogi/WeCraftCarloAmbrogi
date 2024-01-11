@@ -44,6 +44,9 @@
               if(!isThisUserCollaboratingForTheDesignOfThisProduct($userToAdd,$insertedProductId)){
                 //The new user is added to the collaboration of this product
                 startCooperatingDesignForThisProduct($userToAdd,$insertedProductId);
+                //Send a notification to the user
+                sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"You have been added to the collaboration for the design of this product","product",$insertedProductId);
+                //Show that the user has been added
                 $userInfos = obtainUserInfos($userToAdd);
                 addParagraph(translate("The user")." ".$userInfos["name"]." ".$userInfos["surname"]." (".$userInfos["email"].") ".translate("has been added"));
               } else {

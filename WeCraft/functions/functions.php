@@ -570,7 +570,7 @@
       if($firstTime == false){
         $result.=" ahreibeuwfbefbnFIERFBYRYNDSJSHnidebfebn ";
       }
-      $result.=htmlentities($value);
+      $result.=$value;
       $firstTime = false;
     }
     $result = str_replace("\r", "", $result);
