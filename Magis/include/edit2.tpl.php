@@ -385,6 +385,7 @@ function savepoi() {
    if (poisnew) {
 
        var mposition = m1.getLatLng();
+       console.log(mposition);
        $("#PoiLat").val(mposition.lat);
        $("#PoiLng").val(mposition.lng);
 

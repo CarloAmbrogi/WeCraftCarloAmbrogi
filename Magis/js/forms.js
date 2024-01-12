@@ -39,7 +39,7 @@ function do_submit(action, form_id="editform") {
 			if ($("#waiting").length) $("#waiting").hide();
   		},
 		error: function (jqXHR, status, err) {
-			alert("an error occurred during request handling");
+			alert("an error occurred during request handling" + post_url);
 		},
 		complete: function (jqXHR, status) {
 			// after success or error callback are executed

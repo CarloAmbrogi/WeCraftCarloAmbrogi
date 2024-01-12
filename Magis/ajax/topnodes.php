@@ -22,6 +22,17 @@ $cid = $_POST["poiId"]; // qui non utlizzata, riceve sempre zero
 // language setting:
 $language = "ExprIT";
 //$language = "ExprUK";
+//Load the language from WeCraft settings
+$acceptLanguage = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+if(isset($_COOKIE['language'])){
+	$acceptLanguage = $_COOKIE['language'];
+}
+if($acceptLanguage != "it"){
+	$acceptLanguage = "en";
+}
+if($acceptLanguage == "en"){
+	$language = "ExprUK";
+}
 
 
 

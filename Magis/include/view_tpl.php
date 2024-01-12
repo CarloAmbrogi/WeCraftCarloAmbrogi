@@ -97,8 +97,8 @@ var jsroot = "<?= $BASE_URL ?>";
 
 // generazione del filtro cronologico:
 
-d1 = new Date("2010-01-01").getTime();
-d2 = new Date("2022-12-31").getTime();
+d1 = new Date("2023-01-01").getTime();
+d2 = new Date("2025-12-31").getTime();
 
 d01 = new Date("<?= $mindate ?>").getTime();
 d02 = new Date("<?= $maxdate ?>").getTime();
