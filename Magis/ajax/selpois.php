@@ -83,6 +83,7 @@ if (true) {
    $query .= " and Metadata.MediaCode in ";
    //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE Tags.TagID in $elenco )";
    $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE true )";
+   //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE false )";
 }
 
 // $pois = $database->sel_data("POI", "CodePOI > 0 and CodePOI < 100"); // TEST

@@ -11,6 +11,7 @@ function do_topnodes() {
    ajFn("ajax/topnodes",{poiId:0},show_topnodes);
 }
 function show_topnodes(objResp) {
+   console.log(objResp);
    if (objResp.errMsg) console.log(objResp.errMsg);
    //else console.log(objResp.htm);
    else $("#topics").html(objResp.htm);
