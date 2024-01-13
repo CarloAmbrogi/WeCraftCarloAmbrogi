@@ -98,7 +98,7 @@ $voci = $database->sel_data("Tags", $condizionePerTraduzioniLinguistiche); // tr
 
 foreach ($voci as $voce) { 
 
-	$tid = $voce[TagID];
+	$tid = $voce['TagID'];
 	$label = "<span>" . $voce[$language] . "</span>";
 
 	$item = "<li class='list-group-item topicitem' id='item_$tid' >";
