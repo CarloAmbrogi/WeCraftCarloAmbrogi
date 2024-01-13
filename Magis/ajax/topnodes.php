@@ -113,7 +113,7 @@ foreach ($voci as $voce) {
 $output = '<ul class="list-group">' . $output . '</ul>';
 
 
-/// $output = "ajax content";
+$output = "ajax content";
 
 
 
