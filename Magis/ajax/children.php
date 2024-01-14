@@ -70,7 +70,7 @@ if ($voci) {
 } 
 
 
-$container .= "<input class='form-check-input me-1' type='checkbox' id='chk_$tagid' value='' disabled aria-label='topic item'>";
+$container .= "<input class='form-check-input me-1' type='checkbox' id='chk_$tagid' value='' aria-label='topic item'>";
 // $container .= "<span>$tagVoce</span><br><br>";
 if ($q > 0) $container .= "<span>$tagVoce</span><br><br>";
 else $container .= "<span>$tagVoce</span>";

@@ -50,10 +50,17 @@ function Risalire ($nodo) {
 		$father = $trovato["Tag2"];  // se compare, considero il tag2
 
 		if (in_array($father, $topnodes)) $q++; // se è già nell'array top, mi fermo (dovrei sommare il numero)
-		else Risalire($father);  // se non è già presente, itero ricorsivamente
+		else {
+			Risalire($father);
+			array_push($topnodes, $nodo);
+		}  // se non è già presente, itero ricorsivamente
 
 	}
-	else $topnodes[] = $nodo;  // se non compare, inserisco il nodo nell'array dei nodi top (con il numero)
+	else array_push($topnodes, $nodo);  // se non compare, inserisco il nodo nell'array dei nodi top (con il numero)
+
+	if (!in_array($nodo, $topnodes)){
+		array_push($topnodes, $nodo);//ogni nodo presente nell'array
+	}
 
 } // end function
 
@@ -94,7 +101,10 @@ $condizionePerTraduzioniLinguistiche = "Name IN $elenco ORDER BY $language";
 if($elenco == "()"){
 	$condizionePerTraduzioniLinguistiche = "false";
 }
+
 $voci = $database->sel_data("Tags", $condizionePerTraduzioniLinguistiche); // traduzioni linguistiche
+//var_dump($condizionePerTraduzioniLinguistiche);
+//var_dump($voci);
 
 foreach ($voci as $voce) { 
 

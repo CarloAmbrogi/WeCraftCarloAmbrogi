@@ -27,7 +27,7 @@ echo "<!-- role: ".$userinfo["ruolo"]." -->";
       Topic filter<br/><br/>
       <div id="topics"><?= $topictree ?></div>
       <br/>
-      <input class='form-check-input me-1' type='checkbox' value='' aria-label='topic item'> include related contents<br>
+      <!-- <input class='form-check-input me-1' type='checkbox' value='' aria-label='topic item'> include related contents<br> -->
     </div>
     <button class="btn btn-success mt-3" type="button" onclick="updateMap()" >Update Map</button>
   </div>

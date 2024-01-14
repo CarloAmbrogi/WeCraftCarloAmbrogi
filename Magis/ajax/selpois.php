@@ -73,16 +73,19 @@ $nodi = explode(',', $strNodi);
    $elenco = str_replace(",)", ")", $elenco);
 }
 
-
-
 // data:
 
 $query = "select distinct CodePOI from Metadata";
 $query .= " where PublicationDate between '$time1' and '$time2'";
 if (true) {
    $query .= " and Metadata.MediaCode in ";
-   //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE Tags.TagID in $elenco )";
-   $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE true )";
+   if($elenco == "()"){
+      //se non selezioni nulla nel Topic filter allora carica tutto
+      $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE true )";
+   } else {
+      //Carica solo i poi con aventi almeno un metadata con almeno uno dei Topic filter selezionati
+      $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE Tags.TagID in $elenco )";
+   }
    //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE false )";
 }
 
