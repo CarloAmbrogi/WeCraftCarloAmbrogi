@@ -42,7 +42,7 @@
   //This function is to load the lower part of the page
   //Parameters: array elements for the footer (empty array if no footer);
   //each elements of this array is an array with 2 elements with the title and the link
-  function lowerPartOfThePage($elementsForTheFooter){
+  function lowerPartOfThePage($elementsForTheFooter, $skipFinalSpaceBeforeTheFooter = false){
     include(dirname(__FILE__)."/bodyOfThePage/lowerPartOfThePage.html");
   }
 

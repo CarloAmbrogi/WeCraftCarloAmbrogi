@@ -19,4 +19,7 @@ $database = new dbConnection($DB_SERVER, $DB_USERNAME, $DB_PASSWORD, $DB_DATABAS
 
 // $database2 = new dbConnection(...)
 
+//A password to let only WeCraft to use apis of Magis for WeCraft
+$PASSWORD_CONNECTION_WECRAFT_MAGIS = "abcde";
+
 ?>

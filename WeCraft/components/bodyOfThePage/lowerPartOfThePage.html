@@ -1,6 +1,12 @@
-  </main>
+</main>
 
-  <div class="row" id="finalSpaceBeforeTheFooter"></div>
+  <?php
+    if($skipFinalSpaceBeforeTheFooter == false){
+  ?>
+    <div class="row" id="finalSpaceBeforeTheFooter"></div>
+  <?php
+    }
+  ?>
   <!-- Footer (not all buttons will be showed) -->
   <?php
     if(count($elementsForTheFooter) > 0){

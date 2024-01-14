@@ -185,7 +185,17 @@ function showall_mk() {
 function onMkClick(e) {
     // alert(this.getLatLng());
     // alert(this.mkid);
-    ajFn("ajax/poi_content",{poiId:this.mkid},show_cont);
+    <?php
+    if(isset($thisMapIsForWeCraft) && $thisMapIsForWeCraft == true){
+    ?>
+      ajFn("ajax/poi_contentForWeCraft",{poiId:this.mkid},show_cont);
+    <?php
+      } else {
+    ?>
+      ajFn("ajax/poi_content",{poiId:this.mkid},show_cont);
+    <?php
+    }
+    ?>
     /// loadElem ('#contents', page_url = 'ajax/poi_content.php', this.mkid );
 }
 
