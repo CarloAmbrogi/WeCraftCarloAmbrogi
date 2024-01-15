@@ -80,13 +80,13 @@ $query .= " where PublicationDate between '$time1' and '$time2'";
 if (true) {
    $query .= " and Metadata.MediaCode in ";
    if($elenco == "()"){
-      //se non selezioni nulla nel Topic filter allora carica tutto
-      $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE true )";
+      //se non selezioni nulla nel Topic filter allora non caricare niente
+      $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE false )";
    } else {
       //Carica solo i poi con aventi almeno un metadata con almeno uno dei Topic filter selezionati
       $query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE Tags.TagID in $elenco )";
    }
-   //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE false )";
+   //$query .= " (SELECT MediaCode FROM MetadataTags JOIN Tags ON MetadataTags.TagID = Tags.TagID WHERE true )";
 }
 
 // $pois = $database->sel_data("POI", "CodePOI > 0 and CodePOI < 100"); // TEST

@@ -86,7 +86,17 @@ echo "<!-- role: ".$userinfo["ruolo"]." -->";
 <script src="http://carloambrogipolimi.altervista.org/Magis/js/navigate.js"></script> 
 <script src="http://carloambrogipolimi.altervista.org/Magis/js/forms.js"></script> 
 <script src="http://carloambrogipolimi.altervista.org/Magis/js/maps.js"></script> 
-<script src="http://carloambrogipolimi.altervista.org/Magis/js/topictree.js"></script> 
+<?php
+  if(isset($thisMapIsForWeCraft) && $thisMapIsForWeCraft == true){
+    ?>
+      <script src="http://carloambrogipolimi.altervista.org/Magis/js/topictreeForMapWeCraft.js"></script>
+    <?php
+  } else {
+    ?>
+      <script src="http://carloambrogipolimi.altervista.org/Magis/js/topictree.js"></script>
+    <?php
+  }
+?>
 
 <script>
 

@@ -237,7 +237,6 @@ public function do_remove ($valore, $tabella, $keyfield, $debug=false) {
 
 }
 
-	
 
 	
 

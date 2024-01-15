@@ -106,7 +106,7 @@ $voci = $database->sel_data("Tags", $condizionePerTraduzioniLinguistiche); // tr
 //var_dump($condizionePerTraduzioniLinguistiche);
 //var_dump($voci);
 
-foreach ($voci as $voce) { 
+foreach ($voci as $voce) {
 
 	$tid = $voce['TagID'];
 	$label = "<span>" . $voce[$language] . "</span>";
