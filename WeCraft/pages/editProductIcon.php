@@ -38,6 +38,10 @@
               $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
               changeIconOfAProduct($insertedProductId,$fileExtension,$imgData);
               addParagraph(translate("Done"));
+              //sync also on Magis
+              $imageUrl = blobToFile($fileExtension,$imgData);
+              $idOfThisProduct = $insertedProductId;
+              doGetRequest(MagisBaseUrl."apiForWeCraft/changeImageUrlMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&imageUrl=".urlencode($imageUrl)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct));  
             }
           } else {
             addParagraph(translate("You have missed to select the new icon"));

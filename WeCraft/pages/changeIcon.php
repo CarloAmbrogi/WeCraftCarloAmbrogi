@@ -6,7 +6,8 @@
 
   //Change icon
   doInitialScripts();
-  if(getKindOfTheAccountInUse() == "Guest"){
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  if($kindOfTheAccountInUse == "Guest"){
     //This page is not visible if you are a guest
     upperPartOfThePage(translate("Account"),"");
     addParagraph(translate("This page is not visible without being logged in"));
@@ -38,6 +39,12 @@
             $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
             changeIconOfAnUser($_SESSION["userId"],$fileExtension,$imgData);
             addParagraph(translate("Done"));
+            if($kindOfTheAccountInUse == "Artisan"){
+              //sync also on Magis
+              $imageUrl = blobToFile($fileExtension,$imgData);
+              $idOfThisArtisan = $_SESSION["userId"];
+              doGetRequest(MagisBaseUrl."apiForWeCraft/changeImageUrlMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&imageUrl=".urlencode($imageUrl)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan));
+            }
           }
         } else {
           addParagraph(translate("You have missed to select the new icon"));

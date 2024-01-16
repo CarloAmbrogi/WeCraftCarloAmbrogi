@@ -3,10 +3,10 @@
 include "../database/db_connect.inc.php";
 
 //example:
-//http://carloambrogipolimi.altervista.org/Magis/apiForWeCraft/changeCategoryMetadata.php?password=abcde&tag=Artisan&tagEn=Artisan&tagIt=Artigiano&url=exampleUrl
+//http://carloambrogipolimi.altervista.org/Magis/apiForWeCraft/changeTagMetadata.php?password=abcde&tag=Artisan&tagEn=Artisan&tagIt=Artigiano&url=exampleUrl
 
 
-if(isset($_GET["password"]) && isset($_GET["category"]) && isset($_GET["tag"]) && isset($_GET["tagEn"]) && isset($_GET["tagIt"])){
+if(isset($_GET["password"]) && isset($_GET["tag"]) && isset($_GET["tagEn"]) && isset($_GET["tagIt"])){
     if($_GET["password"] == $PASSWORD_CONNECTION_WECRAFT_MAGIS){
         //Find the media code of the metadata
         $existingMetadataFound = $database->sel_record("Metadata","URL = '".$_GET["url"]."'");

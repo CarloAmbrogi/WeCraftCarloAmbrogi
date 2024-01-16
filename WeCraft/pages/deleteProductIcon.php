@@ -24,6 +24,10 @@
           //Delete the icon of this product
           deleteIconOfAProduct($insertedProductId);
           addParagraph(translate("Done"));
+          //sync also on Magis
+          $imageUrl = genericProductImage;
+          $idOfThisProduct = $insertedProductId;
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeImageUrlMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&imageUrl=".urlencode($imageUrl)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct));  
         } else {
           addParagraph(translate("You cant modify this product"));
         }

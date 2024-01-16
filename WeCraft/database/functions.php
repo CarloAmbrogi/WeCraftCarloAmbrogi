@@ -3122,4 +3122,42 @@
     return $elements;
   }
 
+  //get the id of the last user with this name and surname
+  function getIdOfLastUserWithThisNameAndSurname($name,$surname){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id` as id from `User` where `User`.`name` = ? and `User`.`surname` = ? order by `User`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$name,$surname);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["id"];
+  }
+
+  //get the id of the last product with this name
+  function getIdOfLastProductWithThisNameAndSurname($name){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Product`.`id` as id from `Product` where `Product`.`name` = ? order by `Product`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$name);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["id"];
+  }
+
 ?>

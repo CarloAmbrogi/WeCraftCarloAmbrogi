@@ -27,6 +27,70 @@
     return $result;
   }
 
+  //Translate quickly some useful strings
+  function translateQuickly($textToTranslate,$langAbbrv){
+    switch($textToTranslate){
+      case "Artisan":
+        if($langAbbrv == "en"){
+          return "Artisan";
+        }
+        if($langAbbrv == "it"){
+          return "Artigiano";
+        }
+      case "No category":
+        if($langAbbrv == "en"){
+          return "No category";
+        }
+        if($langAbbrv == "it"){
+          return "Nessuna categoria";
+        }
+      case "Jewerly":
+        if($langAbbrv == "en"){
+          return "Jewerly";
+        }
+        if($langAbbrv == "it"){
+          return "Gioielleria";
+        }
+      case "Home decoration":
+        if($langAbbrv == "en"){
+          return "Home decoration";
+        }
+        if($langAbbrv == "it"){
+          return "Decorazioni per la casa";
+        }
+      case "Pottery":
+        if($langAbbrv == "en"){
+          return "Pottery";
+        }
+        if($langAbbrv == "it"){
+          return "Ceramica";
+        }
+      case "Teppiches":
+        if($langAbbrv == "en"){
+          return "Teppiches";
+        }
+        if($langAbbrv == "it"){
+          return "Tappeti";
+        }
+      case "Bedware Bathroomware":
+        if($langAbbrv == "en"){
+          return "Bedware / Bathroomware";
+        }
+        if($langAbbrv == "it"){
+          return "Coperte / asciugamani";
+        }
+      case "Artisan craft":
+        if($langAbbrv == "en"){
+          return "Artisan craft";
+        }
+        if($langAbbrv == "it"){
+          return "Costruzioni artigianali";
+        }
+      default:
+        return "";
+    }
+  }
+
   //Check if this email address is valid
   function isValidEmail($email){
     $regex = "/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/";
@@ -581,6 +645,33 @@
   //Replace a specific string of characters with br
   function replaceSpecificStringNewLine($str){
     return str_replace(" ahreibeuwfbefbnFIERFBYRYNDSJSHnidebfebn ","<br>",$str);
+  }
+
+  //Do a get request to a website
+  function doGetRequest($url,$part = 1){
+    $emulationConnection = true;//should be false (else emulation via client js)
+    if($emulationConnection == false){
+      $urlForCurl = $url;
+      $curlSES=curl_init();
+      curl_setopt($curlSES,CURLOPT_URL,$urlForCurl);
+      curl_setopt($curlSES,CURLOPT_RETURNTRANSFER,true);
+      curl_setopt($curlSES,CURLOPT_HEADER, false);
+      $result=curl_exec($curlSES);
+      curl_close($curlSES);
+      return $result;
+    } else {
+      ?>
+        <script>
+          let requestUrl<?= $part ?> = "<?= $url ?>";
+          let request<?= $part ?> = new XMLHttpRequest();
+          request<?= $part ?>.open("GET", requestUrl<?= $part ?>);
+          //request.responseType = "json";//not json but empty file
+          request<?= $part ?>.send();
+          request<?= $part ?>.onload = function(){
+          }
+        </script>
+      <?php
+    }
   }
 
 ?>

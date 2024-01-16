@@ -110,7 +110,7 @@ $voci = $database->sel_data("Tags", $condizionePerTraduzioniLinguistiche); // tr
 
 foreach ($voci as $voce) {
     $voceCheStoPerAggiungere = $voce['Name'];
-    $vociPermesseDaWeCraft = ["Artisan","Nonee","Jewerly","Home decoration","Pottery","Teppiches","Bedware Bathroomware","Artisan craft"];
+    $vociPermesseDaWeCraft = ["Artisan","No category","Jewerly","Home decoration","Pottery","Teppiches","Bedware Bathroomware","Artisan craft"];
     if(in_array($voceCheStoPerAggiungere,$vociPermesseDaWeCraft)){
         $tid = $voce['TagID'];
         $label = "<span>" . $voce[$language] . "</span>";

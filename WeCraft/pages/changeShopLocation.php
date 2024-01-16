@@ -40,9 +40,17 @@
       } else if(strlen($insertedAddress) > 49){
         addParagraph(translate("The address is too long"));
       } else {
+        //Old data
+        $artisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+        $oldAddress = $artisanInfos["address"];
+        $oldLatitude = $artisanInfos["latitude"];
+        $oldLongitude = $artisanInfos["longitude"];
         //Update shop location
         updateShopLocationOfAnArtisan($_SESSION["userId"],$insertedLatitude,$insertedLongitude,$insertedAddress);
         addParagraph(translate("Done"));
+        //sync also on Magis
+        $idOfThisArtisan = $_SESSION["userId"];
+        doGetRequest(MagisBaseUrl."apiForWeCraft/changeLocationPoi.php?password=".urlencode(PasswordCommunicationWithMagis)."&oldAddress=".urlencode($oldAddress)."&oldLatitude=".urlencode($oldLatitude)."&oldLongitude=".urlencode($oldLongitude)."&address=".urlencode($insertedAddress)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($longitude));
       }
     } else {
       //Content of the page change shop location

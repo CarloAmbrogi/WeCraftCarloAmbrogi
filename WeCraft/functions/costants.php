@@ -29,4 +29,10 @@
   //Days in a week
   define('daysInAWeek', ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]);
 
+  //Magis base url
+  define('MagisBaseUrl', "http://carloambrogipolimi.altervista.org/Magis/");
+
+  //Password communication with magis
+  define('PasswordCommunicationWithMagis', "abcde");
+
 ?>

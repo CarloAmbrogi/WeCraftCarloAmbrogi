@@ -6,7 +6,8 @@
 
   //Change name and surname
   doInitialScripts();
-  if(getKindOfTheAccountInUse() == "Guest"){
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  if($kindOfTheAccountInUse == "Guest"){
     //This page is not visible if you are a guest
     upperPartOfThePage(translate("Account"),"");
     addParagraph(translate("This page is not visible without being logged in"));
@@ -33,6 +34,13 @@
         //Update name and surname
         updateNameAndSurnameOfAnUser($_SESSION["userId"],$insertedName,$insertedSurname);
         addParagraph(translate("Done"));
+        if($kindOfTheAccountInUse == "Artisan"){
+          //sync also on Magis
+          $artisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+          $titleMetadata = $artisanInfos["shopName"]." (".$insertedName." ".$insertedSurname.")";
+          $idOfThisArtisan = $_SESSION["userId"];
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeTitleMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan));
+        }
       }
     } else {
       //Content of the page change name and surname

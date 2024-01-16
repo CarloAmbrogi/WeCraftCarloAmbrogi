@@ -6,7 +6,8 @@
 
   //Delete icon
   doInitialScripts();
-  if(getKindOfTheAccountInUse() == "Guest"){
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  if($kindOfTheAccountInUse == "Guest"){
     //This page is not visible if you are a guest
     upperPartOfThePage(translate("Account"),"");
     addParagraph(translate("This page is not visible without being logged in"));
@@ -23,6 +24,12 @@
         //Delete your icon
         deleteIconOfAnUser($_SESSION["userId"]);
         addParagraph(translate("Done"));
+        if($kindOfTheAccountInUse == "Artisan"){
+          //sync also on Magis
+          $imageUrl = genericUserImage;
+          $idOfThisArtisan = $_SESSION["userId"];
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeImageUrlMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&imageUrl=".urlencode($imageUrl)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan));  
+        }
       }
     } else {
       //Content of the page delete icon

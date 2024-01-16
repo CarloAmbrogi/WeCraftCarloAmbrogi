@@ -47,6 +47,11 @@
           //Edit general info of this product
           updateGeneralInfoOfAProduct($insertedProductId,$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity);
           addParagraph(translate("Done"));
+          //sync also on Magis
+          $titleMetadata = $insertedName;
+          $idOfThisProduct = $insertedProductId;
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeTitleMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct),1);
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeDescriptionMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct),2);
         } else {
           addParagraph(translate("You cant modify this product"));
         }

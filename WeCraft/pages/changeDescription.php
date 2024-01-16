@@ -26,12 +26,15 @@
       } else if(strlen($insertedDescription) > 2046){
         addParagraph(translate("The description is too long"));
       } else {
-        //Update name and surname
+        //Update description
         if($kindOfTheAccountInUse == "Designer"){
           updateDescriptionOfADesigner($_SESSION["userId"],$insertedDescription);
         }
         if($kindOfTheAccountInUse == "Artisan"){
           updateDescriptionOfAnArtisan($_SESSION["userId"],$insertedDescription);
+          //sync also on Magis
+          $idOfThisArtisan = $_SESSION["userId"];
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeDescriptionMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan));
         }
         addParagraph(translate("Done"));
       }

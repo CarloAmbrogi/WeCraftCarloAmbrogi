@@ -27,6 +27,13 @@
           //Edit the category of this product
           updateCategoryOfAProduct($insertedProductId,$insertedCategory);
           addParagraph(translate("Done"));
+          //sync also on Magis
+          $tag = $insertedCategory;
+          if($tag == "Nonee"){
+            $tag = "No category";
+          }
+          $idOfThisProduct = $insertedProductId;
+          doGetRequest(MagisBaseUrl."apiForWeCraft/changeTagMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&tag=".urlencode($tag)."&tagEn=".urlencode(translateQuickly($tag,"en"))."&tagIt=".urlencode(translateQuickly($tag,"it"))."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct));
         } else {
           addParagraph(translate("You cant modify this product"));
         }

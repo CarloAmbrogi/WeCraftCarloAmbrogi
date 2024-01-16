@@ -18,7 +18,7 @@
     src="http://carloambrogipolimi.altervista.org/Magis/home/viewMapForWeCraft.php" onload="resizeIframe(this)"></iframe></div>
     <script>
       function resizeIframe(obj) {
-        obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+        //obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
       }
     </script>
   <?php

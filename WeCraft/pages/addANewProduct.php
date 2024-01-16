@@ -88,16 +88,55 @@
               $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
               addANewProductWithIcon($_SESSION["userId"],$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedQuantity,$insertedCategory);
               addParagraph(translate("Your data has been loaded correctly"));
+              //sync also on Magis
+              $titleMetadata = $insertedName;
+              $idOfThisProduct = getIdOfLastProductWithThisNameAndSurname($insertedName);
+              $imageUrl = blobToFile($fileExtension,$imgData);
+              $artisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+              $address = $artisanInfos["address"];
+              $latitude = $artisanInfos["latitude"];
+              $longitude = $artisanInfos["longitude"];
+              $tag = $insertedCategory;
+              if($tag == "Nonee"){
+                $tag = "No category";
+              }
+              doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct)."&address=".urlencode($address)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($latitude)."&longitude=".urlencode($longitude)."&tag=".urlencode($tag)."&tagEn=".urlencode(translateQuickly($tag,"en"))."&tagIt=".urlencode(translateQuickly($tag,"it"))."&shopName=".urlencode($insertedShopName));
             }
             if($insertCorrectlyTheIcon == false){
               //add the new product without file icon (because of error in the icon)
               addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
               addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change the icon later"));
+              //sync also on Magis
+              $titleMetadata = $insertedName;
+              $idOfThisProduct = getIdOfLastProductWithThisNameAndSurname($insertedName);
+              $imageUrl = genericProductImage;
+              $artisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+              $address = $artisanInfos["address"];
+              $latitude = $artisanInfos["latitude"];
+              $longitude = $artisanInfos["longitude"];
+              $tag = $insertedCategory;
+              if($tag == "Nonee"){
+                $tag = "No category";
+              }
+              doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct)."&address=".urlencode($address)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($latitude)."&longitude=".urlencode($longitude)."&tag=".urlencode($tag)."&tagEn=".urlencode(translateQuickly($tag,"en"))."&tagIt=".urlencode(translateQuickly($tag,"it"))."&shopName=".urlencode($insertedShopName));
             }
           } else {
             //add the new product without file icon
             addParagraph(translate("Your data has been loaded correctly"));
             addANewProductWithoutIcon($_SESSION["userId"],$insertedName,$insertedDescription,$insertedPrice,$insertedQuantity,$insertedCategory);
+            //sync also on Magis
+            $titleMetadata = $insertedName;
+            $idOfThisProduct = getIdOfLastProductWithThisNameAndSurname($insertedName);
+            $imageUrl = genericProductImage;
+            $artisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+            $address = $artisanInfos["address"];
+            $latitude = $artisanInfos["latitude"];
+            $longitude = $artisanInfos["longitude"];
+            $tag = $insertedCategory;
+            if($tag == "Nonee"){
+              $tag = "No category";
+            }
+            doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/product.php?id=".$idOfThisProduct)."&address=".urlencode($address)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($latitude)."&longitude=".urlencode($longitude)."&tag=".urlencode($tag)."&tagEn=".urlencode(translateQuickly($tag,"en"))."&tagIt=".urlencode(translateQuickly($tag,"it"))."&shopName=".urlencode($insertedShopName));
           }
           //Show button to return to your artisan page
           addParagraph(translate("Now you can optionaly edit the product, for example to add tags and images and you can start to sell this product"));

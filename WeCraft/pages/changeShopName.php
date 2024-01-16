@@ -29,6 +29,11 @@
         //Update shop name
         updateShopNameOfAnArtisan($_SESSION["userId"],$insertedShopName);
         addParagraph(translate("Done"));
+        //sync also on Magis
+        $idOfThisArtisan = $_SESSION["userId"];
+        $artisanInfosUser = obtainUserInfos($_SESSION["userId"]);
+        $titleMetadata = $insertedShopName." (".$artisanInfosUser["name"]." ".$artisanInfosUser["surname"].")";
+        doGetRequest(MagisBaseUrl."apiForWeCraft/changeTitleMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan));
       }
     } else {
       //Content of the page change shop name
