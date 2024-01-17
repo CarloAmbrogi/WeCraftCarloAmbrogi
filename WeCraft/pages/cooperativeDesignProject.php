@@ -44,6 +44,7 @@
             if($projectInfos["claimedByThisArtisan"] == $_SESSION["userId"]){
               //Options in case you are the owner
               addButtonLink(translate("Add partecipants"),"./addPartecipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Coordinate collaboration"),"./");
               addButtonLink(translate("Delete this collaboration"),"./deleteCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
             } else {
               //Options in case you aren't the owner
