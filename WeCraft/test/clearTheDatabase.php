@@ -6,6 +6,7 @@
     $connection = mysqli_connect("localhost","carloambrogipolimi","","my_carloambrogipolimi");
     mysqli_set_charset($connection, "utf8mb4");
 
+    //Tables of WeCraft
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Advertisement`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Artisan`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ContentPurchase`");
@@ -28,6 +29,14 @@
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ProjectImages`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Messages`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ReadMessage`");
+
+    //Tables of Magis
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Metadata`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`MetadataTags`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Ontology`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`POI`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Users`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Tags`");
     
   }
 

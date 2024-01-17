@@ -52,5 +52,90 @@
 (24, 2, 'png', 0x89504e470d0a1a0a0000000d494844520000000f0000000f08030000000c0865780000000467414d410000b18f0bfc6105000000206348524d00007a26000080840000fa00000080e8000075300000ea6000003a98000017709cba513c000001b0504c5445fffffffdfefbdcf2b2f0f04dfff332fded6cfef5d7fefffdcbec988bd513d8e600fff000fbd80afbd240fef4cfc9eec178d1167ed100c5e200ffee01fbd20efac70ffacd53fef7eef9fdf957ce582cbe0079d000b1dd00feeb02fbce10f9c115f7a622fcdaaad5f3d419bc1803b5004ec600a0d900f8e604fac912f8ae1df79d20f9bd66fffdfaa9e7bf03b81e00b50213b9007dd100f0df06faba19f7a123f79c20f9a03dfef1e58be3d900c09a01bd6b00b83136c40adbcf0bfa9f1ff8871dfa7316fb7022fee1d181e0d700c2af01c4b100bfa909ac8aae7b3dfe6211fb6212fb6211fb691dfedcca8be2da00b9b001a3b60088be1764c29a2d8cfa2c17fe3e06fc510cfb6920fee0d1a9d9e8037ec0006fc30968c23848bb8d28a8e22759fe2504ff2600fe4f26ffeae3d4e6f5187bc9006cc22457be493eb88524abce288cef2734ff2100fe664dfff9f8f9fbfd569fd7125ebf384aba5139b77d22adc42895da2877f82718ffaa9ac2d8ef415bc03946b95a33b57821b0b92797d3268ce75d89ffeeeafefefeadb2e24953be612ab3731eb0aa249cdb50a2f5d1e7fbfcfec2c3e89464c78c48bfbf78c6f8d9ea0e66a0e800000001624b47440088051d48000000097048597300000ec400000ec401952b0e1b0000000774494d4507e70c0d0a29173a0d2bbc000000016f724e5401cfa2779a000000b64944415408d763600002462666165636061860e7e0e4e2e6e1e583f1f9050485844544c5c4215c09492969195939790545085f495945554d5d43534b5b07ccd7d5d3373034323631353307f32d2cadac6d6cedec1d1c9dc07c67175737770f4f2f6f1f5f30dfcf3f2030283824342c3c02cc8f8c8a8e898d8b4f484c4a06f35352d3d23332b3b27372f3c0fcfc82c2a2e292d2b2f20aa8fb2aabaa6b6aebea1b1aa1fca6e696d6b6f68e4eb887baba7b7afbfac14c002e1d2839550b59a10000002574455874646174653a63726561746500323032332d31322d31335431303a34313a32312b30303a3030ac1f7cb70000002574455874646174653a6d6f6469667900323032332d31322d31335431303a34313a32312b30303a3030dd42c40b0000000049454e44ae426082),
 (25, 2, 'png', 0x89504e470d0a1a0a0000000d494844520000000f0000000f08030000000c0865780000000467414d410000b18f0bfc6105000000206348524d00007a26000080840000fa00000080e8000075300000ea6000003a98000017709cba513c000002a6504c54454520194b591f498e1f49c31e4df61e75f51e79c11f798d1f74581e7b241eec231ef9571ef88d1efac420fcf7194e2e4455624a54934a55c54a59f4497df34b82c4498193497c624b823149ea314af5614af59349f8c84bfbf7454e2c6354616b53936951c46956f4697cf46c7fc46c7f936a7a6168812f68e62f69f46068f49369f7c76bfbf7674e2c8452618851938b51c68b55f78c7cf68b7ec58b7e938b7a5f89812e87eb2e8af85e8df8928cf9c78cfdf7894f2ca65462aa5394ab53c6af57f6af7cf6ae7ec6ae7f94aa7d60ab812fa9ea30aaf660adf693acf8c7adfcf7ad4f2bc45460c85294ca51c7cc55f6ce7cf5cf80c6cd8094c87d61c68130c6ea30caf660ccf593cef8c8d1fcf8ce522ce55761e45593e756c6ec58f6ef7af5ef7cc5eb7b93e87760e47f2fe1ed2ee8fa5eeafa92eefdc7f2fff8f33a2cf04061f13f94f53dc6f746f5fa8ef7fc94c6f99293f69060f2952ff0db2ef5e55ef7e592fae8c8fce9f8fe232de82961e82993ec26c6ed30f6eda4f7f1aec7eeac94ebaa61eaad2fe8ca2fe9cd5feccf92efd0c8f0d0f7f3222ac52860c82993cb26c6cc31f7cda1f7cfa9c5cda692caa35ec8a52cc7cb2bc8d05ccad190cdd3c5cfd3f6cf2229a5285fa92993aa25c6ab32f5aea1f6aeabc6ada793aca35eaba52daaca2baad15dabd290acd3c5afd2f6ad262d852d60872e928b2ac58c34f58ca2f68cadc68da9948da5608aa63088cb2f89d15f8bd1928cd3c78cd4f689262c602c61672c91692ac16a33f36aa2f46aabc66aa7946ba3606ba22f69c62f68cc5f68ce926bd2c66bd2f567282e432e61492e93492bc64a36f44aa3f64bacc649a8944ca46249a63249c93149d06149d2924bd2c64cd3f54719211821571f1f8d1d1dc41f29f71e9df71fa6c41fa48e1ea0581ea3241dc9231ed0561fd08c1ed1c321d2f619ffffffba9c602200000001624b4744e15f08cfa6000000097048597300000ec300000ec301c76fa8640000000774494d4507e70c0d0a2a027cfd9c94000000016f724e5401cfa2779a000000fb4944415408d701f0000fff00000102030405060708090a0b0c0d0e000f101112131415161718191a1b1c1d001e1f202122232425262728292a2b2c002d2e2f303132333435363738393a3b003c3d3e3f404142434445464748494a004b4c4d4e4f50515253545556575859005a5b5c5d5e5f60616263646566676800696a6b6c6d6e6f70717273747576770078797a7b7c7d7e7f80818283848586008788898a8b8c8d8e8f90919293949500969798999a9b9c9d9e9fa0a1a2a3a400a5a6a7a8a9aaabacadaeafb0b1b2b300b4b5b6b7b8b9babbbcbdbebfc0c1c200c3c4c5c6c7c8c9cacbcccdcecfd0d100d2d3d4d5d6d7d8d9dadbdcdddedfe0b54a6271a7dabbd20000004174455874636f6d6d656e740043524541544f523a2067642d6a7065672076312e3020287573696e6720494a47204a50454720763830292c207175616c697479203d2037350acd8d05c80000002574455874646174653a63726561746500323032332d31322d31335431303a34323a30312b30303a3030050dc0c90000002574455874646174653a6d6f6469667900323032332d31322d31335431303a34323a30312b30303a3030745078750000000049454e44ae426082);");
 
+//FROM HERE ALSO MAGIS TABLES
+
+mysqli_query($connection, "INSERT INTO `Metadata` (`MediaCode`, `Title`, `Description`, `URL`, `Type`, `PublicationDate`, `StartDate`, `EndDate`, `Location`, `TagsFound`, `TrainingTags`, `ImageURL`, `ProviderName`, `ProviderURL`, `ProviderIcon`, `CodePOI`, `TrainingText`, `Usage`, `TagsAlgorithm`) VALUES
+(NULL, 'Alla scoperta del Ferragosto al Civico Museo Archeologico', 'Alla scoperta del Ferragosto al Civico Museo Archeologico', 'https://www.milanotoday.it/eventi/cosa-fare-milano-ferragosto-2021.html', 'link', '2021-08-09 14:00:00', '2021-08-15 11:00:00', '2021-08-15 00:00:00', 'Corso Magenta 15', 'feste\r\nmusei\r\nferragosto\r\nmilano\r\neventi\r\n', 'news; culture; museum ', 'https://www.milanotoday.it/~media/horizontal-hi/34130978343816/civico-museo-archeologico-3.jpg', 'MilanoToday', 'https://milanotoday.it', '', 1, 'Alla scoperta del Ferragosto al Civico Museo Archeologico feste\nmusei\nferragosto\nmilano\neventi\n cosa fare milano ferragosto 2021 ', 'Training', 'Museum');");
+
+mysqli_query($connection, "INSERT INTO `MetadataTags` (`MediaCode`, `TagID`, `Source`) VALUES
+(1, 1, 'SVM_02');");
+
+mysqli_query($connection, "INSERT INTO `Ontology` (`RelationID`, `Tag1`, `Tag2`, `Relation`) VALUES
+(NULL, 'Concert', 'PublicEvent', 'is_a'),
+(NULL, 'Concert', 'Music', 'related_to'),
+(NULL, 'University', 'Culture', 'is_a'),
+(NULL, 'Discovery', 'Culture', 'is_a'),
+(NULL, 'PublicEvent', 'Culture', 'is_a'),
+(NULL, 'Interview', 'Discovery', 'related_to'),
+(NULL, 'Interactive activity', 'Discovery', 'related_to'),
+(NULL, 'Interactive activity', 'Museum', 'related_to'),
+(NULL, 'Museum', 'PublicEvent', 'is_a'),
+(NULL, 'Cinema', 'PublicEvent', 'is_a'),
+(NULL, 'Theatre', 'PublicEvent', 'is_a'),
+(NULL, 'Infrastructures & Transports', 'Constructions', 'related_to'),
+(NULL, 'Infrastructures & Transports', 'Warning', 'related_to'),
+(NULL, 'Infrastructures & Transports', 'Transports', 'related_to'),
+(NULL, 'Construction site', 'Constructions', 'is_a'),
+(NULL, 'Roadwork', 'Constructions', 'is_a'),
+(NULL, 'Cycle path', 'Constructions', 'is_a'),
+(NULL, 'Road', 'Transports', 'is_a'),
+(NULL, 'Railway', 'Transports', 'is_a'),
+(NULL, 'Tram', 'Transports', 'is_a'),
+(NULL, 'Underground', 'Transports', 'is_a'),
+(NULL, 'Cycle path', 'Transports', 'is_a'),
+(NULL, 'Cycle path', 'Road', 'related_to'),
+(NULL, 'Roadwork', 'Transports', 'related_to'),
+(NULL, 'Warning', 'Transports', 'related_to'),
+(NULL, 'Warning', 'Constructions', 'related_to'),
+(NULL, 'Crime', 'Local news', 'is_a'),
+(NULL, 'Accident', 'Crime', 'is_a'),
+(NULL, 'Accident', 'Warning', 'related_to'),
+(NULL, 'Accident', 'Infrastructures & Transports', 'related_to'),
+(NULL, 'New opening', 'Local news', 'is_a'),
+(NULL, 'New opening', 'PublicEvent', 'related_to'),
+(NULL, 'Politics', 'Local news', 'is_a'),
+(NULL, 'Commemoration', 'Local news', 'is_a'),
+(NULL, 'Commemoration', 'Politics', 'related_to');");
+
+mysqli_query($connection, "INSERT INTO `POI` (`CodePOI`, `Name`, `Latitude`, `Longitude`, `Elevation`, `TypePOI`, `Surface`, `Address`) VALUES
+(NULL, 'Civico Museo Archeologico, Milano', '45.47088839', '9.20491554', 0, 'Building', 0, 'Corso Magenta, 15, 20123 Milano MI');");
+
+mysqli_query($connection, "INSERT INTO `Users` (`userid`, `username`, `password`, `type`) VALUES
+(NULL, 'DEIB', 'a', 'user'),
+(NULL, 'GEO', 'a', 'user');");
+
+mysqli_query($connection, "INSERT INTO `Tags` (`TagID`, `Context`, `Name`, `ExprUK`, `ExprIT`) VALUES
+(NULL, 'News', 'Cinema', 'Cinema', 'Cinema');");
+
+//Add on Magis tables based on WeCraft
+
+mysqli_query($connection, "INSERT INTO `Metadata` (`MediaCode`, `Title`, `Description`, `URL`, `Type`, `PublicationDate`, `StartDate`, `EndDate`, `Location`, `TagsFound`, `TrainingTags`, `ImageURL`, `ProviderName`, `ProviderURL`, `ProviderIcon`, `CodePOI`, `TrainingText`, `Usage`, `TagsAlgorithm`) VALUES
+(2, 'TuttoShop (Indiano ArtigianTutto)', 'I\'m the artisan number 1, from me you can buy 2 objects', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/artisan.php?id=3', 'link', '2024-01-16 19:19:38', '2024-01-16 19:19:38', '2024-01-16 19:19:38', 'via', 'WeCraft', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/temp/b16290770be394352d8273ea0c606f0c03630232.png', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/index.php', '', 2, '', 'WeCraft', 'WeCraft'),
+(3, 'ArtisticShop (Arte Igiano)', 'I sell just 1 item but I\'m at least the artisan number 2. Sadly my shop is always close', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/artisan.php?id=4', 'link', '2024-01-16 19:19:38', '2024-01-16 19:19:38', '2024-01-16 19:19:38', 'via delle vie', 'WeCraft', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/temp/ed6da55586ca89c28ebeb2d10c683952c8e040c2.png', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/index.php', '', 3, '', 'WeCraft', 'WeCraft'),
+(4, 'Table', 'A confortable table', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/product.php?id=39', 'link', '2024-01-16 19:38:13', '2024-01-16 19:38:13', '2024-01-16 19:38:13', 'via', 'WeCraft', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/temp/e950a6c83412338204271127c84773e47c201ab5.png', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/index.php', '', 2, '', 'WeCraft', 'WeCraft'),
+(5, 'Generic useless product', 'A generic and useless product which moreover is not available', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/product.php?id=40', 'link', '2024-01-16 19:38:13', '2024-01-16 19:38:13', '2024-01-16 19:38:13', 'via delle vie', 'WeCraft', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/temp/245b80974601f4851e74f476d9573b8bfa9f4226.png', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/index.php', '', 3, '', 'WeCraft', 'WeCraft'),
+(6, 'Ring', 'A nice ring', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/product.php?id=38', 'link', '2024-01-16 19:38:13', '2024-01-16 19:38:13', '2024-01-16 19:38:13', 'via', 'WeCraft', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/temp/60152adf57bbd7bdf6d1b92c7df0ae069e181a61.png', 'WeCraft', 'http://carloambrogipolimi.altervista.org/WeCraft/pages/index.php', '', 2, '', 'WeCraft', 'WeCraft');");
+
+mysqli_query($connection, "INSERT INTO `MetadataTags` (`MediaCode`, `TagID`, `Source`) VALUES
+(2, 2, 'SVM_02'),
+(3, 2, 'SVM_02'),
+(4, 5, 'SVM_02'),
+(5, 3, 'SVM_02'),
+(6, 6, 'SVM_02');");
+
+mysqli_query($connection, "INSERT INTO `Tags` (`TagID`, `Context`, `Name`, `ExprUK`, `ExprIT`) VALUES
+(2, 'WeCraft', 'Artisan', 'Artisan', 'Artigiano'),
+(3, 'WeCraft', 'No category', 'No category', 'Nessuna categoria'),
+(4, 'WeCraft', 'Bedware Bathroomware', 'Bedware / Bathroomware', 'Coperte / asciugamani'),
+(5, 'WeCraft', 'Home decoration', 'Home decoration', 'Decorazioni per la casa'),
+(6, 'WeCraft', 'Jewerly', 'Jewerly', 'Gioielleria');");
+
+mysqli_query($connection, "INSERT INTO `POI` (`CodePOI`, `Name`, `Latitude`, `Longitude`, `Elevation`, `TypePOI`, `Surface`, `Address`) VALUES
+(2, 'TuttoShop (Indiano ArtigianTutto)', '1.3', '1.5', 0, 'PoiWeCraft', 0, 'via'),
+(3, 'ArtisticShop (Arte Igiano)', '3.3', '3.5', 0, 'PoiWeCraft', 0, 'via delle vie');");
+
+//Generation temp images used on Magis
+//Copy from folder tempespdb
+
   }
 ?>

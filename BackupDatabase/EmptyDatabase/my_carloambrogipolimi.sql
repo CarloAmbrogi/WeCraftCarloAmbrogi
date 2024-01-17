@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Gen 12, 2024 alle 11:57
+-- Creato il: Gen 17, 2024 alle 12:50
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -174,13 +174,6 @@ CREATE TABLE `Metadata` (
   `TagsAlgorithm` varchar(250) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='This table includes multimedia files and their metadata';
 
---
--- Dump dei dati per la tabella `Metadata`
---
-
-INSERT INTO `Metadata` (`MediaCode`, `Title`, `Description`, `URL`, `Type`, `PublicationDate`, `StartDate`, `EndDate`, `Location`, `TagsFound`, `TrainingTags`, `ImageURL`, `ProviderName`, `ProviderURL`, `ProviderIcon`, `CodePOI`, `TrainingText`, `Usage`, `TagsAlgorithm`) VALUES
-(6, 'Alla scoperta del Ferragosto al Civico Museo Archeologico', 'Alla scoperta del Ferragosto al Civico Museo Archeologico', 'https://www.milanotoday.it/eventi/cosa-fare-milano-ferragosto-2021.html', 'link', '2021-08-09 14:00:00', '2021-08-15 11:00:00', '2021-08-15 00:00:00', 'Corso Magenta 15', 'feste\r\nmusei\r\nferragosto\r\nmilano\r\neventi\r\n', 'news; culture; museum ', 'https://www.milanotoday.it/~media/horizontal-hi/34130978343816/civico-museo-archeologico-3.jpg', 'MilanoToday', 'https://milanotoday.it', '', 1, 'Alla scoperta del Ferragosto al Civico Museo Archeologico feste\nmusei\nferragosto\nmilano\neventi\n cosa fare milano ferragosto 2021 ', 'Training', 'Museum');
-
 -- --------------------------------------------------------
 
 --
@@ -192,13 +185,6 @@ CREATE TABLE `MetadataTags` (
   `TagID` int NOT NULL,
   `Source` varchar(24) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dump dei dati per la tabella `MetadataTags`
---
-
-INSERT INTO `MetadataTags` (`MediaCode`, `TagID`, `Source`) VALUES
-(6, 102, 'SVM_02');
 
 -- --------------------------------------------------------
 
@@ -213,47 +199,6 @@ CREATE TABLE `Ontology` (
   `Relation` varchar(24) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='This table represents the relationships between tags';
 
---
--- Dump dei dati per la tabella `Ontology`
---
-
-INSERT INTO `Ontology` (`RelationID`, `Tag1`, `Tag2`, `Relation`) VALUES
-(1, 'Concert', 'PublicEvent', 'is_a'),
-(2, 'Concert', 'Music', 'related_to'),
-(3, 'University', 'Culture', 'is_a'),
-(4, 'Discovery', 'Culture', 'is_a'),
-(5, 'PublicEvent', 'Culture', 'is_a'),
-(6, 'Interview', 'Discovery', 'related_to'),
-(7, 'Interactive activity', 'Discovery', 'related_to'),
-(8, 'Interactive activity', 'Museum', 'related_to'),
-(9, 'Museum', 'PublicEvent', 'is_a'),
-(10, 'Cinema', 'PublicEvent', 'is_a'),
-(11, 'Theatre', 'PublicEvent', 'is_a'),
-(12, 'Infrastructures & Transports', 'Constructions', 'related_to'),
-(13, 'Infrastructures & Transports', 'Warning', 'related_to'),
-(14, 'Infrastructures & Transports', 'Transports', 'related_to'),
-(15, 'Construction site', 'Constructions', 'is_a'),
-(16, 'Roadwork', 'Constructions', 'is_a'),
-(17, 'Cycle path', 'Constructions', 'is_a'),
-(18, 'Road', 'Transports', 'is_a'),
-(19, 'Railway', 'Transports', 'is_a'),
-(20, 'Tram', 'Transports', 'is_a'),
-(21, 'Underground', 'Transports', 'is_a'),
-(22, 'Cycle path', 'Transports', 'is_a'),
-(23, 'Cycle path', 'Road', 'related_to'),
-(24, 'Roadwork', 'Transports', 'related_to'),
-(25, 'Warning', 'Transports', 'related_to'),
-(26, 'Warning', 'Constructions', 'related_to'),
-(27, 'Crime', 'Local news', 'is_a'),
-(28, 'Accident', 'Crime', 'is_a'),
-(29, 'Accident', 'Warning', 'related_to'),
-(30, 'Accident', 'Infrastructures & Transports', 'related_to'),
-(31, 'New opening', 'Local news', 'is_a'),
-(32, 'New opening', 'PublicEvent', 'related_to'),
-(33, 'Politics', 'Local news', 'is_a'),
-(34, 'Commemoration', 'Local news', 'is_a'),
-(35, 'Commemoration', 'Politics', 'related_to');
-
 -- --------------------------------------------------------
 
 --
@@ -265,18 +210,11 @@ CREATE TABLE `POI` (
   `Name` varchar(250) NOT NULL,
   `Latitude` decimal(10,8) NOT NULL,
   `Longitude` decimal(11,8) NOT NULL,
-  `Elevation` int NOT NULL,
-  `TypePOI` varchar(30) NOT NULL,
-  `Surface` int NOT NULL,
-  `Address` varchar(100) NOT NULL
+  `Elevation` int NOT NULL DEFAULT '0',
+  `TypePOI` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'TypePOI',
+  `Surface` int NOT NULL DEFAULT '0',
+  `Address` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'Address'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='This table includes the Points of Interest identified on the map';
-
---
--- Dump dei dati per la tabella `POI`
---
-
-INSERT INTO `POI` (`CodePOI`, `Name`, `Latitude`, `Longitude`, `Elevation`, `TypePOI`, `Surface`, `Address`) VALUES
-(1, 'Civico Museo Archeologico, Milano', '45.47088839', '9.20491554', 0, 'Building', 0, 'Corso Magenta, 15, 20123 Milano MI');
 
 -- --------------------------------------------------------
 
@@ -448,13 +386,6 @@ CREATE TABLE `Tags` (
   `ExprIT` varchar(64) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='This table includes the classification tags related to the media';
 
---
--- Dump dei dati per la tabella `Tags`
---
-
-INSERT INTO `Tags` (`TagID`, `Context`, `Name`, `ExprUK`, `ExprIT`) VALUES
-(102, 'News', 'Cinema', 'Cinema', 'Cinema');
-
 -- --------------------------------------------------------
 
 --
@@ -515,14 +446,6 @@ CREATE TABLE `Users` (
   `password` varchar(24) NOT NULL,
   `type` varchar(12) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dump dei dati per la tabella `Users`
---
-
-INSERT INTO `Users` (`userid`, `username`, `password`, `type`) VALUES
-(1, 'DEIB', 'a', 'user'),
-(2, 'GEO', 'a', 'user');
 
 --
 -- Indici per le tabelle scaricate
@@ -711,19 +634,19 @@ ALTER TABLE `Messages`
 -- AUTO_INCREMENT per la tabella `Metadata`
 --
 ALTER TABLE `Metadata`
-  MODIFY `MediaCode` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=536;
+  MODIFY `MediaCode` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Ontology`
 --
 ALTER TABLE `Ontology`
-  MODIFY `RelationID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `RelationID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `POI`
 --
 ALTER TABLE `POI`
-  MODIFY `CodePOI` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=328;
+  MODIFY `CodePOI` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Product`
@@ -762,6 +685,12 @@ ALTER TABLE `PurchasesCronology`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `Tags`
+--
+ALTER TABLE `Tags`
+  MODIFY `TagID` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `User`
 --
 ALTER TABLE `User`
@@ -777,7 +706,7 @@ ALTER TABLE `UserImages`
 -- AUTO_INCREMENT per la tabella `Users`
 --
 ALTER TABLE `Users`
-  MODIFY `userid` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `userid` int NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
