@@ -33,9 +33,19 @@
       $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
       $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
       addANewArtisanWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
+      //sync also on Magis
+      $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
+      $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
+      $imageUrl = blobToFile($fileExtension,$imgData);
+      doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
     } else {
       //create account without file icon
       addANewArtisanWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
+      //sync also on Magis
+      $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
+      $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
+      $imageUrl = genericUserImage;
+      doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
     }
     $userId = idUserWithThisEmail($insertedEmail);
     registerEmailVerified($userId);

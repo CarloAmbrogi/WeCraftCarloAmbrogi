@@ -18,6 +18,7 @@
       $userInfos = obtainUserInfos($userId);
       $nameAndSurname = $userInfos["name"]." ".$userInfos["surname"];
       //Show image
+      $fileImageToVisualize = genericUserImage;
       if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
         $fileImageToVisualize = blobToFile($userInfos["iconExtension"],$userInfos['icon']);
         ?>
@@ -32,6 +33,15 @@
       //Welcome
       addParagraph(translate("Welcome")." ".$nameAndSurname);
       addParagraph(translate("Your email address is verified and now you can return to home and do the log in"));
+      //Check if it is an artisan
+      if(getKindOfThisAccount($userId) == "Artisan"){
+        //sync also on Magis
+        $artisanInfos = obtainArtisanInfos($userId);
+        $titleMetadata = $artisanInfos["shopName"]." (".$nameAndSurname.")";
+        $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($userInfos["name"],$userInfos["surname"]);
+        $imageUrl = $fileImageToVisualize;
+        doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
+      }
     } else {
       addParagraph(translate("Verification code not correct or too time has passed or verification already done"));
     }

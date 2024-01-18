@@ -22,7 +22,7 @@
   if(isset($_GET["id"])){
     if(doesThisProjectExists($_GET["id"])){
       //Check possibility to see this project
-      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"])){
+      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
         addScriptAddThisPageToCronology();
         upperPartOfThePage(translate("Project"),"cookieBack");
         //Real content of this page

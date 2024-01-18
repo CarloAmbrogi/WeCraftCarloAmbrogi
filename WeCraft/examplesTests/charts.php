@@ -4,27 +4,11 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page reserved for the analytics administrator
+  //Page test
   doInitialScripts();
-  if($_SESSION["userId"] == "admin"){
-    upperPartOfThePage(translate("Analytics administrator"),"");
-    addScriptAddThisPageToCronology();
+  if(true){
+    upperPartOfThePage(translate("Test"),"");
     //Content of this page
-
-    //Artisans who have started to sell products of other artisan without having sold at least a certain quantity of their items in last period
-    addParagraph(translate("Artisans who have started to sell products of other artisan without having sold at least a certain quantity of their items in last period"));
-    $minNumItems = 2;
-    $durationLastPeriod = 5184000;
-    $previewArtisansWhoAreOnlyResellingItems = obtainPreviewArtisansWhoArePraticallyOnlyResellingItems($minNumItems,$durationLastPeriod);
-    startCardGrid();
-    foreach($previewArtisansWhoAreOnlyResellingItems as &$singleArtisanPreview){
-      $fileImageToVisualize = genericUserImage;
-      if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
-        $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
-      }
-      addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),"");
-    }
-    endCardGrid();
 
     //general statistics of WeCraft
     ?>
@@ -103,16 +87,14 @@
       </script>
     <?php
 
-    //addLineChart("myId",["Monday","Tuesday","Wednesday"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
-    //addLineChart("myId2",["Monday","Tuesday","Wednesday","pippo"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
-    //addLineChart("myId",["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],["work load","free hours"],[[2, 9, 3, 17, 6, 3, 7],[2, 2, 5, 5, 2, 1, 10]]);
+    addLineChart("myId1",["Monday","Tuesday","Wednesday"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
+    addLineChart("myId2",["Monday","Tuesday","Wednesday","pippo"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
+    addLineChart("myId3",["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],["work load","free hours"],[[2, 9, 3, 17, 6, 3, 7],[2, 2, 5, 5, 2, 1, 10]]);
 
-    //addBarChart("myId3","# of Votes",["Red","Blue","Yellow"],[12,19,3]);
-    //addBarChart("myId4","# of Votes",["Red","Blue","Yellow","Green","Purple","Orange"],[12,19,3,5,2,3]);
+    addBarChart("myId4","# of Votes",["Red","Blue","Yellow"],[12,19,3]);
+    addBarChart("myId5","# of Votes",["Red","Blue","Yellow","Green","Purple","Orange"],[12,19,3,5,2,3]);
 
     //End of this page
-  } else {
-    upperPartOfThePage(translate("Error"),"");
   }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
