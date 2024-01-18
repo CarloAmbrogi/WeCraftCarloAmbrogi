@@ -253,7 +253,7 @@
   function addButtonLinkJsVersion($written,$link){
     ?>
       <div class="row">
-        <button type="button" onclick="window.location='<?= $link ?>';" class="btn btn-primary"
+        <button type="button" onclick="window.location='<?= $link ?>';" class="btn btn-outline-primary"
           style="margin:10px; transform: translateX(-10px);">
           <?= htmlentities($written) ?>
         </button>
@@ -266,7 +266,7 @@
     ?>
       <a href="<?= $link ?>" style="text-decoration: none;">
         <div class="row">
-          <button type="button" class="btn btn-primary"
+          <button type="button" class="btn btn-outline-primary"
             style="margin:10px; transform: translateX(-10px);">
             <?= htmlentities($written) ?>
           </button>

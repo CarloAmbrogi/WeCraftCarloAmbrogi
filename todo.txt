@@ -1,13 +1,6 @@
-Magari scalare gli id nello script relativo all'esportazione del db
 
 Progetti per oggetti personalizzati pubblici ad asta
 
 Magari request big order - special order - l'artigiano dovrà scegliere se accettare o meno anche per capire se può collaborare
-
-cambia estetica tastoni
-
-Statistiche sulle cooperazioni
-
-Grafico collaborazioni quali artigiani sono impegnati con chi quanti
 
 Aggiungere campo motivazione rifiuta artigiano da progetto
