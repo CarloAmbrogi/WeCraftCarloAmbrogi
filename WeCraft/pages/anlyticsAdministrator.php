@@ -26,89 +26,39 @@
     }
     endCardGrid();
 
-    //general statistics of WeCraft
-    ?>
-      <canvas id="myChart1" style="max-width: 500px;"></canvas>
-      <script>
-        let ctx1 = document.getElementById("myChart1").getContext("2d");
-        let myChart1 = new Chart(ctx1, {
-          type: "line",
-          data: {
-            labels: [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday",
-              "Sunday",
-            ],
-            datasets: [
-              {
-                label: "work load",
-                data: [2, 9, 3, 17, 6, 3, 7],
-                backgroundColor: "rgba(153,205,1,0.6)",
-              },
-              {
-                label: "free hours",
-                data: [2, 2, 5, 5, 2, 1, 10],
-                backgroundColor: "rgba(155,153,10,0.6)",
-              },
-            ],
-          },
-        });
-      </script>
-    <?php
+    //General statistics of WeCraft
+    addTitle(translate("General statistics of WeCraft"));
 
-    ?>
-      <canvas id="myChart2" style="max-width: 500px;"></canvas>
-      <script>
-        var ctx2 = document.getElementById("myChart2").getContext('2d');
-        var myChart2 = new Chart(ctx2, {
-          type: 'bar',
-          data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-              label: '# of Votes',
-              data: [12, 19, 3, 5, 2, 3],
-              backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-              ],
-              borderColor: [
-                'rgba(255,99,132,1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-              ],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              yAxes: [{
-                ticks: {
-                  beginAtZero: true
-                }
-              }]
-            }
-          }
-        });
-      </script>
-    <?php
+    //Number of users divided by categories
+    addParagraph(translate("Number of users"));
+    addBarChart("numberOfUsers",translate("Number of users"),[translate("All users"),translate("Customer"),translate("Artisan"),translate("Designer")],[getNumberOfUsers(),getNumberOfCustomers(),getNumberOfArtisans(),getNumberOfDesigners()]);
+    
+    //New users in years
+    addParagraph(translate("New users in years"));
+    addBarChart("numberOfUsersYear",translate("New users in years"),["2023","2024","2025","2026"],[numberNewUsersYear(2023),numberNewUsersYear(2024),numberNewUsersYear(2025),numberNewUsersYear(2026)]);
 
-    //addLineChart("myId",["Monday","Tuesday","Wednesday"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
-    //addLineChart("myId2",["Monday","Tuesday","Wednesday","pippo"],["work load","free hours"],[[2, 9, 3],[2, 2, 5]]);
-    //addLineChart("myId",["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],["work load","free hours"],[[2, 9, 3, 17, 6, 3, 7],[2, 2, 5, 5, 2, 1, 10]]);
+    //Number of products per categories
+    addParagraph("Number of products per categories");
+    addBarChart("numberOfProducts",translate("Number of products per categories"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[getNumberOfProducts(),getNumberOfProductsWithThisCategory("Nonee"),getNumberOfProductsWithThisCategory("Jewerly"),getNumberOfProductsWithThisCategory("Home decoration"),getNumberOfProductsWithThisCategory("Pottery"),getNumberOfProductsWithThisCategory("Teppiches"),getNumberOfProductsWithThisCategory("Bedware Bathroomware"),getNumberOfProductsWithThisCategory("Artisan craft")]);
 
-    //addBarChart("myId3","# of Votes",["Red","Blue","Yellow"],[12,19,3]);
-    //addBarChart("myId4","# of Votes",["Red","Blue","Yellow","Green","Purple","Orange"],[12,19,3,5,2,3]);
+    //New products in years
+    addParagraph(translate("New products in years"));
+    addBarChart("numberOfProductsYear",translate("New products in years"),["2023","2024","2025","2026"],[numberNewProductsYear(2023),numberNewProductsYear(2024),numberNewProductsYear(2025),numberNewProductsYear(2026)]);
+
+    //Averange number of sells of a product
+    addParagraph(translate("Averange number of sells of a product"));
+    addBarChart("averangeNumberSells",translate("Averange number of sells of a product"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[averangeNumberSellsOfAProduct(),averangeNumberSellsOfAProductWithThisCategory("Nonee"),averangeNumberSellsOfAProductWithThisCategory("Jewerly"),averangeNumberSellsOfAProductWithThisCategory("Home decoration"),averangeNumberSellsOfAProductWithThisCategory("Pottery"),averangeNumberSellsOfAProductWithThisCategory("Teppiches"),averangeNumberSellsOfAProductWithThisCategory("Bedware Bathroomware"),averangeNumberSellsOfAProductWithThisCategory("Artisan craft")]);
+
+    //Analytics related to collaboration
+    addTitle(translate("Analytics related to collaboration"));
+
+    //Number of products witch are sponsored by a certain number of artisans
+    addParagraph(translate("Number of products witch are sponsored by a certain number of artisans"));
+    addBarChart("numberOfProductsSponsoredByNumArtisans",translate("Number of products witch are sponsored by a certain number of artisans"),[translate("Nonee"),"1","2","3","4","5+"],[numberProductsNotSponsored(),numberProductsSponsoredByACertainNumberOfArtisans(1),numberProductsSponsoredByACertainNumberOfArtisans(2),numberProductsSponsoredByACertainNumberOfArtisans(3),numberProductsSponsoredByACertainNumberOfArtisans(4),numberProductsSponsoredByAtLeastACertainNumberOfArtisans(5)]);
+
+    //Number of products witch are sold by a certain number of extra artisans
+    addParagraph(translate("Number of products witch are sold by a certain number of extra artisans"));
+    addBarChart("numberOfProductsSoldByNumArtisans",translate("Number of products witch are sold by a certain number of extra artisans"),[translate("Nonee"),"1","2","3","4","5+"],[numberProductsNotExchangeSold(),numberProductsSoldByACertainNumberOfArtisans(1),numberProductsSoldByACertainNumberOfArtisans(2),numberProductsSoldByACertainNumberOfArtisans(3),numberProductsSoldByACertainNumberOfArtisans(4),numberProductsSoldByAtLeastACertainNumberOfArtisans(5)]);
 
     //End of this page
   } else {
