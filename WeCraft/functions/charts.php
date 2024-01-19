@@ -6,7 +6,7 @@
   //other example: addLineChart("myId2",["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],["work load","free hours"],[[2, 9, 3, 17, 6, 3, 7],[2, 2, 5, 5, 2, 1, 10]]);
   function addLineChart($id,$labels,$labelsDataset,$data){
     ?>
-      <canvas id="myChart<?= $id ?>" style="max-width: 500px;"></canvas>
+      <canvas id="myChart<?= $id ?>" style="max-width: 600px;"></canvas>
       <script>
         let ctx<?= $id ?> = document.getElementById("myChart<?= $id ?>").getContext("2d");
         let myChart<?= $id ?> = new Chart(ctx<?= $id ?>, {
@@ -54,7 +54,7 @@
   //other example: addBarChart("myId4","# of Votes",["Red","Blue","Yellow","Green","Purple","Orange"],[12,19,3,5,2,3]);
   function addBarChart($id,$title,$labels,$data){
     ?>
-      <canvas id="myChart<?= $id ?>" style="max-width: 500px;"></canvas>
+      <canvas id="myChart<?= $id ?>" style="max-width: 600px;"></canvas>
       <script>
         var ctx<?= $id ?> = document.getElementById("myChart<?= $id ?>").getContext('2d');
         var myChart<?= $id ?> = new Chart(ctx<?= $id ?>, {

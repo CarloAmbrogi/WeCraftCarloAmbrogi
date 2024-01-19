@@ -225,6 +225,25 @@
     return $numSells / $numProducts;
   }
 
+  //Number of products sold for at least a certain number of units
+  function numberProductsSoldAtLeastNUnits($numMinSellsUnits){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsSoldAtLeastNUnits from (select * from ((select `id` as product, 0 as numUnitsSells from `Product` where `id` not in (select `product` from `ContentPurchase`)) union (select `product` as product, sum(`quantity`) as numUnitsSells from `ContentPurchase` group by `product`)) as t where numUnitsSells >= ?) as tt;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$numMinSellsUnits);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsSoldAtLeastNUnits"];
+  }
+
   //Number of products not sponsored
   function numberProductsNotSponsored(){
     $connectionDB = $GLOBALS['$connectionDB'];
@@ -337,4 +356,448 @@
     return $elements[0]["numberProductsSoldByAtLeastACertainNumberOfArtisans"];
   }
 
+  //Number of products in cooperation for the design
+  function numberProductsInCooperationForTheDesign(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProductsInCooperationForTheDesign from (select * from `CooperativeDesignProducts` group by `product`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProductsInCooperationForTheDesign"];
+  }
+
+  //Number of products not in cooperation for the design
+  function numberProductsNotInCooperationForTheDesign(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProductsNotInCooperationForTheDesign from `Product` where `id` not in (select `product` from `CooperativeDesignProducts`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProductsNotInCooperationForTheDesign"];
+  }
+
+  //Number of cooperations for products with a certain number of collaborators
+  function numberCooperationsForProductsWithACertainNumberOfCollaborations($numberOfCollaborators){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeDesignProducts` group by `product`) as t where t.num = ?) as tt;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$numberOfCollaborators);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCooperationsWithThisNumberOfCollaborators"];
+  }
+
+  //Number of cooperations for products with at least a certain number of collaborators
+  function numberCooperationsForProductsWithAtLeastACertainNumberOfCollaborations($numberOfCollaborators){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeDesignProducts` group by `product`) as t where t.num >= ?) as tt;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$numberOfCollaborators);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCooperationsWithAtLeastThisNumberOfCollaborators"];
+  }
+
+  //Number cooperations for the design of a product with at least a designer
+  function numberCooperationsProductWithADesigner(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCooperationsProductWithADesigner from (select * from `CooperativeDesignProducts` where `user` in (select `id` from `Designer`) group by `product`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCooperationsProductWithADesigner"];
+  }
+
+  //Number cooperations for the design of a product without a designer
+  function numberCooperationsProductWithoutADesigner(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCooperationsProductWithoutADesigner from (select t.product from (select `product` as product from `CooperativeDesignProducts` group by `product`) as t where t.product not in (select `product` from `CooperativeDesignProducts` where `user` in (select `id` from `Designer`))) as tt;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCooperationsProductWithoutADesigner"];
+  }
+
+  //Sum number of cooperation for the design of a product for each artisan
+  function sumNumberCooperationProductsArtisans(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as sumNumberCooperationProductsArtisans from `Artisan` join `CooperativeDesignProducts` on `Artisan`.`id` = `CooperativeDesignProducts`.`user`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["sumNumberCooperationProductsArtisans"];
+  }
+
+  //Sum number of cooperation for the design of a product for each designer
+  function sumNumberCooperationProductsDesigners(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as sumNumberCooperationProductsDesigners from `Designer` join `CooperativeDesignProducts` on `Designer`.`id` = `CooperativeDesignProducts`.`user`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["sumNumberCooperationProductsDesigners"];
+  }
+
+  //Averange number of products for which an artisan is collaborating for the design
+  function averangeNumberProductsForWhichArtisanCollaborating(){
+    $n = getNumberOfArtisans();
+    $d = sumNumberCooperationProductsArtisans();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+
+  //Averange number of products for which a designer is collaborating for the design
+  function averangeNumberProductsForWhichDesignerCollaborating(){
+    $n = getNumberOfDesigners();
+    $d = sumNumberCooperationProductsDesigners();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+
+  //Averange number of products for which an artisan or a designer is collaborating for the design
+  function averangeNumberProductsForWhichArtisanDesignerCollaborating(){
+    $n = getNumberOfArtisans() + getNumberOfDesigners();
+    $d = sumNumberCooperationProductsArtisans() + sumNumberCooperationProductsDesigners();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+
+  //Number of projects that have been completed within a certain time range
+  function numberCompletedProjectsInCertainTimeRange($min,$max){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCompletedProjectsInCertainTimeRange from `Project` where TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= ? and TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) <= ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$min,$max);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCompletedProjectsInCertainTimeRange"];
+  }
+
+  //Number of projects that have been completed in at least a certain time range
+  function numberCompletedProjectsInAtLeastCertainTimeRange($min){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCompletedProjectsInAtLeastCertainTimeRange from `Project` where TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$min);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCompletedProjectsInAtLeastCertainTimeRange"];
+  }
+
+  //Number projects not assigned to any artisan
+  function numberProjectsNotAssigned(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsNotAssigned from `Project` where `id` not in (select `project` from `ProjectAssignArtisans`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsNotAssigned"];
+  }
+
+  //Number projects assigned but not claimed
+  function numberProjectsAssignedNotClaimed(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsAssignedNotClaimed from `Project` where `claimedByThisArtisan` is null and `id` in (select `project` from `ProjectAssignArtisans`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsAssignedNotClaimed"];
+  }
+
+  //Number projects claimed but not confirmed
+  function numberProjectsClaimedNotConfirmed(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsClaimedNotConfirmed from `Project` where `claimedByThisArtisan` is not null and `confirmedByTheCustomer` = 0;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsClaimedNotConfirmed"];
+  }
+
+  //Number projects confirmed not completed
+  function numberProjectsConfirmedNotCompleted(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsConfirmedNotCompleted from `Project` where `confirmedByTheCustomer` = 1 and `timestampReady` is null;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsConfirmedNotCompleted"];
+  }
+
+  //Number projects completed
+  function numberProjectsCompleted(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsCompleted from `Project` where `timestampReady` is not null;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsCompleted"];
+  }
+
+  //Number of projects in cooperation for the design
+  function numberProjectsInCooperationForTheDesign(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProjectsInCooperationForTheDesign from (select * from `CooperativeDesignProjects` group by `project`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProjectsInCooperationForTheDesign"];
+  }
+
+  //Number of projects not in cooperation for the design
+  function numberProjectsNotInCooperationForTheDesign(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProjectsNotInCooperationForTheDesign from `Project` where `id` not in (select `project` from `CooperativeDesignProjects`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProjectsNotInCooperationForTheDesign"];
+  }
+
+    //Number of cooperations for projects with a certain number of collaborators
+    function numberCooperationsForProjectsWithACertainNumberOfCollaborations($numberOfCollaborators){
+      $connectionDB = $GLOBALS['$connectionDB'];
+      $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeDesignProjects` group by `project`) as t where t.num = ?) as tt;";
+      if($statement = $connectionDB->prepare($sql)){
+        $statement->bind_param("i",$numberOfCollaborators);
+        $statement->execute();
+      } else {
+        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+      }
+  
+      $results = $statement->get_result();
+      while($element = $results->fetch_assoc()){
+        $elements[] = $element;
+      }
+  
+      return $elements[0]["numCooperationsWithThisNumberOfCollaborators"];
+    }
+  
+    //Number of cooperations for projects with at least a certain number of collaborators
+    function numberCooperationsForProjectsWithAtLeastACertainNumberOfCollaborations($numberOfCollaborators){
+      $connectionDB = $GLOBALS['$connectionDB'];
+      $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeDesignProjects` group by `project`) as t where t.num >= ?) as tt;";
+      if($statement = $connectionDB->prepare($sql)){
+        $statement->bind_param("i",$numberOfCollaborators);
+        $statement->execute();
+      } else {
+        echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+      }
+  
+      $results = $statement->get_result();
+      while($element = $results->fetch_assoc()){
+        $elements[] = $element;
+      }
+  
+      return $elements[0]["numCooperationsWithAtLeastThisNumberOfCollaborators"];
+    }
+
+  //Sum number of cooperation for the design of a project for each artisan
+  function sumNumberCooperationProjectsArtisans(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as sumNumberCooperationProjectsArtisans from `Artisan` join `CooperativeDesignProjects` on `Artisan`.`id` = `CooperativeDesignProjects`.`user`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["sumNumberCooperationProjectsArtisans"];
+  }
+
+  //Sum number of cooperation for the design of a project for each designer
+  function sumNumberCooperationProjectsDesigners(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as sumNumberCooperationProjectsDesigners from `Designer` join `CooperativeDesignProjects` on `Designer`.`id` = `CooperativeDesignProjects`.`user`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["sumNumberCooperationProjectsDesigners"];
+  }
+
+  //Averange number of projects for which an artisan is collaborating for the design
+  function averangeNumberProjectsForWhichArtisanCollaborating(){
+    $n = getNumberOfArtisans();
+    $d = sumNumberCooperationProjectsArtisans();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+
+  //Averange number of projects for which a designer is collaborating for the design
+  function averangeNumberProjectsForWhichDesignerCollaborating(){
+    $n = getNumberOfDesigners();
+    $d = sumNumberCooperationProjectsDesigners();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+
+  //Averange number of projects for which an artisan or a designer is collaborating for the design
+  function averangeNumberProjectsForWhichArtisanDesignerCollaborating(){
+    $n = getNumberOfArtisans() + getNumberOfDesigners();
+    $d = sumNumberCooperationProjectsArtisans() + sumNumberCooperationProjectsDesigners();
+    if($d == 0){
+      return 0;
+    }
+    return $n / $d;
+  }
+  
 ?>
