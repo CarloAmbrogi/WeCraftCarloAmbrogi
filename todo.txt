@@ -1,6 +1,10 @@
 
+Chi può scrivere messaggi a chi?
+
 Progetti per oggetti personalizzati pubblici ad asta
 
 Magari request big order - special order - l'artigiano dovrà scegliere se accettare o meno anche per capire se può collaborare
 
 Aggiungere campo motivazione rifiuta artigiano da progetto
+
+Recensioni prodotti?
