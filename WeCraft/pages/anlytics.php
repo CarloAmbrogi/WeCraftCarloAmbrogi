@@ -4,17 +4,17 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page reserved for the analytics administrator
+  //Page reserved for the admin
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
-    upperPartOfThePage(translate("Analytics administrator"),"");
+    upperPartOfThePage(translate("Admin"),"");
     addScriptAddThisPageToCronology();
     //Content of this page
 
     //Artisans who have started to sell products of other artisan without having sold at least a certain quantity of their items in last period
     addParagraph(translate("Artisans who have started to sell products of other artisan without having sold at least a certain quantity of their items in last period"));
     $minNumItems = 2;
-    $durationLastPeriod = 5184000;
+    $durationLastPeriod = 5184000;//60 days
     $previewArtisansWhoAreOnlyResellingItems = obtainPreviewArtisansWhoArePraticallyOnlyResellingItems($minNumItems,$durationLastPeriod);
     startCardGrid();
     foreach($previewArtisansWhoAreOnlyResellingItems as &$singleArtisanPreview){

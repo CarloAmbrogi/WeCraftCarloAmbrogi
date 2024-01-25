@@ -1,10 +1,15 @@
+Si chiama semplicemente admin
 
-Chi può scrivere messaggi a chi?
+Cancella utenti con flag
+
+Aggiungo tasto rimuovi partecipante da cooperazione.
+
+Quando aggiungi o togli utente da collaborazione -> salvare timestamp
+
+Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione
+
+Recensioni prodotti (solo chi ha acquistato almeno 1 unità)
 
 Progetti per oggetti personalizzati pubblici ad asta
 
-Magari request big order - special order - l'artigiano dovrà scegliere se accettare o meno anche per capire se può collaborare
-
 Aggiungere campo motivazione rifiuta artigiano da progetto
-
-Recensioni prodotti?

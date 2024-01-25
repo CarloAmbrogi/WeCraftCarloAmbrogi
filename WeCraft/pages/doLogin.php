@@ -18,7 +18,7 @@
       if($insertedEmail == "admin" && $insertedPassword == "a"){
         //Log in as profile anlytics administrator
         $_SESSION["userId"] = "admin";
-        header('Location: ./anlyticsAdministrator.php');
+        header('Location: ./anlytics.php');
       } else {
         $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
         //$isLoginValid = true;//Uncomment to force log in valid
