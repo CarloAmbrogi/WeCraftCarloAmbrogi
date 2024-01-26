@@ -3188,6 +3188,25 @@
     }
   }
 
+  //Number projects non completed and claimed by this artisan
+  function numberProjectsNonCompletedAndClaimedByThisArtisan($artisanId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsNonCompletedAndClaimedByThisArtisan from (select * from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `timestampReady` is null) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$artisanId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsNonCompletedAndClaimedByThisArtisan"];
+  }
+
   //Include also analytic queries
   include dirname(__FILE__)."/analyticQueries.php";
 
