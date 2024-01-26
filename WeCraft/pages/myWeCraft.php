@@ -41,7 +41,7 @@
       addButtonLink(translate("Go to your designer page"),"./designer.php");
     }
     //User settings
-    addButtonLink(translate("Change name and surname"),"./changeNameAndSurname.php");
+    //addButtonLink(translate("Change name and surname"),"./changeNameAndSurname.php");
     if($fileImageToVisualize != genericUserImage){
       addButtonLink(translate("Delete icon"),"./deleteIcon.php");
     }
@@ -63,10 +63,10 @@
   //For artisans
   if($kindOfTheAccountInUse == "Artisan"){
     addButtonLink(translate("Change description"),"./changeDescription.php");
-    addButtonLink(translate("Change shop name"),"./changeShopName.php");
+    //addButtonLink(translate("Change shop name"),"./changeShopName.php");
     addButtonLink(translate("Change opening hours"),"./changeOpeningHours.php");
     addButtonLink(translate("Change phone number"),"./changePhoneNumber.php");
-    addButtonLink(translate("Change shop location"),"./changeShopLocation.php");
+    //addButtonLink(translate("Change shop location"),"./changeShopLocation.php");
   }
   //For Designers
   if($kindOfTheAccountInUse == "Designer"){

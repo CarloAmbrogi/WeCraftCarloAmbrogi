@@ -7,6 +7,9 @@
   //Change shop location
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  upperPartOfThePage(translate("Error"),"");
+  addParagraph(translate("This page is not available"));
+  /*
   if($kindOfTheAccountInUse != "Artisan"){
     //This page is visible only to artisans
     upperPartOfThePage(translate("Account"),"");
@@ -99,6 +102,7 @@
       <?php
     }
   }
+  */
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
 ?>

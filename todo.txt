@@ -1,6 +1,4 @@
-Impedisci cambio nome cognome e nome negozio
-
-Aggiungo tasto rimuovi partecipante da cooperazione.
+Aggiungo tasto rimuovi partecipante da cooperazione
 
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
