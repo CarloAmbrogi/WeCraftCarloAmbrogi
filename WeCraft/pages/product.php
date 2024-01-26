@@ -20,6 +20,9 @@
         upperPartOfThePage(translate("Product"),"cookieBack");
       }
       $artisanInfosUser = obtainUserInfos($productInfos["artisan"]);
+      if($artisanInfosUser["isActive"] == 0){
+        addParagraph(translate("This is a product of a deleted account")."!");
+      }
       $artisanInfosArtisan = obtainArtisanInfos($productInfos["artisan"]);
       startRow();
       startCol();

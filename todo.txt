@@ -1,6 +1,4 @@
-Si chiama semplicemente admin
-
-Cancella utenti con flag
+Impedisci cambio nome cognome e nome negozio
 
 Aggiungo tasto rimuovi partecipante da cooperazione.
 

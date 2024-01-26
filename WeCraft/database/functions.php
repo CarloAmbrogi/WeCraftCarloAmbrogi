@@ -199,7 +199,7 @@
   //Obtain infos (except password) of an user
   function obtainUserInfos($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`email`,`name`,`surname`,`iconExtension`,`icon`,`emailVerified` from `User` where `id` = ?;";
+    $sql = "select `id`,`email`,`name`,`surname`,`iconExtension`,`icon`,`emailVerified`,`isActive`,`oldEmail` from `User` where `id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("s",$userId);
       $statement->execute();
@@ -3138,6 +3138,54 @@
     }
 
     return $elements[0]["id"];
+  }
+
+  //delete account
+  function deleteAccount($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `User` set `isActive` = 0, `oldEmail` = `email`, `email` = CONCAT('ACCOUNT_DELETED',`id`) where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //When deleting the account make all products anavailable in case of an artisan
+  function makeAllProductsAnaviable($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Product` set `quantity` = 0 where `artisan` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //When deleting the account stop sponsoring items in case of an artisan
+  function stopSponsoringItems($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `Advertisement` where `artisan` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //When deleting the account stop reselling items in case of an artisan
+  function stopResellingItems($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "delete from `ExchangeProduct` where `artisan` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
   }
 
   //Include also analytic queries

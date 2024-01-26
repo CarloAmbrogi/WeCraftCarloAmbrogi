@@ -19,6 +19,9 @@
       addScriptAddThisPageToCronology();
       //Show the designer
       $userInfos = obtainUserInfos($_GET["id"]);
+      if($userInfos["isActive"] == 0){
+        addParagraph(translate("This is a deleted account")."!");
+      }
       $designerInfos = obtainDesignerInfos($_GET["id"]);
       startRow();
       startCol();
@@ -31,7 +34,9 @@
       endCol();
       startCol();
       addParagraphWithoutMb3($nameAndSurname);
-      addEmailToLinkWithoutMb3($userInfos["email"]);
+      if(substr($userInfos["email"],0,strlen("ACCOUNT_DELETED")) != "ACCOUNT_DELETED"){
+        addEmailToLinkWithoutMb3($userInfos["email"]);
+      }
       $textButtonShowHide = translate("Show or hide more information about this designer");
       if($_GET["id"] == $_SESSION["userId"]){
         $textButtonShowHide = translate("Show or hide more information about you");

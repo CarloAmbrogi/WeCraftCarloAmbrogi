@@ -72,6 +72,10 @@
   if($kindOfTheAccountInUse == "Designer"){
     addButtonLink(translate("Change description"),"./changeDescription.php");
   }
+  //For all logged in
+  if($kindOfTheAccountInUse != "Guest"){
+    addButtonLink(translate("Delete account"),"./deleteAccount.php");
+  }
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
 ?>

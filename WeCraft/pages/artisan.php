@@ -26,6 +26,9 @@
       addScriptAddThisPageToCronology();
       //Show the artisan
       $userInfos = obtainUserInfos($_GET["id"]);
+      if($userInfos["isActive"] == 0){
+        addParagraph(translate("This is a deleted account")."!");
+      }
       $artisanInfos = obtainArtisanInfos($_GET["id"]);
       $analyzedOpeningHours = analyzeStringOpeningHours($artisanInfos["openingHours"]);
       startRow();
@@ -40,7 +43,9 @@
       startCol();
       addParagraph($artisanInfos["shopName"]);
       addParagraphWithoutMb3($nameAndSurname);
-      addEmailToLinkWithoutMb3($userInfos["email"]);
+      if(substr($userInfos["email"],0,strlen("ACCOUNT_DELETED")) != "ACCOUNT_DELETED"){
+        addEmailToLinkWithoutMb3($userInfos["email"]);
+      }
       addTelLinkWithoutMb3($artisanInfos["phoneNumber"]);
       addParagraphWithoutMb3($artisanInfos["address"]);
       if($analyzedOpeningHours["nowOpen"] == true){

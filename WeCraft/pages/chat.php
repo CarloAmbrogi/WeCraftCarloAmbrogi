@@ -50,6 +50,9 @@
           $kindUserChatWith = getKindOfThisAccount($_GET["chatWith"]);
           $fileImageToVisualize = genericUserImage;
           $userInfos = obtainUserInfos($_GET["chatWith"]);
+          if($userInfos["isActive"] == 0){
+            addParagraph(translate("This is a deleted account")."!");
+          }
           $title = $userInfos["name"]." ".$userInfos["surname"];
           $text1 = translate($kindUserChatWith);
           if(isset($userInfos['icon']) && ($userInfos['icon'] != null)){
