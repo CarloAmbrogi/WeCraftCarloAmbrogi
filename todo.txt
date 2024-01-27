@@ -1,9 +1,13 @@
+Progetti per oggetti personalizzati pubblici ad asta
+
+
 Aggiungo tasto rimuovi partecipante da cooperazione
 
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
 Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione
 
-Progetti per oggetti personalizzati pubblici ad asta
+NON SI ELIMINANO LE COOPERAZIONI MA LE SI TERMINANO (per tenerne traccia)
+(Terminata la cooperazione si può ricominciare)
 
-Aggiungere campo motivazione rifiuta artigiano da progetto
+Dunque così ho uno storico sulla cooperazione

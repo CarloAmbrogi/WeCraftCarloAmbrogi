@@ -12,10 +12,15 @@
     //Receive post request for refusing artisans to this project
     $insertedProjectId = $_POST['insertedProjectId'];
     upperPartOfThePage(translate("Refuse artisans"),"./project.php?id=".urlencode($insertedProjectId));
+    $insertedMotivation = trim($_POST['insertedMotivation']);
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
+    } else if($insertedMotivation == ""){
+      addParagraph(translate("You have missed to insert the motivation"));
+    } else if(strlen($insertedMotivation) > 2046){
+      addParagraph(translate("The motivation is too long"));
     } else {
       //Check that this project exists, the user is who has created the project or the customer for which is the project, the project is not confirmed
       if(doesThisProjectExists($insertedProjectId)){
@@ -39,6 +44,7 @@
                 $postOfThisArtisan = $_POST['artisan'.$idOfThisArtisan];
                 if($postOfThisArtisan == true){
                   removeThisArtisanFromThisProject($idOfThisArtisan,$insertedProjectId);
+                  sendAutomaticMessageWithLinkAndExtraText($_SESSION["userId"],"personal",$idOfThisArtisan,"I have refused you from this project","project",$insertedProjectId," ".$insertedMotivation);
                   if($projectInfos["claimedByThisArtisan"] == $idOfThisArtisan){
                     makeThisProjectUnclaimed($insertedProjectId);
                   }
@@ -100,8 +106,24 @@
                   </ul>
                 <?php
               }
+              addLongTextField(translate("Motivation"),"insertedMotivation",2046);
               addHiddenField("insertedProjectId",$_GET["id"]);
               endForm(translate("Submit"));
+              ?>
+                <script>
+                  //form inserted parameters
+                  const form = document.querySelector('form');
+                  const insertedMotivation = document.getElementById('insertedMotivation');
+
+                  //prevent sending form with errors
+                  form.onsubmit = function(e){
+                    if(insertedMotivation.value.trim() == ""){
+                      e.preventDefault();
+                      alert("<?= translate("You have missed to insert the motivation") ?>");
+                    }
+                  }
+                </script>
+              <?php
             }
             //End main content of this page
           } else {

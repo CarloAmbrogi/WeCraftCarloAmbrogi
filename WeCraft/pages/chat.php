@@ -142,7 +142,11 @@
           addParagraphWithoutMb3($textParagraphWhen);
           if($singleMessagePreview["text"] != ""){
             if($singleMessagePreview["isANotification"] == 1){
-              addParagraphWithoutMb3(translate($singleMessagePreview["text"]));
+              $extraText = "";
+              if(isset($singleMessagePreview["extraText"]) && $singleMessagePreview["extraText"] != null){
+                $extraText = $singleMessagePreview["extraText"];
+              }
+              addParagraphWithoutMb3(translate($singleMessagePreview["text"]).$extraText);
             } else {
               addParagraphWithoutMb3Unsafe(adjustTextWithLinks($singleMessagePreview["text"]));
             }

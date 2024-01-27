@@ -2987,7 +2987,7 @@
   //Obtain a preview of this chat with all messages (we pass user for security reason)
   function obtainPreviewChat($userId,$chatWith,$chatKind){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Messages`.`id`, `Messages`.`fromWho`, `Messages`.`toKind`, `Messages`.`toWho`, `Messages`.`timestamp`, `Messages`.`isANotification`, `Messages`.`text`, `Messages`.`imgExtension`, `Messages`.`image`, `Messages`.`linkKind`, `Messages`.`linkTo` from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?) as tt join `Messages` on tt.messageId = `Messages`.`id` order by `Messages`.`id` DESC;";
+    $sql = "select `Messages`.`id`, `Messages`.`fromWho`, `Messages`.`toKind`, `Messages`.`toWho`, `Messages`.`timestamp`, `Messages`.`isANotification`, `Messages`.`text`, `Messages`.`imgExtension`, `Messages`.`image`, `Messages`.`linkKind`, `Messages`.`linkTo`, `Messages`.`extraText` from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?) as tt join `Messages` on tt.messageId = `Messages`.`id` order by `Messages`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiis",$userId,$userId,$userId,$userId,$chatWith,$chatKind);
       $statement->execute();
@@ -3000,7 +3000,7 @@
       $elements[] = $element;
     }
 
-    //return an array of associative array with 
+    //return an array of associative array with id fromWho toKind toWho timestamp isANotification text imgExtension image linkKind linkTo extraText
     return $elements;
   }
 
@@ -3065,6 +3065,18 @@
     $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 1, ?, NULL, NULL, ?, ?);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("isissi",$fromWho,$toKind,$toWho,$text,$linkKind,$linkTo);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //send this automatic message with a link and extra text
+  function sendAutomaticMessageWithLinkAndExtraText($fromWho,$toKind,$toWho,$text,$linkKind,$linkTo,$extraText){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Messages` (`id`, `fromWho`, `toKind`, `toWho`, `timestamp`, `isANotification`, `text`, `imgExtension`, `image`, `linkKind`, `linkTo`, `extraText`) VALUES (NULL, ?, ?, ?, CURRENT_TIMESTAMP(), 1, ?, NULL, NULL, ?, ?, ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isissis",$fromWho,$toKind,$toWho,$text,$linkKind,$linkTo,$extraText);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
