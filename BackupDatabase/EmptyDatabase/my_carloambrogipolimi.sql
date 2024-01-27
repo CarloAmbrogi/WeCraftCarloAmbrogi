@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Gen 17, 2024 alle 18:13
+-- Creato il: Gen 27, 2024 alle 12:45
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -336,6 +336,21 @@ CREATE TABLE `ReadMessage` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `Review`
+--
+
+CREATE TABLE `Review` (
+  `id` int NOT NULL,
+  `fromWho` int NOT NULL,
+  `product` int NOT NULL,
+  `stars` int NOT NULL,
+  `text` text NOT NULL,
+  `timestamp` timestamp NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `SheetProducts`
 --
 
@@ -402,7 +417,9 @@ CREATE TABLE `User` (
   `icon` longblob,
   `emailVerified` tinyint(1) NOT NULL,
   `verificationCode` varchar(10) NOT NULL,
-  `timeVerificationCode` timestamp NOT NULL
+  `timeVerificationCode` timestamp NOT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
+  `oldEmail` varchar(50) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -578,6 +595,12 @@ ALTER TABLE `ReadMessage`
   ADD PRIMARY KEY (`readBy`,`messageId`);
 
 --
+-- Indici per le tabelle `Review`
+--
+ALTER TABLE `Review`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `SheetProducts`
 --
 ALTER TABLE `SheetProducts`
@@ -682,6 +705,12 @@ ALTER TABLE `ProjectImages`
 -- AUTO_INCREMENT per la tabella `PurchasesCronology`
 --
 ALTER TABLE `PurchasesCronology`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `Review`
+--
+ALTER TABLE `Review`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --

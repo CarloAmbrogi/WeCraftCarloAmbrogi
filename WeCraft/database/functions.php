@@ -3207,6 +3207,82 @@
     return $elements[0]["numberProjectsNonCompletedAndClaimedByThisArtisan"];
   }
 
+  //Calc avg reviews of this product
+  function avgReviewsThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select COALESCE(avg(`stars`),0) as avgReviewsThisProduct from `Review` where `Review`.`product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["avgReviewsThisProduct"];
+  }
+
+  //Obtain a preview of the reviews of this product
+  function obtainReviewsPreviewOfThisProduct($productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Review`.`id` as id,`Review`.`fromWho` as fromWhoId,`User`.`name` as fromWhoName,`User`.`surname` as fromWhoSurname,`Review`.`stars` as stars,`Review`.`text` as text,`Review`.`timestamp` as timestamp from `Review` left join `User` on `Review`.`fromWho` = `User`.`id` where `Review`.`product` = ? ORDER BY `Review`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id fromWhoId fromWhoName fromWhoSurname stars text timestamp
+    return $elements;
+  }
+
+  //has this user purchased this item
+  function hasThisUserPurchasedThisItem($userId,$productId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as hasThisUserPurchasedThisItem from `ContentPurchase` where `purchaseId` in (select `id` from `PurchasesCronology` where `customer` = ?) and `product` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ii",$userId,$productId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    $res = $elements[0]["hasThisUserPurchasedThisItem"];
+
+    if($res > 0){
+      $res = 1;
+    }
+
+    return $res;
+  }
+
+  //Load a reviev for an item
+  function loadReview($userId,$product,$stars,$text){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `Review` (`id`, `fromWho`, `product`, `stars`, `text`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP());";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiis",$userId,$product,$stars,$text);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
   //Include also analytic queries
   include dirname(__FILE__)."/analyticQueries.php";
 

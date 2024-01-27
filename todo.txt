@@ -4,8 +4,6 @@ Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
 Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione
 
-Recensioni prodotti (solo chi ha acquistato almeno 1 unità)
-
 Progetti per oggetti personalizzati pubblici ad asta
 
 Aggiungere campo motivazione rifiuta artigiano da progetto

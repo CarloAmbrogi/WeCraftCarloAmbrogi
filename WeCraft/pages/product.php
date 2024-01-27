@@ -274,6 +274,25 @@
           addButtonLink(translate("See collaboration"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
         }
       }
+      //Reviews
+      addTitle(translate("Reviews"));
+      addParagraph(translate("Averange stars")." ".avgReviewsThisProduct($_GET["id"]));
+      if(hasThisUserPurchasedThisItem($_SESSION["userId"],$_GET["id"])){
+        addButtonLink(translate("Write a review"),"./writeReview.php?id=".urlencode($_GET["id"]));
+      }
+      $reviews = obtainReviewsPreviewOfThisProduct($_GET["id"]);
+      foreach($reviews as &$review){
+        startSquare();
+        $reviewTitle = $review["fromWhoName"]." ".$review["fromWhoSurname"]." ".$review["timestamp"]." ";
+        $countStars = 0;
+        while($countStars < $review["stars"]){
+          $reviewTitle.="⭐️";
+          $countStars++;
+        }
+        addParagraph($reviewTitle);
+        addParagraph($review["text"]);
+        endSquare();
+      }
     } else {
       upperPartOfThePage(translate("Error"),"");
       addParagraph(translate("This product doesnt exists"));
