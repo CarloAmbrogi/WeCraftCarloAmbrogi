@@ -585,14 +585,16 @@
     startCardGrid();
     $foundAtLeastOneResult = false;
     foreach($SearchPreviewProducts as &$singleProductPreview){
-      $foundAtLeastOneResult = true;
-      $fileImageToVisualize = genericProductImage;
-      if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
-        $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+      if(isThisProductOfAnActiveArtisan($singleProductPreview["id"])){
+        $foundAtLeastOneResult = true;
+        $fileImageToVisualize = genericProductImage;
+        if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
+          $fileImageToVisualize = blobToFile($singleProductPreview["iconExtension"],$singleProductPreview['icon']);
+        }
+        $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
+        $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"]." ".translate("Number of sells").": ".$singleProductPreview["numSells"];
+        addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);  
       }
-      $text1 = translate("Category").": ".translate($singleProductPreview["category"]).'<br>'.translate("Price").": ".floatToPrice($singleProductPreview["price"]);
-      $text2 = translate("Quantity available from the owner").": ".$singleProductPreview["quantity"]." ".translate("Number of sells").": ".$singleProductPreview["numSells"];
-      addACardForTheGrid("./product.php?id=".urlencode($singleProductPreview["id"]),$fileImageToVisualize,htmlentities($singleProductPreview["name"]),$text1,$text2);
     }
     endCardGrid();
     //In case of no result

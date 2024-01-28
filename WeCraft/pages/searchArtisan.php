@@ -145,7 +145,7 @@
       </script>
     <?php
     //Prepare sql
-    $sqlInitialPart = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where ";
+    $sqlInitialPart = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`User`.`isActive`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where ";
     $sqlMidExample = "`User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Artisan`.`shopName` like ? or `Artisan`.`description` like ? or `Artisan`.`address` like ? or `Artisan`.`phoneNumber` like ? ";
     $sqlFinalPart = "group by `User`.`id` order by `User`.`id` limit 100;";
     $sql = "";
@@ -221,12 +221,14 @@
     startCardGrid();
     $foundAtLeastOneResult = false;
     foreach($SearchPreviewArtisans as &$singleArtisanPreview){
-      $foundAtLeastOneResult = true;
-      $fileImageToVisualize = genericUserImage;
-      if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
-        $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+      if($singleArtisanPreview["isActive"] == 1){
+        $foundAtLeastOneResult = true;
+        $fileImageToVisualize = genericUserImage;
+        if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+          $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+        }
+        addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
       }
-      addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
     }
     endCardGrid();
     //In case of no result

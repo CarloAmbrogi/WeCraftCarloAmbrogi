@@ -111,7 +111,7 @@
       </script>
     <?php
     //Prepare sql
-    $sqlInitialPart = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` join `Designer` on `User`.`id` = `Designer`.`id` where ";
+    $sqlInitialPart = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`User`.`isActive` from `User` join `Designer` on `User`.`id` = `Designer`.`id` where ";
     $sqlMidExample = "`User`.`email` like ? or `User`.`name` like ? or `User`.`surname` like ? or concat(`User`.`name`,' ',`User`.`surname`) like ? or concat(`User`.`surname`,' ',`User`.`name`) like ? or `Designer`.`description` like ? ";
     $sqlFinalPart = "order by `User`.`id` limit 100;";
     $sql = "";
@@ -163,13 +163,16 @@
     //Show results
     $SearchPreviewArtisans = executeSql($sql);
     startCardGrid();
+    $foundAtLeastOneResult = false;
     foreach($SearchPreviewArtisans as &$singleDesignerPreview){
-      $foundAtLeastOneResult = true;
-      $fileImageToVisualize = genericUserImage;
-      if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
-        $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
+      if($singleDesignerPreview["isActive"] == 1){
+        $foundAtLeastOneResult = true;
+        $fileImageToVisualize = genericUserImage;
+        if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
+          $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
+        }
+        addACardForTheGrid("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"");
       }
-      addACardForTheGrid("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"");
     }
     endCardGrid();
     //In case of no result
