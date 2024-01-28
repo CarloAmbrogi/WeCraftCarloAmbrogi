@@ -5,29 +5,31 @@
   include "./../database/functions.php";
 
   //Visualize a project by id (the id is sent as a get)
-  //A project is visible only to realated customer, designers and artisans
+  //A project is visible only to realated customer, designers and artisans (excepts for public projects)
   //Actions for designers:
   // edit the project
   // assign artisans
   // refuse artisans
+  // set public or private a project
   //Actions for artisans
   // refuse the project
   // claim the project
   //Actions for customers
   // refuse artisans
   // confirm the project
+  // set private a project
 
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(doesThisProjectExists($_GET["id"])){
       //Check possibility to see this project
-      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
+      $projectInfos = obtainProjectInfos($_GET["id"]);
+      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $projectInfos["isPublic"] == 1 || $_SESSION["userId"] == "admin"){
         addScriptAddThisPageToCronology();
         upperPartOfThePage(translate("Project"),"cookieBack");
         //Real content of this page
         //General info of this project
-        $projectInfos = obtainProjectInfos($_GET["id"]);
         startRow();
         startCol();
         $fileImageToVisualizeProduct = genericProjectImage;
@@ -45,6 +47,12 @@
         endCol();
         endRow();
         addParagraphUnsafe(adjustTextWithYouTubeLinks($projectInfos["description"]));
+        //If the project is public or not
+        if($projectInfos["isPublic"] == 1){
+          addParagraph(translate("This project is public"));
+        } else {
+          addParagraph(translate("This project is not public"));
+        }
         //Carousel with images of this project
         addCarouselImagesOfThisProject($_GET["id"]);
         //related designer
@@ -56,13 +64,15 @@
         }
         addACard("./designer.php?id=".urlencode($designerUserInfos["id"]),$fileImageToVisualize,htmlentities($designerUserInfos["name"]." ".$designerUserInfos["surname"]),translate("Designer"),"");
         //related customer
-        addParagraph(translate("This project has been created for this customer").":");
-        $customerUserInfos = obtainUserInfos($projectInfos["customer"]);
-        $fileImageToVisualize = genericUserImage;
-        if(isset($customerUserInfos['icon']) && ($customerUserInfos['icon'] != null)){
-          $fileImageToVisualize = blobToFile($customerUserInfos["iconExtension"],$customerUserInfos['icon']);
+        if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
+          addParagraph(translate("This project has been created for this customer").":");
+          $customerUserInfos = obtainUserInfos($projectInfos["customer"]);
+          $fileImageToVisualize = genericUserImage;
+          if(isset($customerUserInfos['icon']) && ($customerUserInfos['icon'] != null)){
+            $fileImageToVisualize = blobToFile($customerUserInfos["iconExtension"],$customerUserInfos['icon']);
+          }
+          addACard("./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]." (".$customerUserInfos["email"].")"),translate("Customer"),"");
         }
-        addACard("./chat.php?chatKind=".urlencode("personal")."&chatWith=".urlencode($customerUserInfos["id"]),$fileImageToVisualize,htmlentities($customerUserInfos["name"]." ".$customerUserInfos["surname"]." (".$customerUserInfos["email"].")"),translate("Customer"),"");
         //Claimed artisan
         $isTheProjectClaimed = false;
         if(isset($projectInfos["claimedByThisArtisan"]) and $projectInfos["claimedByThisArtisan"] != null){
@@ -86,8 +96,10 @@
         if($projectInfos["confirmedByTheCustomer"] == 1){
           $thisProjectIsConfirmed = true;
           addParagraph(translate("This project is confirmed by the customer"));
-          addParagraph(translate("Purchased")." ".$projectInfos["timestampPurchase"]);
-          addParagraph(translate("Address").": ".$projectInfos["address"]);
+          if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
+            addParagraph(translate("Purchased")." ".$projectInfos["timestampPurchase"]);
+            addParagraph(translate("Address").": ".$projectInfos["address"]);
+          }
         }
         //Other candidate artisans
         $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($_GET["id"]);
@@ -151,34 +163,47 @@
         }
         //Commands for the designer
         if($kindOfTheAccountInUse == "Designer"){
-          if(!$thisProjectIsConfirmed){
-            addButtonLink(translate("Edit project"),"./editProject.php?id=".urlencode($_GET["id"]));
-            if($isIconToThisProjectSetted){
-              addButtonLink(translate("Delete project icon"),"./deleteProjectIcon.php?id=".urlencode($_GET["id"]));
+          if($projectInfos["designer"] == $_SESSION["userId"]){
+            if(!$thisProjectIsConfirmed){
+              addButtonLink(translate("Edit project"),"./editProject.php?id=".urlencode($_GET["id"]));
+              if($isIconToThisProjectSetted){
+                addButtonLink(translate("Delete project icon"),"./deleteProjectIcon.php?id=".urlencode($_GET["id"]));
+              }
+              addButtonLink(translate("Edit project icon"),"./editProjectIcon.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Add images to this project"),"./addImagesToThisProject.php?id=".urlencode($_GET["id"]));
+              $numberOfImages = getNumberImagesOfThisProject($_GET["id"]);
+              if($numberOfImages > 0){
+                addButtonLink(translate("Remove images to this project"),"./removeImagesToThisProject.php?id=".urlencode($_GET["id"]));
+              }
             }
-            addButtonLink(translate("Edit project icon"),"./editProjectIcon.php?id=".urlencode($_GET["id"]));
-            addButtonLink(translate("Add images to this project"),"./addImagesToThisProject.php?id=".urlencode($_GET["id"]));
-            $numberOfImages = getNumberImagesOfThisProject($_GET["id"]);
-            if($numberOfImages > 0){
-              addButtonLink(translate("Remove images to this project"),"./removeImagesToThisProject.php?id=".urlencode($_GET["id"]));
+            if(!$isTheProjectClaimed){
+              addButtonLink(translate("Assign artisans to this project"),"./assignArtisansToThisProject.php?id=".urlencode($_GET["id"]));
             }
-          }
-          if(!$isTheProjectClaimed){
-            addButtonLink(translate("Assign artisans to this project"),"./assignArtisansToThisProject.php?id=".urlencode($_GET["id"]));
-          }
-          if(!$thisProjectIsConfirmed){
-            if($numberArtisansAssignedThisProject > 0){
-              addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+            if(!$thisProjectIsConfirmed){
+              if($numberArtisansAssignedThisProject > 0){
+                addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+              }
+            }
+            if($projectInfos["isPublic"] == 0){
+              addButtonLink(translate("Set this project public"),"./setThisProjectPublic.php?id=".urlencode($_GET["id"]));
+            }
+            if($projectInfos["isPublic"] == 1){
+              addButtonLink(translate("Set this project private"),"./setThisProjectPrivate.php?id=".urlencode($_GET["id"]));
             }
           }
         }
         //Commands for the artisans
         if($kindOfTheAccountInUse == "Artisan"){
-          if(!$isTheProjectClaimed){
-            addButtonLink(translate("Claim this project"),"./claimThisProject.php?id=".urlencode($_GET["id"]));
+          if(!isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"]) && $projectInfos["isPublic"] == 1){
+            addButtonLink(translate("Assign yourself to this project"),"./assignYourselfToThisProject.php?id=".urlencode($_GET["id"]));
           }
-          if(!$thisProjectIsConfirmed){
-            addButtonLink(translate("Refuse this project"),"./refuseThisProject.php?id=".urlencode($_GET["id"]));
+          if(isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"])){
+            if(!$isTheProjectClaimed){
+              addButtonLink(translate("Claim this project"),"./claimThisProject.php?id=".urlencode($_GET["id"]));
+            }
+            if(!$thisProjectIsConfirmed){
+              addButtonLink(translate("Refuse this project"),"./refuseThisProject.php?id=".urlencode($_GET["id"]));
+            }
           }
           if($thisProjectIsConfirmed && $projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && !$thisProjectIsReady){
             addButtonLink(translate("Annunce that this personalized item is ready"),"./annunceProjectReady.php?id=".urlencode($_GET["id"]));
@@ -199,12 +224,17 @@
         }
         //Commands for the customer
         if($kindOfTheAccountInUse == "Customer"){
-          if(!$thisProjectIsConfirmed){
-            if($numberArtisansAssignedThisProject > 0){
-              addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+          if($projectInfos["customer"] == $_SESSION["userId"]){
+            if(!$thisProjectIsConfirmed){
+              if($numberArtisansAssignedThisProject > 0){
+                addButtonLink(translate("Refuse artisans to this project"),"./refuseArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+              }
+              if($isTheProjectClaimed && !$thisProjectIsConfirmed){
+                addButtonLink(translate("Confirm this project"),"./confirmThisProject.php?id=".urlencode($_GET["id"]));
+              }
             }
-            if($isTheProjectClaimed && !$thisProjectIsConfirmed){
-              addButtonLink(translate("Confirm this project"),"./confirmThisProject.php?id=".urlencode($_GET["id"]));
+            if($projectInfos["isPublic"] == 1){
+              addButtonLink(translate("Set this project private"),"./setThisProjectPrivate.php?id=".urlencode($_GET["id"]));
             }
           }
         }

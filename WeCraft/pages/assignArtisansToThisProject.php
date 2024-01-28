@@ -9,7 +9,7 @@
   doInitialScripts();
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //Receive post request for editing the general info of this project
+    //Receive post request for assigneng an artisan to this project
     $insertedProjectId = $_POST['insertedProjectId'];
     upperPartOfThePage(translate("Assign artisans"),"./project.php?id=".urlencode($insertedProjectId));
     $insertedCandidate = trim($_POST['insertedCandidate']);

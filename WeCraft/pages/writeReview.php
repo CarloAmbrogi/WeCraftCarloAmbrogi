@@ -40,7 +40,7 @@
         if(doesThisProductExists($insertedProductId)){
           if(hasThisUserPurchasedThisItem($_SESSION["userId"],$insertedProductId)){
             //Load the review
-            loadReview($_SESSION["userId"],$insertedProductId,$numInsertedStars,$insertedReview);
+            uploadReview($_SESSION["userId"],$insertedProductId,$numInsertedStars,$insertedReview);
             addParagraph(translate("Done"));
           } else {
             addParagraph("You cant write a review of this product because you havent purchased it");

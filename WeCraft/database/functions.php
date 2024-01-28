@@ -2351,6 +2351,25 @@
     return $elements;
   }
 
+  //Obtain a preview of public and not claimed projects
+  function obtainPreviewPublicUnclaimedProjects(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` is NULL and `Project`.`isPublic` = 1 order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
   //Obtain a preview of projects not yet claimed and created for this customer
   function obtainProjectsPreviewNotClaimedThisCustomer($customerId){
     $connectionDB = $GLOBALS['$connectionDB'];
@@ -2479,7 +2498,7 @@
   //Obtain a project infos of a project given the id
   function obtainProjectInfos($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`id` = ?;";
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady`,`Project`.`isPublic` from `Project` where `Project`.`id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
       $statement->execute();
@@ -2492,7 +2511,7 @@
       $elements[] = $element;
     }
 
-    //return an array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    //return an array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady isPublic
     return $elements[0];
   }
 
@@ -3283,12 +3302,36 @@
     return $res;
   }
 
-  //Load a reviev for an item
-  function loadReview($userId,$product,$stars,$text){
+  //Upload a reviev for an item
+  function uploadReview($userId,$product,$stars,$text){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "INSERT INTO `Review` (`id`, `fromWho`, `product`, `stars`, `text`, `timestamp`) VALUES (NULL, ?, ?, ?, ?, CURRENT_TIMESTAMP());";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiis",$userId,$product,$stars,$text);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Make this project public
+  function makeThisProjectPublic($insertedProjectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `isPublic` = 1 where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$insertedProjectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Make this project private
+  function makeThisProjectPrivate($insertedProjectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "update `Project` set `isPublic` = 0 where `id` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$insertedProjectId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;

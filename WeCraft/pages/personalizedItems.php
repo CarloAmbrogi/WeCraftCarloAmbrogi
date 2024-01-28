@@ -112,6 +112,7 @@
           <option value="v2" <?php if($_GET["insertedCategory"] == "v2"){echo "selected";} ?>><?= translate("Projects claimed by you") ?></option>
           <option value="v3" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects confirmed by the customer") ?></option>
           <option value="v4" <?php if($_GET["insertedCategory"] == "v4"){echo "selected";} ?>><?= translate("Projects completed ready") ?></option>
+          <option value="v5" <?php if($_GET["insertedCategory"] == "v5"){echo "selected";} ?>><?= translate("Public unclaimed projects") ?></option>
         </select>
       <?php
       endFormGet(translate("Load projects"));
@@ -133,6 +134,10 @@
           case "v4":
             //projects completed ready
             $projectsToVisualize = obtainProjectsPreviewOfThisArtisanCompleted($_SESSION["userId"]);
+            break;
+          case "v5":
+            //public unclaimed projects
+            $projectsToVisualize = obtainPreviewPublicUnclaimedProjects();
             break;
           default:
             addParagraph(translate("You havent selected any category"));
