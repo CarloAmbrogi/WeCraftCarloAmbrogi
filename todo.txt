@@ -1,5 +1,3 @@
-Aggiungo tasto rimuovi partecipante da cooperazione
-
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
 Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione

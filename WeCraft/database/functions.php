@@ -594,7 +594,7 @@
       $elements[] = $element;
     }
 
-    //return an associative array with the infos of this product
+    //return an associative array with id artisan name description iconExtension icon price quantity category added lastSell
     return $elements[0];
   }
 

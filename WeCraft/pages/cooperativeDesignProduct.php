@@ -38,6 +38,7 @@
           if($_SESSION["userId"] == $productInfos["artisan"]){
             //Options in case you are the owner
             addButtonLink(translate("Add partecipants"),"./addPartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Remove partecipants"),"./removePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
             addButtonLink(translate("Coordinate collaboration"),"./");
             addButtonLink(translate("Delete this collaboration"),"./deleteCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           } else {
