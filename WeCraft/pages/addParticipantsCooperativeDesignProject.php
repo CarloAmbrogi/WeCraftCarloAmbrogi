@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for adding a partecipant (artisan or designer) as collaborator for the design of this project
+  //Page for adding a participant (artisan or designer) as collaborator for the design of this project
   //(get param id is te id of the project related to this collaboration)
   //You need to be the artisan who has claimed this project
   //You can see this page only if the collaborating design for this project is active and if the project is not completed
@@ -16,9 +16,9 @@
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
       upperPartOfThePage(translate("Cooperative design"),"cookieBack");
-      //Receive post request to add a new partecipant to the cooperative design for this project
+      //Receive post request to add a new participant to the cooperative design for this project
       $insertedProjectId = $_POST['insertedProjectId'];
-      $insertedPartecipant = trim($_POST['insertedPartecipant']);
+      $insertedParticipant = trim($_POST['insertedParticipant']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
@@ -26,12 +26,12 @@
         addParagraph(translate("This project doesnt exists"));
       } else if(!isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
         addParagraph(translate("You are not a collaborator for the design of this project"));
-      } else if($insertedPartecipant == ""){
-        addParagraph(translate("You have missed to insert the new partecipant"));
-      } else if(strlen($insertedPartecipant) > 49){
-        addParagraph(translate("The email address of the new partecipant is too long"));
-      } else if(!isValidEmail($insertedPartecipant)){
-        addParagraph(translate("The email address of this new partecipant is not valid"));
+      } else if($insertedParticipant == ""){
+        addParagraph(translate("You have missed to insert the new participant"));
+      } else if(strlen($insertedParticipant) > 49){
+        addParagraph(translate("The email address of the new participant is too long"));
+      } else if(!isValidEmail($insertedParticipant)){
+        addParagraph(translate("The email address of this new participant is not valid"));
       } else {
         //Check to be the artisan who has claimed this project and that the project is not completed
         $projectInfos = obtainProjectInfos($insertedProjectId);
@@ -41,8 +41,8 @@
           } else {
             //Check that the user you are going to add exists and it is an artisan or a designer
             //and is not already collaborating for the design of this project
-            if(doesThisUserGivenEmailExists($insertedPartecipant)){
-              $userToAdd = idUserWithThisEmail($insertedPartecipant);
+            if(doesThisUserGivenEmailExists($insertedParticipant)){
+              $userToAdd = idUserWithThisEmail($insertedParticipant);
               $kindUserToAdd = getKindOfThisAccount($userToAdd);
               if($kindUserToAdd == "Artisan" || $kindUserToAdd == "Designer"){
                 if(!isThisUserCollaboratingForTheDesignOfThisProject($userToAdd,$insertedProjectId)){
@@ -63,7 +63,7 @@
               addParagraph(translate("The user you are going to add doesnt exists"));
             }
           }
-          addButtonLink(translate("Add another user"),"./addPartecipantsCooperativeDesignProject.php?id=".urlencode($insertedProjectId));
+          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeDesignProject.php?id=".urlencode($insertedProjectId));
         } else {
           addParagraph(translate("You are not the artisan who has claimed this project"));
         }
@@ -85,10 +85,10 @@
                 upperPartOfThePage(translate("Cooperative design"),"cookieBack");
                 //Real content of the page
                 addParagraph(translate("Project").": ".$projectInfos["name"]);
-                //Form to insert data to add the new partecipant
+                //Form to insert data to add the new participant
                 startForm1();
                 startForm2($_SERVER['PHP_SELF']);
-                addShortTextField(translate("Insert the email address of the new partecipant to add for the collaboration for the design of this personalized product"),"insertedPartecipant",49);
+                addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the design of this personalized product"),"insertedParticipant",49);
                 addHiddenField("insertedProjectId",$_GET["id"]);
                 endForm(translate("Submit"));
                 //Suggested designer
@@ -99,7 +99,7 @@
                   if(isset($designerUserInfos['icon']) && ($designerUserInfos['icon'] != null)){
                     $fileImageToVisualize = blobToFile($designerUserInfos["iconExtension"],$designerUserInfos['icon']);
                   }
-                  addACardFunctionToCallAfter("./designer.php?id=".urlencode($designerUserInfos["id"]),$fileImageToVisualize,htmlentities($designerUserInfos["name"]." ".$designerUserInfos["surname"]),translate("Designer"),"","insertInInsertedPartecipant",$designerUserInfos["email"]);
+                  addACardFunctionToCallAfter("./designer.php?id=".urlencode($designerUserInfos["id"]),$fileImageToVisualize,htmlentities($designerUserInfos["name"]." ".$designerUserInfos["surname"]),translate("Designer"),"","insertInInsertedParticipant",$designerUserInfos["email"]);
                 }
                 //Suggested artisans
                 $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($_GET["id"]);
@@ -117,7 +117,7 @@
                     if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
                       $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
                     }
-                    addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"],"insertInInsertedPartecipant",$singleArtisanPreview["email"]);
+                    addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
                   }            
                 }
                 if($needToEndCardGrid == true){
@@ -128,7 +128,7 @@
                   <script>
                     //form inserted parameters
                     const form = document.querySelector('form');
-                    const insertedPartecipant = document.getElementById('insertedPartecipant');
+                    const insertedParticipant = document.getElementById('insertedParticipant');
       
                     function isValidEmail(email){
                       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -137,18 +137,18 @@
       
                     //prevent sending form with errors
                     form.onsubmit = function(e){
-                      if(insertedPartecipant.value.trim() == ""){
+                      if(insertedParticipant.value.trim() == ""){
                         e.preventDefault();
-                        alert("<?= translate("You have missed to insert the new partecipant") ?>");
-                      } else if(!isValidEmail(insertedPartecipant.value)){
+                        alert("<?= translate("You have missed to insert the new participant") ?>");
+                      } else if(!isValidEmail(insertedParticipant.value)){
                         e.preventDefault();
-                        alert("<?= translate("The email address of this new partecipant is not valid") ?>");
+                        alert("<?= translate("The email address of this new participant is not valid") ?>");
                       }
                     }
 
                     //function to insert suggested artisans and designers
-                    function insertInInsertedPartecipant(parteceipantToInsert){
-                      insertedPartecipant.value = parteceipantToInsert;
+                    function insertInInsertedParticipant(parteceipantToInsert){
+                      insertedParticipant.value = parteceipantToInsert;
                       $("#submit").unbind('click').click();
                     }
                   </script>

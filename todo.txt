@@ -1,10 +1,10 @@
 Termine "Assegnato" diventa "Presented" (se è pubblico auto presentati al progetto)
 
-Chi non è loggiato non può vedere at all il progetto
-
 I progetti pubblici sono visibili (sola lettura) anche ai designer (solo quelli che non sono stati riscattati o che sono stati completati)
 
-É participant con la I e non con la E
+Number of projects per state - con un click l'admin va a vedere la lista dei progetti
+
+
 
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
@@ -18,7 +18,3 @@ Dunque così ho uno storico sulla cooperazione
 
 
 Historical analytical queries
-
-
-
-Number of projects per state - con un click l'admin va a vedere la lista dei progetti

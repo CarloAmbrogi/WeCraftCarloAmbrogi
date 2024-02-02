@@ -7,7 +7,7 @@
   //Page for the collaboration for a product (get param id is te id of the product related to this collaboration)
   //You need to be an artisan or a designer
   //You can see this page only if you are collaborating for the design of this product
-  //If you are the owner of the product you can add partecipants and delete this collaboration
+  //If you are the owner of the product you can add participants and delete this collaboration
   //In this page there is a collaboration sheet
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -37,8 +37,8 @@
           //Show some options related to the collaboration
           if($_SESSION["userId"] == $productInfos["artisan"]){
             //Options in case you are the owner
-            addButtonLink(translate("Add partecipants"),"./addPartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
-            addButtonLink(translate("Remove partecipants"),"./removePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Add participants"),"./addParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
             addButtonLink(translate("Coordinate collaboration"),"./");
             addButtonLink(translate("Delete this collaboration"),"./deleteCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           } else {
@@ -47,7 +47,7 @@
           }
           //Options for every collaborator
           addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("product")."&chatWith=".urlencode($_GET["id"]));
-          addButtonLink(translate("See partecipants"),"./seePartecipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          addButtonLink(translate("See participants"),"./seeParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();
           //Show the sheet

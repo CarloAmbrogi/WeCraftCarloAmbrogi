@@ -2047,8 +2047,8 @@
     }
   }
 
-  //remove partecipant collaboration for the cooperating design for this product
-  function removePartecipantCooperatingDesignForThisProduct($userId,$productId){
+  //remove participant collaboration for the cooperating design for this product
+  function removeParticipantCooperatingDesignForThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `CooperativeDesignProducts` where `user` = ? and `product` = ?;";
     
@@ -2918,8 +2918,8 @@
     }
   }
 
-  //remove partecipant collaboration for the cooperating design for this project
-  function removePartecipantCooperatingDesignForThisProject($userId,$projectId){
+  //remove i collaboration for the cooperating design for this project
+  function removeParticipantCooperatingDesignForThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `CooperativeDesignProjects` where `user` = ? and `project` = ?;";
     

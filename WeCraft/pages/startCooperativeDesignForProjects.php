@@ -38,7 +38,7 @@
                 addSheetCooperatingDesignForThisProject($insertedProjectId);
                 addParagraph(translate("The collaboration for the design of this customized product has started"));
                 addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($insertedProjectId));
-                addParagraph(translate("From the page of the collaboration youll be able to add partecipants to this collaboration"));
+                addParagraph(translate("From the page of the collaboration youll be able to add participants to this collaboration"));
               } else {
                 addParagraph(translate("The cooperative design for this customized product is already active"));
                 addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($insertedProjectId));

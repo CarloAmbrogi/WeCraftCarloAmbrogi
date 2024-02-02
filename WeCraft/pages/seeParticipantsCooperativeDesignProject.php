@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page to see the partecipants of the cooperation for the design of this project
+  //Page to see the participants of the cooperation for the design of this project
   //(get param id is te id of the project to this collaboration)
   //You need to be an artisan or a designer
   //You can see this page only if you are collaborating for the design of this project

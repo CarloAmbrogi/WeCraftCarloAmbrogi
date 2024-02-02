@@ -29,7 +29,7 @@
         $productInfos = obtainProductInfos($insertedProductId);
         if($_SESSION["userId"] != $productInfos["artisan"]){
           //leave the collaboration for the design of this product
-          removePartecipantCooperatingDesignForThisProduct($_SESSION["userId"],$insertedProductId);
+          removeParticipantCooperatingDesignForThisProduct($_SESSION["userId"],$insertedProductId);
           addParagraph(translate("Done"));
         } else {
           addParagraph(translate("You cant leave the collaboration beacause you are the owner"));

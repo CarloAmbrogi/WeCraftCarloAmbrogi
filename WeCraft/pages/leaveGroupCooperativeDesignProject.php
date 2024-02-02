@@ -32,7 +32,7 @@
             addParagraph(translate("The project is already ready"));
           } else {
             //leave the collaboration for the design of this project
-            removePartecipantCooperatingDesignForThisProject($_SESSION["userId"],$insertedProjectId);
+            removeParticipantCooperatingDesignForThisProject($_SESSION["userId"],$insertedProjectId);
             addParagraph(translate("Done"));
           }
         } else {

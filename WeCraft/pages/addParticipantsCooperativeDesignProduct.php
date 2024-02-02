@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for adding a partecipant (artisan or designer) as collaborator for the design of this product
+  //Page for adding a participant (artisan or designer) as collaborator for the design of this product
   //(get param id is te id of the product related to this collaboration)
   //You need to be the owner of the product
   //You can see this page only if the collaborating design for this product is active
@@ -15,9 +15,9 @@
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
       upperPartOfThePage(translate("Cooperative design"),"cookieBack");
-      //Receive post request to add a new partecipant to the cooperative design for this product
+      //Receive post request to add a new participant to the cooperative design for this product
       $insertedProductId = $_POST['insertedProductId'];
-      $insertedPartecipant = trim($_POST['insertedPartecipant']);
+      $insertedParticipant = trim($_POST['insertedParticipant']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
@@ -25,20 +25,20 @@
         addParagraph(translate("This product doesnt exists"));
       } else if(!isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedProductId)){
         addParagraph(translate("You are not a collaborator for the design of this product"));
-      } else if($insertedPartecipant == ""){
-        addParagraph(translate("You have missed to insert the new partecipant"));
-      } else if(strlen($insertedPartecipant) > 49){
-        addParagraph(translate("The email address of the new partecipant is too long"));
-      } else if(!isValidEmail($insertedPartecipant)){
-        addParagraph(translate("The email address of this new partecipant is not valid"));
+      } else if($insertedParticipant == ""){
+        addParagraph(translate("You have missed to insert the new participant"));
+      } else if(strlen($insertedParticipant) > 49){
+        addParagraph(translate("The email address of the new participant is too long"));
+      } else if(!isValidEmail($insertedParticipant)){
+        addParagraph(translate("The email address of this new participant is not valid"));
       } else {
         //Check to be the owner
         $productInfos = obtainProductInfos($insertedProductId);
         if($_SESSION["userId"] == $productInfos["artisan"]){
           //Check that the user you are going to add exists and it is an artisan or a designer
           //and is not already collaborating for the design of this product
-          if(doesThisUserGivenEmailExists($insertedPartecipant)){
-            $userToAdd = idUserWithThisEmail($insertedPartecipant);
+          if(doesThisUserGivenEmailExists($insertedParticipant)){
+            $userToAdd = idUserWithThisEmail($insertedParticipant);
             $kindUserToAdd = getKindOfThisAccount($userToAdd);
             if($kindUserToAdd == "Artisan" || $kindUserToAdd == "Designer"){
               if(!isThisUserCollaboratingForTheDesignOfThisProduct($userToAdd,$insertedProductId)){
@@ -58,7 +58,7 @@
           } else {
             addParagraph(translate("The user you are going to add doesnt exists"));
           }
-          addButtonLink(translate("Add another user"),"./addPartecipantsCooperativeDesignProduct.php?id=".urlencode($insertedProductId));
+          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeDesignProduct.php?id=".urlencode($insertedProductId));
         } else {
           addParagraph(translate("You are not the owner of the product related to this collaboration"));
         }
@@ -76,17 +76,17 @@
               upperPartOfThePage(translate("Cooperative design"),"cookieBack");
               //Real content of the page
               addParagraph(translate("Product").": ".$productInfos["name"]);
-              //Form to insert data to add the new partecipant
+              //Form to insert data to add the new participant
               startForm1();
               startForm2($_SERVER['PHP_SELF']);
-              addShortTextField(translate("Insert the email address of the new partecipant to add for the collaboration for the design of this product"),"insertedPartecipant",49);
+              addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the design of this product"),"insertedParticipant",49);
               addHiddenField("insertedProductId",$_GET["id"]);
               endForm(translate("Submit"));
               ?>
                 <script>
                   //form inserted parameters
                   const form = document.querySelector('form');
-                  const insertedPartecipant = document.getElementById('insertedPartecipant');
+                  const insertedParticipant = document.getElementById('insertedParticipant');
     
                   function isValidEmail(email){
                     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -95,12 +95,12 @@
     
                   //prevent sending form with errors
                   form.onsubmit = function(e){
-                    if(insertedPartecipant.value.trim() == ""){
+                    if(insertedParticipant.value.trim() == ""){
                       e.preventDefault();
-                      alert("<?= translate("You have missed to insert the new partecipant") ?>");
-                    } else if(!isValidEmail(insertedPartecipant.value)){
+                      alert("<?= translate("You have missed to insert the new participant") ?>");
+                    } else if(!isValidEmail(insertedParticipant.value)){
                       e.preventDefault();
-                      alert("<?= translate("The email address of this new partecipant is not valid") ?>");
+                      alert("<?= translate("The email address of this new participant is not valid") ?>");
                     }
                   }
                 </script>
