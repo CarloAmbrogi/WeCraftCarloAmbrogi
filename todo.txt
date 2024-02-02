@@ -1,11 +1,24 @@
+Termine "Assegnato" diventa "Presented" (se è pubblico auto presentati al progetto)
+
+Chi non è loggiato non può vedere at all il progetto
+
+I progetti pubblici sono visibili (sola lettura) anche ai designer (solo quelli che non sono stati riscattati o che sono stati completati)
+
+É participant con la I e non con la E
+
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
 Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione
 
 NON SI ELIMINANO LE COOPERAZIONI MA LE SI TERMINANO (per tenerne traccia)
 (Terminata la cooperazione si può ricominciare)
+(Cambia anche il nome del tasto)
 
 Dunque così ho uno storico sulla cooperazione
 
 
 Historical analytical queries
+
+
+
+Number of projects per state - con un click l'admin va a vedere la lista dei progetti

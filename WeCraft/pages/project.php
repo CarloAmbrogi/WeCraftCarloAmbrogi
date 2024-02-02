@@ -25,7 +25,7 @@
     if(doesThisProjectExists($_GET["id"])){
       //Check possibility to see this project
       $projectInfos = obtainProjectInfos($_GET["id"]);
-      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || $projectInfos["isPublic"] == 1 || $_SESSION["userId"] == "admin"){
+      if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || ($projectInfos["isPublic"] == 1 && $kindOfTheAccountInUse != "Guest") || $_SESSION["userId"] == "admin"){
         addScriptAddThisPageToCronology();
         upperPartOfThePage(translate("Project"),"cookieBack");
         //Real content of this page
@@ -241,7 +241,11 @@
         //End main content of this page
       } else {
         upperPartOfThePage(translate("Project"),"cookieBack");
-        addParagraph(translate("You havent access to this project"));
+        if($kindOfTheAccountInUse == "Guest"){
+          addParagraph(translate("You havent done the log in"));
+        } else {
+          addParagraph(translate("You havent access to this project"));
+        }
       }
     } else {
       upperPartOfThePage(translate("Error"),"");
