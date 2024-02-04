@@ -1,4 +1,3 @@
-I progetti pubblici sono visibili (sola lettura) anche ai designer (solo quelli che non sono stati riscattati o che sono stati completati)
 
 Number of projects per state - con un click l'admin va a vedere la lista dei progetti
 

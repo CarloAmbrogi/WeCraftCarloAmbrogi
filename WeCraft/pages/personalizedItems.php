@@ -23,11 +23,14 @@
   // a section for projects claimed from the artisan (editable; if edited, it needs to be reclamed)
   // a section for projects confirmed by the customer
   // a section for projects completed ready
+  // a section with public unclaimed projects
+  // a section with public completed projects
   //Artisans can see:
   // a section for projects presented to him
   // a section for projects claimed by him
   // a section for projects confirmed by the customer
   // a section for projects completed ready
+  // a section with public unclaimed projects
   //Customers can see:
   // a section for projects not yet claimed
   // a section for claimed projects (he can confirm)
@@ -53,6 +56,8 @@
           <option value="v3" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects claimed from an artisan") ?></option>
           <option value="v4" <?php if($_GET["insertedCategory"] == "v4"){echo "selected";} ?>><?= translate("Projects confirmed by the customer") ?></option>
           <option value="v5" <?php if($_GET["insertedCategory"] == "v5"){echo "selected";} ?>><?= translate("Projects completed and ready") ?></option>
+          <option value="v6" <?php if($_GET["insertedCategory"] == "v6"){echo "selected";} ?>><?= translate("Public unclaimed projects") ?></option>
+          <option value="v7" <?php if($_GET["insertedCategory"] == "v7"){echo "selected";} ?>><?= translate("Public completed projects") ?></option>
         </select>
       <?php
       endFormGet(translate("Load projects"));
@@ -78,6 +83,14 @@
           case "v5":
             //projects completed and ready
             $projectsToVisualize = obtainProjectsPreviewOfThisDesignerCompleted($_SESSION["userId"]);
+            break;
+          case "v6":
+            //public unclaimed projects
+            $projectsToVisualize = obtainPreviewPublicUnclaimedProjects();
+            break;
+          case "v7":
+            //public completed projects
+            $projectsToVisualize = obtainPreviewPublicCompletedProjects();
             break;
           default:
             addParagraph(translate("You havent selected any category"));

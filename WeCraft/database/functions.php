@@ -2370,6 +2370,25 @@
     return $elements;
   }
 
+  //Obtain a preview of public and completed projects
+  function obtainPreviewPublicCompletedProjects(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`timestampReady` is not NULL and `Project`.`isPublic` = 1 order by `Project`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
   //Obtain a preview of projects not yet claimed and created for this customer
   function obtainProjectsPreviewNotClaimedThisCustomer($customerId){
     $connectionDB = $GLOBALS['$connectionDB'];
