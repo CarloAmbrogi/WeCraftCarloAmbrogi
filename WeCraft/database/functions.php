@@ -2171,7 +2171,7 @@
     }
   }
 
-  //Obtain a preview of projects of this designer not already assigned to an artisan
+  //Obtain a preview of projects of this designer not already presented to an artisan
   function obtainProjectsPreviewOfThisDesignerNotAssigned($designerId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`id` not in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans`) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
@@ -2191,7 +2191,7 @@
     return $elements;
   }
 
-  //Obtain a preview of projects of this designer not assigned to at least an artisan
+  //Obtain a preview of projects of this designer not presented to at least an artisan
   function obtainProjectsPreviewOfThisDesignerAssigned($designerId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `designer` = ? and `Project`.`id` in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans`) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
@@ -2271,7 +2271,7 @@
     return $elements;
   }
 
-  //Obtain a preview of projects assigned to this artisan
+  //Obtain a preview of projects presented to this artisan
   function obtainProjectsPreviewAssignedToThisArtisan($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`id` in (select `ProjectAssignArtisans`.`project` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`artisan` = ?) and `Project`.`claimedByThisArtisan` is null order by `Project`.`id` DESC;";
@@ -2311,7 +2311,7 @@
     return $elements;
   }
 
-  //Obtain a preview of projects assigned to this artisan and confirmed
+  //Obtain a preview of projects presented to this artisan and confirmed
   function obtainProjectsPreviewOfThisArtisanConfirmed($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady` from `Project` where `Project`.`claimedByThisArtisan` = ? and `Project`.`confirmedByTheCustomer` = 1 and `Project`.`timestampReady` is null order by `Project`.`id` DESC;";
@@ -2515,7 +2515,7 @@
     return $elements[0];
   }
 
-  //Obtain a preview of the artisans to witch is assigned this project
+  //Obtain a preview of the artisans to witch is presented this project
   function obtainPreviewArtisansToWitchIsAssignedThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `ProjectAssignArtisans`.`artisan` from `ProjectAssignArtisans` where `ProjectAssignArtisans`.`project` = ?) group by `User`.`id`;";
@@ -2535,7 +2535,7 @@
     return $elements;
   }
 
-  //Number of artisans who are assigned to this project
+  //Number of artisans who are presented to this project
   function numberArtisansAssignedThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select count(*) as numberArtisansAssignedThisProject from (select * from `ProjectAssignArtisans` where `project` = ?) as t;";
@@ -2557,7 +2557,7 @@
   //Return if this user can see this project
   //Designer: only the designer creator of the project
   //Customer: only the customer for which is the project
-  //Artisans: only the artisan who has claimed the project and, in case the project is not confirmed, also the artisans who are assigned to this project
+  //Artisans: only the artisan who has claimed the project and, in case the project is not confirmed, also the artisans who are presented to this project
   //Designer and Artisans: also the ones who are collaborating fo the design of the project
   function doesThisUserCanSeeThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
@@ -2688,7 +2688,7 @@
     }
   }
 
-  //Return if this user (which is an artisan) is assigned to this project
+  //Return if this user (which is an artisan) is presented to this project
   function isThisArtisanAssignedToThisProject($artisanId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select count(*) as isThisArtisanAssignedToThisProject from (select * from `ProjectAssignArtisans` where `artisan` = ? and `project` = ?) as t;";
@@ -2707,7 +2707,7 @@
     return $elements[0]["isThisArtisanAssignedToThisProject"];
   }
 
-  //Assign this artisan to this project
+  //Assign (present) this artisan to this project
   function assignArtisanToThisProject($artisanId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "insert into `ProjectAssignArtisans` (`project`,`artisan`) VALUES (?,?);";
@@ -2732,7 +2732,7 @@
     }
   }
 
-  //This user (which is an artisan assigned to this project) claims this project
+  //This user (which is an artisan presented to this project) claims this project
   function claimThisProject($artisanId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "update `Project` set `claimedByThisArtisan` = ? where `id` = ?;";

@@ -8,7 +8,7 @@
   //A project is visible only to realated customer, designers and artisans (excepts for public projects)
   //Actions for designers:
   // edit the project
-  // assign artisans
+  // present artisans
   // refuse artisans
   // set public or private a project
   //Actions for artisans
@@ -106,9 +106,9 @@
         if(!$thisProjectIsConfirmed){
           if(($numberArtisansAssignedThisProject > 0 && !$isTheProjectClaimed) || ($numberArtisansAssignedThisProject >= 2 && $isTheProjectClaimed)){
             if($isTheProjectClaimed){
-              addParagraph(translate("The other artisans which were candidate assigned to this project were").":");
+              addParagraph(translate("The other artisans which were candidate presented to this project were").":");
             } else {
-              addParagraph(translate("This project is assigned to theese artisans").":");
+              addParagraph(translate("This project is presented to theese artisans").":");
             }
             $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($_GET["id"]);
             startCardGrid();
@@ -124,7 +124,7 @@
             endCardGrid();
           } else {
             if(!$isTheProjectClaimed){
-              addParagraph(translate("The designer hasnt already assigned this project to artisans"));
+              addParagraph(translate("The designer hasnt already presented this project to artisans"));
             }
           }
         }
@@ -177,7 +177,7 @@
               }
             }
             if(!$isTheProjectClaimed){
-              addButtonLink(translate("Assign artisans to this project"),"./assignArtisansToThisProject.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Present artisans to this project"),"./assignArtisansToThisProject.php?id=".urlencode($_GET["id"]));
             }
             if(!$thisProjectIsConfirmed){
               if($numberArtisansAssignedThisProject > 0){
@@ -195,7 +195,7 @@
         //Commands for the artisans
         if($kindOfTheAccountInUse == "Artisan"){
           if(!isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"]) && $projectInfos["isPublic"] == 1){
-            addButtonLink(translate("Assign yourself to this project"),"./assignYourselfToThisProject.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Present yourself to this project"),"./assignYourselfToThisProject.php?id=".urlencode($_GET["id"]));
           }
           if(isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"])){
             if(!$isTheProjectClaimed){

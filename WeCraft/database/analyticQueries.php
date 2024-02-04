@@ -570,7 +570,7 @@
     return $elements[0]["numCompletedProjectsInAtLeastCertainTimeRange"];
   }
 
-  //Number projects not assigned to any artisan
+  //Number projects not presented to any artisan
   function numberProjectsNotAssigned(){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select count(*) as numberProjectsNotAssigned from `Project` where `id` not in (select `project` from `ProjectAssignArtisans`);";
@@ -588,7 +588,7 @@
     return $elements[0]["numberProjectsNotAssigned"];
   }
 
-  //Number projects assigned but not claimed
+  //Number projects presented but not claimed
   function numberProjectsAssignedNotClaimed(){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select count(*) as numberProjectsAssignedNotClaimed from `Project` where `claimedByThisArtisan` is null and `id` in (select `project` from `ProjectAssignArtisans`);";

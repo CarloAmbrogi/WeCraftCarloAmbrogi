@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Refuse this project (if you are assigned to this project) by the id of the project
+  //Refuse this project (if you are presented to this project) by the id of the project
   //Only for not confirmed projects
   //In case you have claimed the project, also the project became unclaimed
   doInitialScripts();
@@ -18,7 +18,7 @@
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
     } else {
-      //Check that this project exists, the user is assigned to this project, the project is not confirmed
+      //Check that this project exists, the user is presented to this project, the project is not confirmed
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
         $thisProjectIsConfirmed = false;
@@ -47,7 +47,7 @@
     if(isset($_GET["id"])){
       upperPartOfThePage(translate("Refuse project"),"./project.php?id=".urlencode($_GET["id"]));
       if(doesThisProjectExists($_GET["id"])){
-        //Verify that the user is assigned to this project and that the project is not confirmed
+        //Verify that the user is presented to this project and that the project is not confirmed
         $projectInfos = obtainProjectInfos($_GET["id"]);
         $thisProjectIsConfirmed = false;
         if($projectInfos["confirmedByTheCustomer"] == 1){

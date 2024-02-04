@@ -31,10 +31,10 @@
             $thisProjectIsConfirmed = true;
           }
           if(!$thisProjectIsConfirmed){
-            //Now check if this project is assigned to at least an artisan (else it's not possible to refuse artisans)
+            //Now check if this project is presented to at least an artisan (else it's not possible to refuse artisans)
             $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($insertedProjectId);
             if($numberArtisansAssignedThisProject == 0){
-              addParagraph(translate("There isnt any artisan assigned to this project"));
+              addParagraph(translate("There isnt any artisan presented to this project"));
             } else {
               //Remove artisans from this project
               $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($insertedProjectId);
@@ -82,12 +82,12 @@
           if(!$thisProjectIsConfirmed){
             //Content of this page
             addParagraph(translate("Project").": ".$projectInfos["name"]);
-            //Title Assign artisans to this project
+            //Title Refuse artisans to this project
             addTitle(translate("Refuse artisans to this project"));
-            //Now check if this project is assigned to at least an artisan (else it's not possible to refuse artisans)
+            //Now check if this project is presented to at least an artisan (else it's not possible to refuse artisans)
             $numberArtisansAssignedThisProject = numberArtisansAssignedThisProject($_GET["id"]);
             if($numberArtisansAssignedThisProject == 0){
-              addParagraph(translate("There isnt any artisan assigned to this project"));
+              addParagraph(translate("There isnt any artisan presented to this project"));
             } else {
               //Form to refuse artisans
               startForm1();

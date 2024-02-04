@@ -89,7 +89,7 @@
 
     //Number of projects per state
     addParagraph(translate("Number of projects per state"));
-    addBarChart("numProjectsPerState",translate("Number of projects per state"),[translate("Not assigned to any artisan"),translate("Assigned but not claimed"),translate("Claimed but not confirmed"),translate("Confirmed not completed"),translate("Completed")],[numberProjectsNotAssigned(),numberProjectsAssignedNotClaimed(),numberProjectsClaimedNotConfirmed(),numberProjectsConfirmedNotCompleted(),numberProjectsCompleted()]);
+    addBarChart("numProjectsPerState",translate("Number of projects per state"),[translate("Not presented to any artisan"),translate("Presented but not claimed"),translate("Claimed but not confirmed"),translate("Confirmed not completed"),translate("Completed")],[numberProjectsNotAssigned(),numberProjectsAssignedNotClaimed(),numberProjectsClaimedNotConfirmed(),numberProjectsConfirmedNotCompleted(),numberProjectsCompleted()]);
 
     //Number of projects in cooperation for the design
     addParagraph(translate("Number of projects in cooperation for the design"));

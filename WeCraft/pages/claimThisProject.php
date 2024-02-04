@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Claim this project (if you are assigned to this project) by the id of the project
+  //Claim this project (if you are presented to this project) by the id of the project
   //Only for not claimed projects
   doInitialScripts();
 
@@ -17,7 +17,7 @@
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
     } else {
-      //Check that this project exists, the user is assigned to this project, the project is not claimed
+      //Check that this project exists, the user is presented to this project, the project is not claimed
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
         $isTheProjectClaimed = false;
@@ -47,7 +47,7 @@
     if(isset($_GET["id"])){
       upperPartOfThePage(translate("Claim project"),"./project.php?id=".urlencode($_GET["id"]));
       if(doesThisProjectExists($_GET["id"])){
-        //Verify that the user is assigned to this project and that the project is not claimed
+        //Verify that the user is presented to this project and that the project is not claimed
         $projectInfos = obtainProjectInfos($_GET["id"]);
         $isTheProjectClaimed = false;
         if(isset($projectInfos["claimedByThisArtisan"]) and $projectInfos["claimedByThisArtisan"] != null){

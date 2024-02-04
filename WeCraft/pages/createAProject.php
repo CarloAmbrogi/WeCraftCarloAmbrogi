@@ -86,7 +86,7 @@
               addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
             }
             //Show button to go to the personalized items page v1
-            addParagraph(translate("You can see the project you have created in the personalized item page and youll be able to assign artisans to this project"));
+            addParagraph(translate("You can see the project you have created in the personalized item page and youll be able to present this project to some artisans"));
             addButtonLink(translate("Go to personalized items page"),"./personalizedItems.php?insertedCategory=v1");
           } else {
             addParagraph(translate("You cant create a project for a customer who hasnt started a chat with you"));

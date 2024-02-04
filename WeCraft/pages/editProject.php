@@ -54,7 +54,7 @@
           if(!$thisProjectIsConfirmed){
             //Edit general info of this project and make it unclaimed
             updateGeneralInfoOfAProject($insertedProjectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
-            //Send notification to the customer and to the assigned artisans
+            //Send notification to the customer and to the presented artisans
             sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has applied some modifications to the project","project",$insertedProjectId);
             $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($insertedProjectId);
             foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){

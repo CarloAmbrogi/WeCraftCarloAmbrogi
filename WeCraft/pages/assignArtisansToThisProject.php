@@ -4,12 +4,12 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Assign artisans to this project (if you are the designer of this project) by the id of the project
+  //Present artisans to this project (if you are the designer of this project) by the id of the project
   //Only for not claimed projects
   doInitialScripts();
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-    //Receive post request for assigneng an artisan to this project
+    //Receive post request for presenting an artisan to this project
     $insertedProjectId = $_POST['insertedProjectId'];
     upperPartOfThePage(translate("Assign artisans"),"./project.php?id=".urlencode($insertedProjectId));
     $insertedCandidate = trim($_POST['insertedCandidate']);
@@ -45,8 +45,8 @@
                   $userInfos = obtainUserInfos($userToAdd);
                   addParagraph(translate("The user")." ".$userInfos["name"]." ".$userInfos["surname"]." (".$userInfos["email"].") ".translate("has been added"));
                   //Send notification to the customer and to the new artisan
-                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has assigned a new artisan to this project","project",$insertedProjectId);
-                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"The designer has assigned you to this project","project",$insertedProjectId);
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has presented a new artisan to this project","project",$insertedProjectId);
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"The designer has presented you to this project","project",$insertedProjectId);
                 } else {
                   addParagraph(translate("The user is already assigned to this project"));
                 }
@@ -82,12 +82,12 @@
           if(!$isTheProjectClaimed){
             //Content of this page
             addParagraph(translate("Project").": ".$projectInfos["name"]);
-            //Title Assign artisans to this project
-            addTitle(translate("Assign artisans to this project"));
-            //Form to insert data to assign a new artisan candidate for this project
+            //Title Present artisans to this project
+            addTitle(translate("Present artisans to this project"));
+            //Form to insert data to present a new artisan candidate for this project
             startForm1();
             startForm2($_SERVER['PHP_SELF']);
-            addShortTextField(translate("Insert the email address of the new candidate to which assign this project"),"insertedCandidate",49);
+            addShortTextField(translate("Insert the email address of the new candidate to which present this project"),"insertedCandidate",49);
             addHiddenField("insertedProjectId",$_GET["id"]);
             endForm(translate("Submit"));
             ?>
