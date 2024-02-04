@@ -356,7 +356,7 @@
   //Load the tab bar for the account in use
   function tabBarForTheAccountInUse(){
     if($_SESSION["userId"] == "admin"){
-      return [[translate("Analytics"),"./anlytics.php"],[translate("Historical analytics"),"./historicalAnlytics.php"],[translate("Log out"),"./logout.php"]];
+      return [[translate("Analytics"),"./anlytics.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Historical analytics"),"./historicalAnlytics.php"],[translate("Log out"),"./logout.php"]];
     }
     switch(getKindOfTheAccountInUse()){
       case "Guest":

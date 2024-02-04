@@ -36,11 +36,13 @@
   // a section for claimed projects (he can confirm)
   // a section for projects confirmed by him
   // a section for projects completed ready
+  //Adin can see:
+  // all the projects per state
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Personalized items"),"");
   //Check you are not a guest
-  if($kindOfTheAccountInUse != "Guest"){
+  if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Customer" || $kindOfTheAccountInUse == "Designer" || $_SESSION["userId"] == "admin"){
     addScriptAddThisPageToCronology();
     //Page for designers
     if($kindOfTheAccountInUse == "Designer"){
@@ -207,6 +209,75 @@
           case "v4":
             //projects completed ready
             $projectsToVisualize = obtainProjectsPreviewOfThisCustomerCompleted($_SESSION["userId"]);
+            break;
+          default:
+            addParagraph(translate("You havent selected any category"));
+            break;
+        }
+        //Visualize the projects $projectsToVisualize
+        startCardGrid();
+        foreach($projectsToVisualize as &$singleProjectPreview){
+          $fileImageToVisualize = genericProjectImage;
+          if(isset($singleProjectPreview['icon']) && ($singleProjectPreview['icon'] != null)){
+            $fileImageToVisualize = blobToFile($singleProjectPreview["iconExtension"],$singleProjectPreview['icon']);
+          }
+          $text1 = translate("Price").": ".floatToPrice($singleProjectPreview["price"]);
+          $text2 = translate("Percentage to designer").": ".$singleProjectPreview["percentageToDesigner"]."%";
+          addACardForTheGrid("./project.php?id=".urlencode($singleProjectPreview["id"]),$fileImageToVisualize,htmlentities($singleProjectPreview["name"]),$text1,$text2);
+        }
+        endCardGrid();
+      } else {
+        addParagraph(translate("You havent selected any category"));
+      }
+    }
+    //Page for the admin
+    if($_SESSION["userId"] == "admin"){
+      addParagraph(translate("The admin can see all the projects per state"));
+      addParagraph(translate("Select witch category of projects you want to see").":");
+      startFormGet($_SERVER['PHP_SELF']);
+      ?>
+        <label for="formCategory" class="form-label"><?= translate("Category") ?></label>
+        <select id="insertedCategory" name="insertedCategory">
+          <option value="v1" <?php if($_GET["insertedCategory"] == "v1"){echo "selected";} ?>><?= translate("Projects not already presented to an artisan") ?></option>
+          <option value="v2" <?php if($_GET["insertedCategory"] == "v2"){echo "selected";} ?>><?= translate("Projects presented to at least one artisan") ?></option>
+          <option value="v3" <?php if($_GET["insertedCategory"] == "v3"){echo "selected";} ?>><?= translate("Projects claimed from an artisan") ?></option>
+          <option value="v4" <?php if($_GET["insertedCategory"] == "v4"){echo "selected";} ?>><?= translate("Projects confirmed by the customer") ?></option>
+          <option value="v5" <?php if($_GET["insertedCategory"] == "v5"){echo "selected";} ?>><?= translate("Projects completed and ready") ?></option>
+          <option value="v6" <?php if($_GET["insertedCategory"] == "v6"){echo "selected";} ?>><?= translate("Public unclaimed projects") ?></option>
+          <option value="v7" <?php if($_GET["insertedCategory"] == "v7"){echo "selected";} ?>><?= translate("Public completed projects") ?></option>
+        </select>
+      <?php
+      endFormGet(translate("Load projects"));
+      if(isset($_GET["insertedCategory"])){
+        $projectsToVisualize = [];
+        switch($_GET["insertedCategory"]){
+          case "v1":
+            //Projects not already presented to an artisan
+            $projectsToVisualize = obtainProjectsPreviewNotAssigned();
+            break;
+          case "v2":
+            //Projects presented to at least one artisan
+            $projectsToVisualize = obtainProjectsPreviewAssigned();
+            break;
+          case "v3":
+            //projects claimed from an artisan
+            $projectsToVisualize = obtainProjectsPreviewClaimed();
+            break;
+          case "v4":
+            //projects confirmed by the customer
+            $projectsToVisualize = obtainProjectsPreviewConfirmed();
+            break;
+          case "v5":
+            //projects completed and ready
+            $projectsToVisualize = obtainProjectsPreviewCompleted();
+            break;
+          case "v6":
+            //public unclaimed projects
+            $projectsToVisualize = obtainPreviewPublicUnclaimedProjects();
+            break;
+          case "v7":
+            //public completed projects
+            $projectsToVisualize = obtainPreviewPublicCompletedProjects();
             break;
           default:
             addParagraph(translate("You havent selected any category"));

@@ -1,8 +1,4 @@
 
-Number of projects per state - con un click l'admin va a vedere la lista dei progetti
-
-
-
 Quando aggiungi o togli utente da collaborazione -> salvare timestamp
 
 Feedback sulla collaborazione obbligatorio per tutti i collaboratori al termine della collaborazione
