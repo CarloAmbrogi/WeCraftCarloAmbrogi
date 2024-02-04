@@ -16,9 +16,9 @@
       addParagraph(translate("Error of the csrf token"));
     } else {
       if($insertedEmail == "admin" && $insertedPassword == "a"){
-        //Log in as profile anlytics administrator
+        //Log in as profile analytics administrator
         $_SESSION["userId"] = "admin";
-        header('Location: ./anlytics.php');
+        header('Location: ./analytics.php');
       } else {
         $isLoginValid = isPasswordValid($insertedEmail, $insertedPassword);
         //$isLoginValid = true;//Uncomment to force log in valid

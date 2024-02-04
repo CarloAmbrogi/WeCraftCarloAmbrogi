@@ -799,5 +799,41 @@
     }
     return $n / $d;
   }
+
+  //Numbero of projects public
+  function numberOfProjectsPublic(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsPublic from `Project` where `isPublic` = 1;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsPublic"];
+  }
+
+  //Numbero of projects private
+  function numberOfProjectsPrivate(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProjectsPrivate from `Project` where `isPublic` = 0;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProjectsPrivate"];
+  }
   
 ?>

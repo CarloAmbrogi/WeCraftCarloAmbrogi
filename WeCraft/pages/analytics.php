@@ -83,6 +83,10 @@
     //Analytics related to projects for personalized items
     addTitle(translate("Analytics related to projects for personalized items"));
 
+    //Number of projects public or private
+    addParagraph(translate("Number of projects public or private"));
+    addBarChart("numProjectsPubPriv",translate("Number of projects public or private"),[translate("Public"),translate("Private")],[numberOfProjectsPublic(),numberOfProjectsPrivate()]);
+
     //Number of projects that have been completed within a certain time range
     addParagraph(translate("Number of projects that have been completed within a certain time range"));
     addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRange(0,86400),numberCompletedProjectsInCertainTimeRange(86400,604800),numberCompletedProjectsInAtLeastCertainTimeRange(604800)]);
