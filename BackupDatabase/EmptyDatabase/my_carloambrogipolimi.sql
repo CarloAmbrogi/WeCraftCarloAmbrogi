@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Gen 27, 2024 alle 12:45
+-- Creato il: Feb 05, 2024 alle 11:26
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -129,6 +129,22 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `FeedbackCollaboration`
+--
+
+CREATE TABLE `FeedbackCollaboration` (
+  `id` int NOT NULL,
+  `fromWho` int NOT NULL,
+  `fromKind` varchar(25) NOT NULL,
+  `toWhat` int NOT NULL,
+  `toWhatKind` varchar(25) NOT NULL,
+  `feedback` text NOT NULL,
+  `timestamp` timestamp NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `Messages`
 --
 
@@ -143,7 +159,8 @@ CREATE TABLE `Messages` (
   `imgExtension` varchar(7) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `image` longblob,
   `linkKind` varchar(25) DEFAULT NULL,
-  `linkTo` int DEFAULT NULL
+  `linkTo` int DEFAULT NULL,
+  `extraText` text
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -282,7 +299,8 @@ CREATE TABLE `Project` (
   `confirmedByTheCustomer` tinyint(1) NOT NULL,
   `timestampPurchase` timestamp NULL DEFAULT NULL,
   `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `timestampReady` timestamp NULL DEFAULT NULL
+  `timestampReady` timestamp NULL DEFAULT NULL,
+  `isPublic` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -517,6 +535,12 @@ ALTER TABLE `ExchangeProduct`
   ADD PRIMARY KEY (`artisan`,`product`);
 
 --
+-- Indici per le tabelle `FeedbackCollaboration`
+--
+ALTER TABLE `FeedbackCollaboration`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `Messages`
 --
 ALTER TABLE `Messages`
@@ -646,6 +670,12 @@ ALTER TABLE `Users`
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
+
+--
+-- AUTO_INCREMENT per la tabella `FeedbackCollaboration`
+--
+ALTER TABLE `FeedbackCollaboration`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `Messages`

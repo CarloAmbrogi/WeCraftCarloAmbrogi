@@ -2092,8 +2092,8 @@
     return $elements[0]["doesThisUserExists"];
   }
 
-  //delete the collaboration for the cooperating design for this product
-  function deleteCooperatingDesignForThisProduct($productId){
+  //terminate the collaboration for the cooperating design for this product
+  function terminateCooperatingDesignForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `CooperativeDesignProducts` WHERE `product` = ?;";
     
@@ -2911,8 +2911,8 @@
     return $elements[0];
   }
 
-  //delete the collaboration for the cooperating design for this project
-  function deleteCooperatingDesignForThisProject($projectId){
+  //terminate the collaboration for the cooperating design for this project
+  function terminateCooperatingDesignForThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `CooperativeDesignProjects` WHERE `project` = ?;";
     
@@ -3468,6 +3468,87 @@
     }
 
     //return an array of associative array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady
+    return $elements;
+  }
+
+  //Save feedback collaboration
+  function saveFeedbackCollaboration($fromWho, $fromKind, $toWhat, $toWhatKind, $feedback){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "INSERT INTO `FeedbackCollaboration` (`id`,`fromWho`,`fromKind`,`toWhat`,`toWhatKind`,`feedback`,`timestamp`) VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP());";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isiss",$fromWho,$fromKind,$toWhat,$toWhatKind,$feedback);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+  }
+
+  //Has this user recived a personal chat automatic of a notification with this kind of link and this link ?
+  function thisUserRecivedThisNotification($userId,$linkKind,$linkTo){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as thisUserRecivedThisNotification from `Messages` where `toKind` = 'personal' and `toWho` = ? and `isANotification` = 1 and `linkKind` = ? and `linkTo` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isi",$userId,$linkKind,$linkTo);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    $r = $elements[0]["thisUserRecivedThisNotification"];
+
+    if($r > 0){
+      $r = 1;
+    }
+
+    return $r;
+  }
+
+  //Has this user sent a personal chat automatic of a notification with this kind of link and this link ?
+  function thisUserSentThisNotification($userId,$linkKind,$linkTo){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as thisUserSentThisNotification from `Messages` where `toKind` = 'personal' and `fromWho` = ? and `isANotification` = 1 and `linkKind` = ? and `linkTo` = ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("isi",$userId,$linkKind,$linkTo);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    $r = $elements[0]["thisUserSentThisNotification"];
+
+    if($r > 0){
+      $r = 1;
+    }
+
+    return $r;
+  }
+
+  //Obtain a preview of the feedbacks for the collaborations
+  function obtainFeedbacksPreview(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `FeedbackCollaboration`.`id`, `FeedbackCollaboration`.`fromWho`, `User`.`name`, `User`.`surname`, `FeedbackCollaboration`.`fromKind`, `FeedbackCollaboration`.`toWhat`, `FeedbackCollaboration`.`toWhatKind`, `FeedbackCollaboration`.`feedback`, `FeedbackCollaboration`.`timestamp` FROM `FeedbackCollaboration` join `User` on `FeedbackCollaboration`.`fromWho` = `User`.`id` order by `FeedbackCollaboration`.`id` DESC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id fromWho name surname fromKind toWhat toWhatKind feedback timestamp
     return $elements;
   }
 

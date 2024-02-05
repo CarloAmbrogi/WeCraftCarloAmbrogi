@@ -14,7 +14,7 @@
   if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
-      upperPartOfThePage(translate("Delete cooperation"),"");
+      upperPartOfThePage(translate("Leave cooperation"),"");
       //Receive post request to delete the collaboration for the design of this product
       $insertedProductId = $_POST['insertedProductId'];
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);

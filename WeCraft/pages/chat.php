@@ -186,6 +186,26 @@
               $text2 = "";
               addACard("./product.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualize,htmlentities($productLinkInfos["name"]),$text1,$text2);
             }
+            if($linkKind == "feedbackCollProd"){
+              $productLinkInfos = obtainProductInfos($singleMessagePreview["linkTo"]);
+              $fileImageToVisualize = genericProductImage;
+              if(isset($productLinkInfos['icon']) && ($productLinkInfos['icon'] != null)){
+                $fileImageToVisualize = blobToFile($productLinkInfos["iconExtension"],$productLinkInfos['icon']);
+              }
+              $text1 = translate("Category").": ".translate($productLinkInfos["category"]).'<br>'.translate("Price").": ".floatToPrice($productLinkInfos["price"]);
+              $text2 = translate("Click here to write your feedback");
+              addACard("./sendFeedbackCollaboration.php?id=".urlencode($singleMessagePreview["linkTo"])."&kind=product",$fileImageToVisualize,htmlentities($productLinkInfos["name"]),$text1,$text2);
+            }
+            if($linkKind == "feedbackCollProj"){
+              $projectLinkInfos = obtainProjectInfos($singleMessagePreview["linkTo"]);
+              $fileImageToVisualize = genericProjectImage;
+              if(isset($projectLinkInfos['icon']) && ($projectLinkInfos['icon'] != null)){
+                $fileImageToVisualize = blobToFile($projectLinkInfos["iconExtension"],$projectLinkInfos['icon']);
+              }
+              $text1 = translate("Price").": ".floatToPrice($projectLinkInfos["price"])." ".translate("Percentage to designer").": ".$projectLinkInfos["percentageToDesigner"]."%";
+              $text2 = translate("Click here to write your feedback");
+              addACard("./sendFeedbackCollaboration.php?id=".urlencode($singleMessagePreview["linkTo"])."&kind=project",$fileImageToVisualize,htmlentities($projectLinkInfos["name"]),$text1,$text2);
+            }
           }
           endSquare();
         }

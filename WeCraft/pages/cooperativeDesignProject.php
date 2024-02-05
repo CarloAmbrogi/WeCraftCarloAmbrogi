@@ -7,7 +7,8 @@
   //Page for the collaboration for a project (get param id is te id of the project related to this collaboration)
   //You need to be an artisan or a designer
   //You can see this page only if you are collaborating for the design of this project
-  //If you are the owner of the project you can add participants and delete this collaboration
+  //If you are the owner of the project you can add or remove participants
+  //The collaboration terminates automatically when the project is completed
   //In this page there is a collaboration sheet
   //You can do actions only if the project is not confirmed
   doInitialScripts();
@@ -46,7 +47,6 @@
               addButtonLink(translate("Add participants"),"./addParticipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
               addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
               addButtonLink(translate("Coordinate collaboration"),"./");
-              addButtonLink(translate("Delete this collaboration"),"./deleteCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
             } else {
               //Options in case you aren't the owner
               addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
