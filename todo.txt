@@ -1,9 +1,4 @@
 
-Quando aggiungi o togli utente da collaborazione -> salvare timestamp
-
-NON SI ELIMINANO LE COOPERAZIONI MA LE SI TERMINANO (per tenerne traccia)
-(Terminata la cooperazione si può ricominciare)
-
-Dunque così ho uno storico sulla cooperazione
-
 Historical analytical queries
+
+Analitiche previsioni futuro, specialmente sulla cooperazione (what if / HOW TO)

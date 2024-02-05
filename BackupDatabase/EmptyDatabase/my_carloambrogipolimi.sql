@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Feb 05, 2024 alle 11:26
+-- Creato il: Feb 05, 2024 alle 19:48
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -74,6 +74,32 @@ CREATE TABLE `CooperativeDesignProducts` (
   `product` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+--
+-- Trigger `CooperativeDesignProducts`
+--
+DELIMITER $$
+CREATE TRIGGER `deleteCooperativeDesignProducts` AFTER DELETE ON `CooperativeDesignProducts` FOR EACH ROW insert into `CooperativeDesignProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, old.`user`, old.`product`,'delete',CURRENT_TIMESTAMP())
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `insertCooperativeDesignProducts` AFTER INSERT ON `CooperativeDesignProducts` FOR EACH ROW insert into `CooperativeDesignProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, new.`user`,new.`product`,'insert',CURRENT_TIMESTAMP())
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `CooperativeDesignProductsTrig`
+--
+
+CREATE TABLE `CooperativeDesignProductsTrig` (
+  `id` int NOT NULL,
+  `user` int NOT NULL,
+  `product` int NOT NULL,
+  `action` varchar(25) NOT NULL,
+  `timestamp` timestamp NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -83,6 +109,32 @@ CREATE TABLE `CooperativeDesignProducts` (
 CREATE TABLE `CooperativeDesignProjects` (
   `user` int NOT NULL,
   `project` int NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Trigger `CooperativeDesignProjects`
+--
+DELIMITER $$
+CREATE TRIGGER `deleteCooperativeDesignProjects` AFTER DELETE ON `CooperativeDesignProjects` FOR EACH ROW insert into `CooperativeDesignProjectsTrig` (`id`,`user`,`project `,`action`,`timestamp`) values (NULL, old.`user`, old.`project`,'delete',CURRENT_TIMESTAMP())
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `insertCooperativeDesignProjects` AFTER INSERT ON `CooperativeDesignProjects` FOR EACH ROW insert into `CooperativeDesignProjectsTrig` (`id`,`user`,`project`,`action`,`timestamp`) values (NULL, new.`user`,new.`project`,'insert',CURRENT_TIMESTAMP())
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `CooperativeDesignProjectsTrig`
+--
+
+CREATE TABLE `CooperativeDesignProjectsTrig` (
+  `id` int NOT NULL,
+  `user` int NOT NULL,
+  `project` int NOT NULL,
+  `action` varchar(25) NOT NULL,
+  `timestamp` timestamp NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
@@ -511,10 +563,22 @@ ALTER TABLE `CooperativeDesignProducts`
   ADD PRIMARY KEY (`user`,`product`);
 
 --
+-- Indici per le tabelle `CooperativeDesignProductsTrig`
+--
+ALTER TABLE `CooperativeDesignProductsTrig`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indici per le tabelle `CooperativeDesignProjects`
 --
 ALTER TABLE `CooperativeDesignProjects`
   ADD PRIMARY KEY (`user`,`project`);
+
+--
+-- Indici per le tabelle `CooperativeDesignProjectsTrig`
+--
+ALTER TABLE `CooperativeDesignProjectsTrig`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indici per le tabelle `Customer`
@@ -670,6 +734,18 @@ ALTER TABLE `Users`
 --
 -- AUTO_INCREMENT per le tabelle scaricate
 --
+
+--
+-- AUTO_INCREMENT per la tabella `CooperativeDesignProductsTrig`
+--
+ALTER TABLE `CooperativeDesignProductsTrig`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `CooperativeDesignProjectsTrig`
+--
+ALTER TABLE `CooperativeDesignProjectsTrig`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT per la tabella `FeedbackCollaboration`

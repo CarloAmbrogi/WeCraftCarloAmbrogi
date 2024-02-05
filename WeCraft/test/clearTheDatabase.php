@@ -31,6 +31,8 @@
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ReadMessage`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Review`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`FeedbackCollaboration`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProductsTrig`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProjectsTrig`");
 
     //Tables of Magis
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Metadata`");
