@@ -356,7 +356,7 @@
   //Load the tab bar for the account in use
   function tabBarForTheAccountInUse(){
     if($_SESSION["userId"] == "admin"){
-      return [[translate("Analytics"),"./analytics.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Historical analytics"),"./historicalAnalytics.php"],[translate("Feedback collaborations"),"./feedbackCollaborations.php"],[translate("Log out"),"./logout.php"]];
+      return [[translate("Analytics"),"./analytics.php"],[translate("Personalized items"),"./personalizedItems.php"],[translate("Historical analytics"),"./historicalAnalytics.php"],[translate("Feedback collaborations"),"./feedbackCollaborations.php"],[translate("Analytical forecast"),"./analyticalForecast.php"],[translate("Map"),"./map.php"],[translate("Search"),"./search.php"],[translate("Log out"),"./logout.php"]];
     }
     switch(getKindOfTheAccountInUse()){
       case "Guest":
@@ -418,6 +418,9 @@
     }
     if($tabTitle == translate("Feedback collaborations")){
       return WeCraftBaseUrl."Icons/feedbackCollaborationsIcon.png";
+    }
+    if($tabTitle == translate("Analytical forecast")){
+      return WeCraftBaseUrl."Icons/analyticalForecastIcon.png";
     }
     if($tabTitle == translate("Log out")){
       return WeCraftBaseUrl."Icons/logoutIcon.png";
