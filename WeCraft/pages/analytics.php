@@ -80,6 +80,10 @@
     addParagraph(translate("Averange number of product for which an artisan or a designer is collaborating for the design"));
     addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the design"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()]);
 
+    //Collaboration design product score in years
+    addParagraph(translate("Collaboration design product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    addBarChart("collaborationDesignProductScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationDesignProductScoreYears(2023),collaborationDesignProductScoreYears(2024),collaborationDesignProductScoreYears(2025),collaborationDesignProductScoreYears(2026)]);
+
     //Analytics related to projects for personalized items
     addTitle(translate("Analytics related to projects for personalized items"));
 
@@ -106,6 +110,10 @@
     //Averange number of projects for which an artisan or a designer is collaborating for the design
     addParagraph(translate("Averange number of projects for which an artisan or a designer is collaborating for the design"));
     addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the design"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()]);
+
+    //Collaboration design project score in years
+    addParagraph(translate("Collaboration design project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    addBarChart("collaborationDesignProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationDesignProjectScoreYears(2023),collaborationDesignProjectScoreYears(2024),collaborationDesignProjectScoreYears(2025),collaborationDesignProjectScoreYears(2026)]);
 
     //End of this page
   } else {

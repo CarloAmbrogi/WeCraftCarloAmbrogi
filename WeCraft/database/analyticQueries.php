@@ -1215,5 +1215,45 @@
     //return an array of associative array with id user project action timestamp
     return $elements;
   }
+
+  //Collaboration design product score in years (each time an action to add a person is performed it counts as one point)
+  //(not count duplicates)
+  function collaborationDesignProductScoreYears($year){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as collaborationDesignProductScoreYears from (select * from `CooperativeDesignProductsTrig` where YEAR(`CooperativeDesignProductsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`product`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$year);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["collaborationDesignProductScoreYears"];
+  }
+
+  //Collaboration design project score in years (each time an action to add a person is performed it counts as one point)
+  //(not count duplicates)
+  function collaborationDesignProjectScoreYears($year){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as collaborationDesignProjectScoreYears from (select * from `CooperativeDesignProjectsTrig` where YEAR(`CooperativeDesignProjectsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`project`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$year);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["collaborationDesignProjectScoreYears"];
+  }
   
 ?>
