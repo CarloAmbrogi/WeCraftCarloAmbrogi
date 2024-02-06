@@ -38,7 +38,7 @@
     addBarChart("numberOfUsersYear",translate("New users in years"),["2023","2024","2025","2026"],[numberNewUsersYear(2023),numberNewUsersYear(2024),numberNewUsersYear(2025),numberNewUsersYear(2026)]);
 
     //Number of products per categories
-    addParagraph("Number of products per categories");
+    addParagraph(translate("Number of products per categories"));
     addBarChart("numberOfProducts",translate("Number of products per categories"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[getNumberOfProducts(),getNumberOfProductsWithThisCategory("Nonee"),getNumberOfProductsWithThisCategory("Jewerly"),getNumberOfProductsWithThisCategory("Home decoration"),getNumberOfProductsWithThisCategory("Pottery"),getNumberOfProductsWithThisCategory("Teppiches"),getNumberOfProductsWithThisCategory("Bedware Bathroomware"),getNumberOfProductsWithThisCategory("Artisan craft")]);
 
     //New products in years

@@ -835,5 +835,385 @@
 
     return $elements[0]["numberProjectsPrivate"];
   }
+
+  //Get number of users registered from X to X
+  function getNumberOfUsersHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberUsers from `User` where `timeVerificationCode` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberUsers"];
+  }
+
+  //Get number of customers registered from X to X
+  function getNumberOfCustomersHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberCustomers from `Customer` where `id` in (select `id` from `User` where `timeVerificationCode` BETWEEN ? AND ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberCustomers"];
+  }
+
+  //Get number of artisans registered from X to X
+  function getNumberOfArtisansHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberArtisans from `Artisan` where `id` in (select `id` from `User` where `timeVerificationCode` BETWEEN ? AND ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberArtisans"];
+  }
+
+  //Get number of designers registered from X to X
+  function getNumberOfDesignersHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberDesigners from `Designer` where `id` in (select `id` from `User` where `timeVerificationCode` BETWEEN ? AND ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberDesigners"];
+  }
+
+  //Get number of products added from X to X
+  function getNumberOfProductsHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProducts from `Product` where `added` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProducts"];
+  }
+
+  //Get number of products with a specific category added from X to X
+  function getNumberOfProductsWithThisCategoryHistorical($category,$start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsWithThisCategory from `Product` where `category` = ? and `added` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("sss",$category,$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsWithThisCategory"];
+  }
+
+  //Number of products added from X to X where now are in cooperation for the design
+  function numberProductsInCooperationForTheDesignHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProductsInCooperationForTheDesign from (select * from `CooperativeDesignProducts` where `product` in (select `id` from `Product` where `added` BETWEEN ? AND ?) group by `product`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProductsInCooperationForTheDesign"];
+  }
+
+  //Number of products added from X to X where now aren't in cooperation for the design
+  function numberProductsNotInCooperationForTheDesignHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProductsNotInCooperationForTheDesign from `Product` where `id` not in (select `product` from `CooperativeDesignProducts`) and `id` in (select `id` from `Product` where `added` BETWEEN ? AND ?);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProductsNotInCooperationForTheDesign"];
+  }
+
+  //Max product id
+  function maxProductId(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select max(`id`) as maxProductId from `Product`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["maxProductId"];
+  }
+
+  //Obtain CooperativeDesignProductsTrig
+  function obtainCooperativeDesignProductsTrigLimitDate($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `CooperativeDesignProductsTrig`.`id`,`CooperativeDesignProductsTrig`.`user`,`CooperativeDesignProductsTrig`.`product`,`CooperativeDesignProductsTrig`.`action`,`CooperativeDesignProductsTrig`.`timestamp` from `CooperativeDesignProductsTrig` where `CooperativeDesignProductsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeDesignProductsTrig`.`id` ASC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id user product action timestamp
+    return $elements;
+  }
+
+  //is this product added from X to X
+  function isThisProductAddedBetweenDates($productId,$start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as isThisProductAddedBetweenDates from `Product` where `id` = ? and `added` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$productId,$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["isThisProductAddedBetweenDates"];
+  }
+
+  //Number products added from X to X which have never been in collaboration for the design
+  function numberProductsAddedBetweenDatesNeverBeenCollaboration($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsNeverBeenCollaboration from `Product` where `added` BETWEEN ? AND ? and `id` not in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert');";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsNeverBeenCollaboration"];
+  }
+
+  //Number products added from X to X which have been in collaboration for the design but never with a designer
+  function numberProductsAddedBetweenDatesBeenCollaborationNeverDesinger($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsBeenCollaborationNeverDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert') and `id` not in (select `product` from `CooperativeDesignProductsTrig` where `user` in (select `id` from `Designer`));";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsBeenCollaborationNeverDesigner"];
+  }
+
+  //Number products added from X to X which have been in collaboration for the design with a designer
+  function numberProductsAddedBetweenDatesBeenCollaborationDesinger($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberProductsBeenCollaborationDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert') and `id` in (select `product` from `CooperativeDesignProductsTrig` where `user` in (select `id` from `Designer`));";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberProductsBeenCollaborationDesigner"];
+  }
+
+  //Number of projects that have been completed within a certain time range (projects confirmed between X and X)
+  function numberCompletedProjectsInCertainTimeRangeHistorical($min,$max,$start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCompletedProjectsInCertainTimeRange from `Project` where TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= ? and TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) <= ? and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iiss",$min,$max,$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCompletedProjectsInCertainTimeRange"];
+  }
+
+  //Number of projects that have been completed in at least a certain time range (projects confirmed between X and X)
+  function numberCompletedProjectsInAtLeastCertainTimeRangeHistorical($min,$start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numCompletedProjectsInAtLeastCertainTimeRange from `Project` where TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= ? and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iss",$min,$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numCompletedProjectsInAtLeastCertainTimeRange"];
+  }
+
+  //Number of projects in cooperation for the design which have been confirmed between X and X (also completed projects)
+  function numberProjectsInCooperationForTheDesignConfirmedBetweenDates($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProjectsInCooperationForTheDesign from (select * from `CooperativeDesignProjects` where `project` in (select `id` from `Project` where `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?) group by `project`) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProjectsInCooperationForTheDesign"];
+  }
+
+  //Number of projects not in cooperation for the design which have been confirmed between X and X (also completed projects)
+  function numberProjectsNotInCooperationForTheDesignConfirmedBetweenDates($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numProjectsNotInCooperationForTheDesign from `Project` where `id` not in (select `project` from `CooperativeDesignProjects`) and `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numProjectsNotInCooperationForTheDesign"];
+  }
+
+  //Max project id
+  function maxProjectId(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select max(`id`) as maxProjectId from `Project`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["maxProjectId"];
+  }
+
+  //Obtain CooperativeDesignProjectsTrig
+  function obtainCooperativeDesignProjectsTrigLimitDate($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `CooperativeDesignProjectsTrig`.`id`,`CooperativeDesignProjectsTrig`.`user`,`CooperativeDesignProjectsTrig`.`project`,`CooperativeDesignProjectsTrig`.`action`,`CooperativeDesignProjectsTrig`.`timestamp` from `CooperativeDesignProjectsTrig` where `CooperativeDesignProjectsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeDesignProjectsTrig`.`id` ASC;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id user project action timestamp
+    return $elements;
+  }
   
 ?>

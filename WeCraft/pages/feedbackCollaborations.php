@@ -12,7 +12,9 @@
     //Content of this page
     addTitle(translate("Feedback collaborations"));
     $feedbacks = obtainFeedbacksPreview();
+    $foundFeedback = false;
     foreach($feedbacks as &$feedback){
+      $foundFeedback = true;
       startSquare();
       addParagraph(translate("From")." ".$feedback["name"]." ".$feedback["surname"]." (".$feedback["fromKind"].")"." [".$feedback["timestamp"]."]");
       if($feedback["fromKind"] == "Artisan" || $feedback["fromKind"] == "owner" || $feedback["fromKind"] == "claimer"){
@@ -29,6 +31,9 @@
       }
       addParagraph($feedback["feedback"]);
       endSquare();
+    }
+    if($foundFeedback == false){
+      addParagraph(translate("No feedback for now"));
     }
     //End of this page
   } else {

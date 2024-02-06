@@ -11,8 +11,179 @@
     addScriptAddThisPageToCronology();
     //Content of this page
 
+    //default start date and end date
+    $startDate = "2020-12-13 10:40:17";
+    $endDate = "2055-12-13 10:40:17";
+
+    //set params via get
+    if(isset($_GET["startDate"]) && isset($_GET["endDate"])){
+      $startDate = $_GET["startDate"];
+      $endDate = $_GET["endDate"];
+    }
+
+    //Form to set start date and end date
+    startFormGet("./historicalAnalytics.php");
+    addParagraph(translate("Use the format")." "."yyyy-mm-dd hh-mm-ss");
+    addShortTextField(translate("Start date"),"startDate",49);
+    addShortTextField(translate("End date"),"endDate",49);
+    endFormGet(translate("Submit"));
+    addButtonLink(translate("Reset default"),"./historicalAnalytics.php");
+    //Load previous inserted values in the form
+    ?>
+    <script>
+      //form inserted parameters
+      const form = document.querySelector('form');
+      const startDate = document.getElementById('startDate');
+      const endDate = document.getElementById('endDate');
+
+      //Load form fields starting values
+      startDate.value = "<?= $startDate ?>";
+      endDate.value = "<?= $endDate ?>";
+    </script>
+  <?php
+
+    //Inserted start / end date
+    addTitle(translate("Historical analytics"));
+    addParagraph(translate("Start date").": ".$startDate);
+    addParagraph(translate("End date").": ".$endDate);
+
+    //General statistics of WeCraft
+    addTitle(translate("General statistics of WeCraft"));
+
+    //Number of users divided by categories historical
+    addParagraph(translate("Number of users registered from")." ".$startDate." ".translate("toa")." ".$endDate);
+    addBarChart("numberOfUsers",translate("Number of users"),[translate("All users"),translate("Customer"),translate("Artisan"),translate("Designer")],[getNumberOfUsersHistorical($startDate,$endDate),getNumberOfCustomersHistorical($startDate,$endDate),getNumberOfArtisansHistorical($startDate,$endDate),getNumberOfDesignersHistorical($startDate,$endDate)]);
     
+    //Number of products per categories historical
+    addParagraph(translate("Number of products per categories")." (".translate("products added from")." ".$startDate." ".translate("toa")." ".$endDate.")");
+    addBarChart("numberOfProducts",translate("Number of products per categories"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[getNumberOfProductsHistorical($startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Nonee",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Jewerly",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Home decoration",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Pottery",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Teppiches",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Bedware Bathroomware",$startDate,$endDate),getNumberOfProductsWithThisCategoryHistorical("Artisan craft",$startDate,$endDate)]);
+
+    //Analytics related to collaboration
+    addTitle(translate("Analytics related to collaboration"));
+
+    //Number of products in cooperation for the design historical
+    addParagraph(translate("Number of products added from")." ".$startDate." ".translate("toa")." ".$endDate." ".translate("which are now in cooperation for the design or not"));
+    addBarChart("numProductsCooperationDesign",translate("Number of products in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProductsInCooperationForTheDesignHistorical($startDate,$endDate),numberProductsNotInCooperationForTheDesignHistorical($startDate,$endDate)]);
+
+    //Number of products added from X that in date X have a certain number of collaborators
+    addParagraph(translate("Number of products added from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
+    $maxProductId = maxProductId();
+    $productArray = [];
+    $countArrayCreator = 0;
+    while($countArrayCreator <= $maxProductId){
+      if(isThisProductAddedBetweenDates($countArrayCreator,$startDate,$endDate)){
+        array_push($productArray,0);
+      } else {
+        array_push($productArray,-1);
+      }
+      $countArrayCreator++;
+    }
+    $cooperativeDesignProductsTrig = obtainCooperativeDesignProductsTrigLimitDate($startDate,$endDate);
+    foreach($cooperativeDesignProductsTrig as &$singleTrig){
+      if($productArray[$singleTrig["product"]] != -1){
+        if($singleTrig["action"] == "insert"){
+          $productArray[$singleTrig["product"]]++;
+        }
+        if($singleTrig["action"] == "delete"){
+          $productArray[$singleTrig["product"]]--;
+        }
+      }
+    }
+    $cont0 = 0;
+    $cont1 = 0;
+    $cont2 = 0;
+    $cont3 = 0;
+    $cont4 = 0;
+    $cont5p = 0;
+    foreach($productArray as &$singleProd){
+      if($singleProd == 0){
+        $cont0++;
+      }
+      if($singleProd == 1){
+        $cont1++;
+      }
+      if($singleProd == 2){
+        $cont2++;
+      }
+      if($singleProd == 3){
+        $cont3++;
+      }
+      if($singleProd == 4){
+        $cont4++;
+      }
+      if($singleProd >= 5){
+        $cont5p++;
+      }
+    }
+    addBarChart("numberProductsWithNumCollaborators",translate("Number products with a certain number of collaborators"),["0","1","2","3","4","5+"],[$cont0,$cont1,$cont2,$cont3,$cont4,$cont5p]);
+
+    //Products added from X to X which have never been in collaboration, have been in collaboration but never with a designer, have been in collaboration with a designer
+    addParagraph(translate("Products added from")." ".$startDate." ".translate("toa")." ".$endDate." ".translate("which have never been in collaboration or have been in collaboration but never with a designer or have been in collaboration with a designer"));
+    addBarChart("numberCooperationsProductsWithDesigner",translate("Products collaborations"),[translate("Never in collaboration"),translate("Never designer"),translate("Designer")],[numberProductsAddedBetweenDatesNeverBeenCollaboration($startDate,$endDate),numberProductsAddedBetweenDatesBeenCollaborationNeverDesinger($startDate,$endDate),numberProductsAddedBetweenDatesBeenCollaborationDesinger($startDate,$endDate)]);
     
+    //Analytics related to projects for personalized items
+    addTitle(translate("Analytics related to projects for personalized items"));
+
+    //Number of projects that have been completed within a certain time range historical (projects confirmed between X and X)
+    addParagraph(translate("Number of projects that have been completed within a certain time range")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
+    addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRangeHistorical(0,86400,$startDate,$endDate),numberCompletedProjectsInCertainTimeRangeHistorical(86400,604800,$startDate,$endDate),numberCompletedProjectsInAtLeastCertainTimeRangeHistorical(604800,$startDate,$endDate)]);
+
+    //Number of projects in cooperation for the design which have been confirmed between X and X (also completed project)
+    addParagraph(translate("Number of projects in cooperation for the design")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
+    addBarChart("numProjectsCooperationDesign",translate("Number of projects in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheDesignConfirmedBetweenDates($startDate,$endDate),numberProjectsNotInCooperationForTheDesignConfirmedBetweenDates($startDate,$endDate)]);
+
+    //Number of projects confirmed from X that in date X have a certain number of collaborators
+    addParagraph(translate("Number of projects added from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
+    $maxProjectId = maxProjectId();
+    $projectArray = [];
+    $countArrayCreator = 0;
+    while($countArrayCreator <= $maxProjectId){
+      if(isThisProductAddedBetweenDates($countArrayCreator,$startDate,$endDate)){
+        array_push($projectArray,0);
+      } else {
+        array_push($projectArray,-1);
+      }
+      $countArrayCreator++;
+    }
+    $cooperativeDesignProjectsTrig = obtainCooperativeDesignProjectsTrigLimitDate($startDate,$endDate);
+    foreach($cooperativeDesignProjectsTrig as &$singleTrig){
+      if($projectArray[$singleTrig["project"]] != -1){
+        if($singleTrig["action"] == "insert"){
+          $projectArray[$singleTrig["project"]]++;
+        }
+        if($singleTrig["action"] == "delete"){
+          $projectArray[$singleTrig["project"]]--;
+        }
+      }
+    }
+    $cont0 = 0;
+    $cont1 = 0;
+    $cont2 = 0;
+    $cont3 = 0;
+    $cont4 = 0;
+    $cont5p = 0;
+    foreach($projectArray as &$singleProd){
+      if($singleProd == 0){
+        $cont0++;
+      }
+      if($singleProd == 1){
+        $cont1++;
+      }
+      if($singleProd == 2){
+        $cont2++;
+      }
+      if($singleProd == 3){
+        $cont3++;
+      }
+      if($singleProd == 4){
+        $cont4++;
+      }
+      if($singleProd >= 5){
+        $cont5p++;
+      }
+    }
+    addBarChart("numberProjectsWithNumCollaborators",translate("Number projects with a certain number of collaborators"),["0","1","2","3","4","5+"],[$cont0,$cont1,$cont2,$cont3,$cont4,$cont5p]);
+
     //End of this page
   } else {
     upperPartOfThePage(translate("Error"),"");
