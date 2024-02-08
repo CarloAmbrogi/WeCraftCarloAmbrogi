@@ -47,7 +47,7 @@
 
     //Averange number of sells of a product
     addParagraph(translate("Averange number of sells of a product"));
-    addBarChart("averangeNumberSells",translate("Averange number of sells of a product"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[averangeNumberSellsOfAProduct(),averangeNumberSellsOfAProductWithThisCategory("Nonee"),averangeNumberSellsOfAProductWithThisCategory("Jewerly"),averangeNumberSellsOfAProductWithThisCategory("Home decoration"),averangeNumberSellsOfAProductWithThisCategory("Pottery"),averangeNumberSellsOfAProductWithThisCategory("Teppiches"),averangeNumberSellsOfAProductWithThisCategory("Bedware Bathroomware"),averangeNumberSellsOfAProductWithThisCategory("Artisan craft")]);
+    addBarChart("averangeNumberSells",translate("Averange number of sells of a product"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[averangeNumberSellsOfAProduct(),averangeNumberSellsOfAProductWithThisCategory("Nonee"),averangeNumberSellsOfAProductWithThisCategory("Jewerly"),averangeNumberSellsOfAProductWithThisCategory("Home decoration"),averangeNumberSellsOfAProductWithThisCategory("Pottery"),averangeNumberSellsOfAProductWithThisCategory("Teppiches"),averangeNumberSellsOfAProductWithThisCategory("Bedware Bathroomware"),averangeNumberSellsOfAProductWithThisCategory("Artisan craft")],false);
 
     //Number of products sold for at least a certain number of units
     addParagraph(translate("Number of products sold for at least a certain number of units"));
@@ -78,7 +78,7 @@
 
     //Averange number of product for which an artisan or a designer is collaborating for the production
     addParagraph(translate("Averange number of product for which an artisan or a designer is collaborating for the production"));
-    addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()]);
+    addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()],false);
 
     //Collaboration production product score in years
     addParagraph(translate("Collaboration production product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
@@ -109,7 +109,7 @@
 
     //Averange number of projects for which an artisan or a designer is collaborating for the production
     addParagraph(translate("Averange number of projects for which an artisan or a designer is collaborating for the production"));
-    addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()]);
+    addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()],false);
 
     //Collaboration production project score in years
     addParagraph(translate("Collaboration production project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");

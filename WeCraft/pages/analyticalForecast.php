@@ -43,7 +43,7 @@
       }
       $yearCounter++;
     }
-    addBarChart("numberOfUsersYear",translate("New users in years"),["2023","2024","2025","2026"],$vv);
+    addBarChart("numberOfUsersYear",translate("New users in years"),["2023","2024","2025","2026"],$vv,false);
 
     //New products in years
     addParagraph(translate("New products in years"));
@@ -74,7 +74,7 @@
       }
       $yearCounter++;
     }
-    addBarChart("numberOfProductsYear",translate("New products in years"),["2023","2024","2025","2026"],$vv);
+    addBarChart("numberOfProductsYear",translate("New products in years"),["2023","2024","2025","2026"],$vv,false);
 
     //Collaboration production product score in years
     addParagraph(translate("Collaboration production product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
@@ -105,7 +105,7 @@
       }
       $yearCounter++;
     }
-    addBarChart("collaborationProductionProductScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
+    addBarChart("collaborationProductionProductScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv,false);
 
     //Collaboration production project score in years
     addParagraph(translate("Collaboration production project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
@@ -136,7 +136,7 @@
       }
       $yearCounter++;
     }
-    addBarChart("collaborationProductionProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
+    addBarChart("collaborationProductionProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv,false);
 
     //End of this page
   } else {

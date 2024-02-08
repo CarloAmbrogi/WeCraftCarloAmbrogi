@@ -52,7 +52,7 @@
 
   //example: addBarChart("myId3","# of Votes",["Red","Blue","Yellow"],[12,19,3]);
   //other example: addBarChart("myId4","# of Votes",["Red","Blue","Yellow","Green","Purple","Orange"],[12,19,3,5,2,3]);
-  function addBarChart($id,$title,$labels,$data){
+  function addBarChart($id,$title,$labels,$data,$onlyIntegers = true){
     ?>
       <canvas id="myChart<?= $id ?>" style="max-width: 600px;"></canvas>
       <script>
@@ -123,7 +123,18 @@
             scales: {
               yAxes: [{
                 ticks: {
-                  beginAtZero: true
+                  <?php
+                    if($onlyIntegers == true){
+                      ?>
+                        beginAtZero: true,
+                        callback: function(value) {if (value % 1 === 0) {return value;}}
+                      <?php
+                    } else {
+                      ?>
+                        beginAtZero: true
+                      <?php
+                    }
+                  ?>
                 }
               }]
             }
