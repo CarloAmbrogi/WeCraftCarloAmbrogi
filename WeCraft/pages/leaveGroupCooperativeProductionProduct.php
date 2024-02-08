@@ -4,9 +4,9 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for leaving the collaboration for the design of this product
+  //Page for leaving the collaboration for the production of this product
   //(get param id is te id of the product related to this collaboration)
-  //You can see this page only if the collaborating design for this product is active
+  //You can see this page only if the collaborating production for this product is active
   //You must not to be the owner of the product
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -15,21 +15,21 @@
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
       upperPartOfThePage(translate("Leave cooperation"),"");
-      //Receive post request to delete the collaboration for the design of this product
+      //Receive post request to leave the collaboration for the production of this product
       $insertedProductId = $_POST['insertedProductId'];
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
       } else if(!doesThisProductExists($insertedProductId)){
         addParagraph(translate("This product doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedProductId)){
-        addParagraph(translate("You are not a collaborator for the design of this product"));
+      } else if(!isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$insertedProductId)){
+        addParagraph(translate("You are not a collaborator for the production of this product"));
       } else {
         //Check to not be the owner
         $productInfos = obtainProductInfos($insertedProductId);
         if($_SESSION["userId"] != $productInfos["artisan"]){
-          //leave the collaboration for the design of this product
-          removeParticipantCooperatingDesignForThisProduct($_SESSION["userId"],$insertedProductId);
+          //leave the collaboration for the production of this product
+          removeParticipantCooperatingProductionForThisProduct($_SESSION["userId"],$insertedProductId);
           addParagraph(translate("Done"));
         } else {
           addParagraph(translate("You cant leave the collaboration beacause you are the owner"));
@@ -40,7 +40,7 @@
       if(isset($_GET["id"])){
         if(doesThisProductExists($_GET["id"])){
           //Check you are a collaborator
-          if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["id"])){
             //Check you aren't the owner of the related product
             $productInfos = obtainProductInfos($_GET["id"]);
             if($_SESSION["userId"] != $productInfos["artisan"]){
@@ -48,8 +48,8 @@
               upperPartOfThePage(translate("Leave cooperation"),"cookieBack");
               //Real content of the page
               addParagraph(translate("Product").": ".$productInfos["name"]);
-              addParagraph(translate("Leave this cooperation for the design for this product")."?");
-              //Form to insert data to leave this cooperation for the design for this product
+              addParagraph(translate("Leave this cooperation for the production for this product")."?");
+              //Form to insert data to leave this cooperation for the production for this product
               startForm1();
               startForm2($_SERVER['PHP_SELF']);
               addHiddenField("insertedProductId",$_GET["id"]);
@@ -61,7 +61,7 @@
             }
           } else {
             upperPartOfThePage(translate("Error"),"");
-            addParagraph(translate("You are not a collaborator for the design of this product"));
+            addParagraph(translate("You are not a collaborator for the production of this product"));
           }
         } else {
           upperPartOfThePage(translate("Error"),"");

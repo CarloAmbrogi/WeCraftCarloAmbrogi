@@ -6,7 +6,7 @@
 
   //Page for the collaboration for a product (get param id is te id of the product related to this collaboration)
   //You need to be an artisan or a designer
-  //You can see this page only if you are collaborating for the design of this product
+  //You can see this page only if you are collaborating for the production of this product
   //If you are the owner of the product you can add participants and terminate this collaboration
   //In this page there is a collaboration sheet
   doInitialScripts();
@@ -15,9 +15,9 @@
     if(doesThisProductExists($_GET["id"])){
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer" || $_SESSION["userId"] == "admin"){        
         //Check you are a collaborator
-        if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
+        if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
           addScriptAddThisPageToCronology();
-          upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+          upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $productInfos = obtainProductInfos($_GET["id"]);
           //Show in the left col the related product and in the right col some options related to the collaboration
@@ -37,17 +37,17 @@
           //Show some options related to the collaboration
           if($_SESSION["userId"] == $productInfos["artisan"]){
             //Options in case you are the owner
-            addButtonLink(translate("Add participants"),"./addParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
-            addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Add participants"),"./addParticipantsCooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
             addButtonLink(translate("Coordinate collaboration"),"./");
-            addButtonLink(translate("Terminate this collaboration"),"./terminateCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Terminate this collaboration"),"./terminateCooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
           } else {
             //Options in case you aren't the owner
-            addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+            addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
           }
           //Options for every collaborator
           addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("product")."&chatWith=".urlencode($_GET["id"]));
-          addButtonLink(translate("See participants"),"./seeParticipantsCooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          addButtonLink(translate("See participants"),"./seeParticipantsCooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();
           //Show the sheet
@@ -74,11 +74,11 @@
               insertedSheet.value = "<?= newlineForJs($sheetContent["content"]) ?>";
             </script>
           <?php
-          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
           forceThisPageReloadWhenBrowserBackButton();
         } else {
           upperPartOfThePage(translate("Error"),"");
-          addParagraph(translate("You are not a collaborator for the design of this product"));
+          addParagraph(translate("You are not a collaborator for the production of this product"));
         }
       } else {
         upperPartOfThePage(translate("Error"),"");

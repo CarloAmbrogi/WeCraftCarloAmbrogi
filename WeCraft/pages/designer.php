@@ -54,7 +54,7 @@
       endDivShowHide("moreInformationOnThisDesigner");
       //Show the products in collaboration for the design with this designer
       addParagraph(translate("Here will be shown the products for witch this designer is collaborating with other artisans and designers"));
-      $productsForWhitchThisDesignerIsCollaborating = obtainProductsPreviewCooperativeDesign($_GET["id"]);
+      $productsForWhitchThisDesignerIsCollaborating = obtainProductsPreviewCooperativeProduction($_GET["id"]);
       $foundOne = false;
       startCardGrid();
       foreach($productsForWhitchThisDesignerIsCollaborating as &$singleProductPreview){

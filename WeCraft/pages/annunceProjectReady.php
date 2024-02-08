@@ -20,9 +20,9 @@
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
       addParagraph(translate("Error of the csrf token"));
-    } else if($insertedFeedback == "" && isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
+    } else if($insertedFeedback == "" && isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedProjectId)){
       addParagraph(translate("You have missed to insert the feedback"));
-    } else if(strlen($insertedFeedback) > 2046 && isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
+    } else if(strlen($insertedFeedback) > 2046 && isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedProjectId)){
       addParagraph(translate("The feedback is too long"));
     } else {
       //Check that this project exists, the user is the artisan of this project, the project is confirmed, the project is not yet ready
@@ -44,7 +44,7 @@
               sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The personalized product is ready","project",$insertedProjectId);
               sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["designer"],"The personalized product is ready","project",$insertedProjectId);
               //In case of collaboration
-              if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
+              if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedProjectId)){
                 //Save the feedback of the claimer of the project
                 saveFeedbackCollaboration($_SESSION["userId"], "claimer", $insertedProjectId, "project", $insertedFeedback);
                 //Send a notification to all the other partecipants to write a feedback about how has gone the collaboration
@@ -95,18 +95,18 @@
               addParagraph(translate("Project").": ".$projectInfos["name"]);
               //Title Annunce that this personalized item is ready
               addTitle(translate("Annunce that this personalized item is ready"));
-              if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+              if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
                 addParagraph(translate("Provide also a feedback about how has gone this collaboration"));
               }
               //Form to annunce that this project is completed ready
               startForm1();
               startForm2($_SERVER['PHP_SELF']);
-              if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+              if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
                 addLongTextField(translate("Feedback"),"insertedFeedback",2046);
               }
               addHiddenField("insertedProjectId",$_GET["id"]);
               endForm(translate("Confirm project"));
-              if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+              if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
                 ?>
                   <script>
                     //form inserted parameters

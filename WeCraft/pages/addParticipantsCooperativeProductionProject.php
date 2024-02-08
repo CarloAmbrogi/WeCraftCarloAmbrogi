@@ -4,10 +4,10 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for adding a participant (artisan or designer) as collaborator for the design of this project
+  //Page for adding a participant (artisan or designer) as collaborator for the production of this project
   //(get param id is te id of the project related to this collaboration)
   //You need to be the artisan who has claimed this project
-  //You can see this page only if the collaborating design for this project is active and if the project is not completed
+  //You can see this page only if the collaborating production for this project is active and if the project is not completed
   //Suggestions for the designer of the project and ex candidate artisans available
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -15,8 +15,8 @@
   if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
-      upperPartOfThePage(translate("Cooperative design"),"cookieBack");
-      //Receive post request to add a new participant to the cooperative design for this project
+      upperPartOfThePage(translate("Cooperative production"),"cookieBack");
+      //Receive post request to add a new participant to the cooperative production for this project
       $insertedProjectId = $_POST['insertedProjectId'];
       $insertedParticipant = trim($_POST['insertedParticipant']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
@@ -24,8 +24,8 @@
         addParagraph(translate("Error of the csrf token"));
       } else if(!doesThisProjectExists($insertedProjectId)){
         addParagraph(translate("This project doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
-        addParagraph(translate("You are not a collaborator for the design of this project"));
+      } else if(!isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedProjectId)){
+        addParagraph(translate("You are not a collaborator for the production of this project"));
       } else if($insertedParticipant == ""){
         addParagraph(translate("You have missed to insert the new participant"));
       } else if(strlen($insertedParticipant) > 49){
@@ -40,21 +40,21 @@
             addParagraph(translate("The project is already ready"));
           } else {
             //Check that the user you are going to add exists and it is an artisan or a designer
-            //and is not already collaborating for the design of this project
+            //and is not already collaborating for the production of this project
             if(doesThisUserGivenEmailExists($insertedParticipant)){
               $userToAdd = idUserWithThisEmail($insertedParticipant);
               $kindUserToAdd = getKindOfThisAccount($userToAdd);
               if($kindUserToAdd == "Artisan" || $kindUserToAdd == "Designer"){
-                if(!isThisUserCollaboratingForTheDesignOfThisProject($userToAdd,$insertedProjectId)){
+                if(!isThisUserCollaboratingForTheProductionOfThisProject($userToAdd,$insertedProjectId)){
                   //The new user is added to the collaboration of this project
-                  startCooperatingDesignForThisProject($userToAdd,$insertedProjectId);
+                  startCooperatingProductionForThisProject($userToAdd,$insertedProjectId);
                   //Send a notification to the user
-                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"You have been added to the collaboration for the design of this project","project",$insertedProjectId);
+                  sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"You have been added to the collaboration for the production of this project","project",$insertedProjectId);
                   //Show that the user has been added
                   $userInfos = obtainUserInfos($userToAdd);
                   addParagraph(translate("The user")." ".$userInfos["name"]." ".$userInfos["surname"]." (".$userInfos["email"].") ".translate("has been added"));
                 } else {
-                  addParagraph(translate("The user is already collaborating for the design of this personalized product"));
+                  addParagraph(translate("The user is already collaborating for the production of this personalized product"));
                 }
               } else {
                 addParagraph(translate("The user you are going to add is not an artisan or a designer"));
@@ -63,7 +63,7 @@
               addParagraph(translate("The user you are going to add doesnt exists"));
             }
           }
-          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeDesignProject.php?id=".urlencode($insertedProjectId));
+          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeProductionProject.php?id=".urlencode($insertedProjectId));
         } else {
           addParagraph(translate("You are not the artisan who has claimed this project"));
         }
@@ -73,7 +73,7 @@
       if(isset($_GET["id"])){
         if(doesThisProjectExists($_GET["id"])){
           //Check you are a collaborator
-          if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
             //Check to be the artisan who has claimed this project and that the project is not completed
             $projectInfos = obtainProjectInfos($_GET["id"]);
             if($projectInfos["claimedByThisArtisan"] == $_SESSION["userId"]){
@@ -82,17 +82,17 @@
                 addParagraph(translate("The project is already ready"));
               } else {
                 addScriptAddThisPageToCronology();
-                upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+                upperPartOfThePage(translate("Cooperative production"),"cookieBack");
                 //Real content of the page
                 addParagraph(translate("Project").": ".$projectInfos["name"]);
                 //Form to insert data to add the new participant
                 startForm1();
                 startForm2($_SERVER['PHP_SELF']);
-                addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the design of this personalized product"),"insertedParticipant",49);
+                addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the production of this personalized product"),"insertedParticipant",49);
                 addHiddenField("insertedProjectId",$_GET["id"]);
                 endForm(translate("Submit"));
                 //Suggested designer
-                if(!isThisUserCollaboratingForTheDesignOfThisProject($projectInfos["designer"],$_GET["id"])){
+                if(!isThisUserCollaboratingForTheProductionOfThisProject($projectInfos["designer"],$_GET["id"])){
                   addParagraph(translate("This is the designer who has created this project if you want to quickly add him").":");
                   $designerUserInfos = obtainUserInfos($projectInfos["designer"]);
                   $fileImageToVisualize = genericUserImage;
@@ -106,7 +106,7 @@
                 $firstArtisan = true;
                 $needToEndCardGrid = false;
                 foreach($previewArtisansToWitchIsAssignedThisProject as &$singleArtisanPreview){
-                  if(!isThisUserCollaboratingForTheDesignOfThisProject($singleArtisanPreview["id"],$_GET["id"])){
+                  if(!isThisUserCollaboratingForTheProductionOfThisProject($singleArtisanPreview["id"],$_GET["id"])){
                     if($firstArtisan){
                       addParagraph(translate("These are the other artisans candidate to this project if you want to quickly add them").":");
                       startCardGrid();
@@ -161,7 +161,7 @@
             }
           } else {
             upperPartOfThePage(translate("Error"),"");
-            addParagraph(translate("You are not a collaborator for the design of this project"));
+            addParagraph(translate("You are not a collaborator for the production of this project"));
           }
         } else {
           upperPartOfThePage(translate("Error"),"");

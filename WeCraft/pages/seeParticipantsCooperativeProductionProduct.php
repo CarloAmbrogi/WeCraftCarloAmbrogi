@@ -4,19 +4,19 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page to see the participants of the cooperation for the design of this product
+  //Page to see the participants of the cooperation for the production of this product
   //(get param id is te id of the product related to this collaboration)
   //You need to be an artisan or a designer
-  //You can see this page only if you are collaborating for the design of this product
+  //You can see this page only if you are collaborating for the production of this product
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){        
         //Check you are a collaborator
-        if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"])){
+        if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["id"])){
           addScriptAddThisPageToCronology();
-          upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+          upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $productInfos = obtainProductInfos($_GET["id"]);
           addParagraph(translate("Product").": ".$productInfos["name"]);
@@ -54,7 +54,7 @@
           }
         } else {
           upperPartOfThePage(translate("Error"),"");
-          addParagraph(translate("You are not a collaborator for the design of this product"));
+          addParagraph(translate("You are not a collaborator for the production of this product"));
         }
       } else {
         upperPartOfThePage(translate("Error"),"");

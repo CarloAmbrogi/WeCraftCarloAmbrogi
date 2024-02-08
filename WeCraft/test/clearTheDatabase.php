@@ -20,8 +20,8 @@
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ShoppingCart`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`User`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`UserImages`");
-    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProducts`");
-    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProjects`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeProductionProducts`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeProductionProjects`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`SheetProducts`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`SheetProjects`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Project`");
@@ -31,8 +31,8 @@
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`ReadMessage`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Review`");
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`FeedbackCollaboration`");
-    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProductsTrig`");
-    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeDesignProjectsTrig`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeProductionProductsTrig`");
+    mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`CooperativeProductionProjectsTrig`");
 
     //Tables of Magis
     mysqli_query($connection, "TRUNCATE TABLE `my_carloambrogipolimi`.`Metadata`");

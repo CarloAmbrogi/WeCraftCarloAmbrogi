@@ -61,9 +61,9 @@
     //Analytics related to collaboration
     addTitle(translate("Analytics related to collaboration"));
 
-    //Number of products in cooperation for the design historical
-    addParagraph(translate("Number of products added from")." ".$startDate." ".translate("toa")." ".$endDate." ".translate("which are now in cooperation for the design or not"));
-    addBarChart("numProductsCooperationDesign",translate("Number of products in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProductsInCooperationForTheDesignHistorical($startDate,$endDate),numberProductsNotInCooperationForTheDesignHistorical($startDate,$endDate)]);
+    //Number of products in cooperation for the production historical
+    addParagraph(translate("Number of products added from")." ".$startDate." ".translate("toa")." ".$endDate." ".translate("which are now in cooperation for the production or not"));
+    addBarChart("numProductsCooperationProduction",translate("Number of products in cooperation for the production or not"),[translate("Yesx"),translate("Nox")],[numberProductsInCooperationForTheProductionHistorical($startDate,$endDate),numberProductsNotInCooperationForTheProductionHistorical($startDate,$endDate)]);
 
     //Number of products added from X that in date X have a certain number of collaborators
     addParagraph(translate("Number of products added from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
@@ -78,8 +78,8 @@
       }
       $countArrayCreator++;
     }
-    $cooperativeDesignProductsTrig = obtainCooperativeDesignProductsTrigLimitDate($startDate,$endDate);
-    foreach($cooperativeDesignProductsTrig as &$singleTrig){
+    $cooperativeProductionProductsTrig = obtainCooperativeProductionProductsTrigLimitDate($startDate,$endDate);
+    foreach($cooperativeProductionProductsTrig as &$singleTrig){
       if($productArray[$singleTrig["product"]] != -1){
         if($singleTrig["action"] == "insert"){
           $productArray[$singleTrig["product"]]++;
@@ -128,9 +128,9 @@
     addParagraph(translate("Number of projects that have been completed within a certain time range")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
     addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRangeHistorical(0,86400,$startDate,$endDate),numberCompletedProjectsInCertainTimeRangeHistorical(86400,604800,$startDate,$endDate),numberCompletedProjectsInAtLeastCertainTimeRangeHistorical(604800,$startDate,$endDate)]);
 
-    //Number of projects in cooperation for the design which have been confirmed between X and X (also completed project)
-    addParagraph(translate("Number of projects in cooperation for the design")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
-    addBarChart("numProjectsCooperationDesign",translate("Number of projects in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheDesignConfirmedBetweenDates($startDate,$endDate),numberProjectsNotInCooperationForTheDesignConfirmedBetweenDates($startDate,$endDate)]);
+    //Number of projects in cooperation for the production which have been confirmed between X and X (also completed project)
+    addParagraph(translate("Number of projects in cooperation for the production")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
+    addBarChart("numProjectsCooperationProduction",translate("Number of projects in cooperation for the production or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheProductionConfirmedBetweenDates($startDate,$endDate),numberProjectsNotInCooperationForTheProductionConfirmedBetweenDates($startDate,$endDate)]);
 
     //Number of projects confirmed from X that in date X have a certain number of collaborators
     addParagraph(translate("Number of projects added from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
@@ -145,8 +145,8 @@
       }
       $countArrayCreator++;
     }
-    $cooperativeDesignProjectsTrig = obtainCooperativeDesignProjectsTrigLimitDate($startDate,$endDate);
-    foreach($cooperativeDesignProjectsTrig as &$singleTrig){
+    $cooperativeProductionProjectsTrig = obtainCooperativeProductionProjectsTrigLimitDate($startDate,$endDate);
+    foreach($cooperativeProductionProjectsTrig as &$singleTrig){
       if($projectArray[$singleTrig["project"]] != -1){
         if($singleTrig["action"] == "insert"){
           $projectArray[$singleTrig["project"]]++;

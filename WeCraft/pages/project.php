@@ -207,18 +207,18 @@
           }
           if($thisProjectIsConfirmed && $projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && !$thisProjectIsReady){
             addButtonLink(translate("Annunce that this personalized item is ready"),"./annunceProjectReady.php?id=".urlencode($_GET["id"]));
-            //If you are the artisan who has claimed this project and the project is confirmed you can start or stop the collaboration for the cooperative design
+            //If you are the artisan who has claimed this project and the project is confirmed you can start or stop the collaboration for the cooperative production
             if($numberCollaboratorsForThisProject == 0){
-              addButtonLink(translate("Start collaboration for a cooperative design"),"./startCooperativeDesignForProjects.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Start collaboration for a cooperative production"),"./startCooperativeProductionForProjects.php?id=".urlencode($_GET["id"]));
             } else {
-              addParagraph(translate("You are collaborating in group for the design of this customized product"));
-              addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+              addParagraph(translate("You are collaborating in group for the production of this customized product"));
+              addButtonLink(translate("See collaboration"),"./cooperativeProductionProject.php?id=".urlencode($_GET["id"]));
             }
           }
           if($projectInfos["claimedByThisArtisan"] == $_SESSION["userId"] && $thisProjectIsReady){
             if($numberCollaboratorsForThisProject > 0){
-              addParagraph(translate("You have collaborated in group for the design of this customized product"));
-              addButtonLink(translate("See collaboration"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+              addParagraph(translate("You have collaborated in group for the production of this customized product"));
+              addButtonLink(translate("See collaboration"),"./cooperativeProductionProject.php?id=".urlencode($_GET["id"]));
             }
           }
         }

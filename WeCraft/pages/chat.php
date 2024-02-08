@@ -32,12 +32,12 @@
         }
       }
       if($_GET["chatKind"] == "product"){
-        if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["chatWith"])){
+        if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["chatWith"])){
           $checkIsOk = true;
         }
       }
       if($_GET["chatKind"] == "project"){
-        if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["chatWith"])){
+        if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["chatWith"])){
           $checkIsOk = true;
         }
       }
@@ -75,7 +75,7 @@
           if(isset($productInfos['icon']) && ($productInfos['icon'] != null)){
             $fileImageToVisualize = blobToFile($productInfos["iconExtension"],$productInfos['icon']);
           }
-          addACard("./cooperativeDesignProduct.php?id=".urlencode($_GET["chatWith"]),$fileImageToVisualize,htmlentities($title),htmlentities($text1),"");
+          addACard("./cooperativeProductionProduct.php?id=".urlencode($_GET["chatWith"]),$fileImageToVisualize,htmlentities($title),htmlentities($text1),"");
         }
         if($_GET["chatKind"] == "project"){
           $fileImageToVisualize = genericProjectImage;
@@ -85,7 +85,7 @@
           if(isset($projectInfos['icon']) && ($projectInfos['icon'] != null)){
             $fileImageToVisualize = blobToFile($projectInfos["iconExtension"],$projectInfos['icon']);
           }
-          addACard("./cooperativeDesignProject.php?id=".urlencode($_GET["chatWith"]),$fileImageToVisualize,htmlentities($title),htmlentities($text1),"");
+          addACard("./cooperativeProductionProject.php?id=".urlencode($_GET["chatWith"]),$fileImageToVisualize,htmlentities($title),htmlentities($text1),"");
         }
         //Mark all messages as read
         markMessagesInThisChatRead($_SESSION["userId"],$_GET["chatWith"],$_GET["chatKind"]);
@@ -218,7 +218,7 @@
             addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
           }
         } else if($_GET["chatKind"] == "product" || $_GET["chatKind"] == "project"){
-          addParagraph(translate("You are not in this group for this cooperative design"));
+          addParagraph(translate("You are not in this group for this cooperative production"));
         } else {
           addParagraph(translate("This kind of chat doesnt exists"));
         }

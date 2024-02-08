@@ -64,25 +64,25 @@
     addParagraph(translate("Number of products witch are sold by a certain number of extra artisans"));
     addBarChart("numberOfProductsSoldByNumArtisans",translate("Number of products witch are sold by a certain number of extra artisans"),[translate("Nonee"),"1","2","3","4","5+"],[numberProductsNotExchangeSold(),numberProductsSoldByACertainNumberOfArtisans(1),numberProductsSoldByACertainNumberOfArtisans(2),numberProductsSoldByACertainNumberOfArtisans(3),numberProductsSoldByACertainNumberOfArtisans(4),numberProductsSoldByAtLeastACertainNumberOfArtisans(5)]);
 
-    //Number of products in cooperation for the design
-    addParagraph(translate("Number of products in cooperation for the design"));
-    addBarChart("numProductsCooperationDesign",translate("Number of products in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProductsInCooperationForTheDesign(),numberProductsNotInCooperationForTheDesign()]);
+    //Number of products in cooperation for the production
+    addParagraph(translate("Number of products in cooperation for the production"));
+    addBarChart("numProductsCooperationProduction",translate("Number of products in cooperation for the production or not"),[translate("Yesx"),translate("Nox")],[numberProductsInCooperationForTheProduction(),numberProductsNotInCooperationForTheProduction()]);
 
     //Number of cooperations for products with a certain number of collaborators
     addParagraph(translate("Number of cooperations for products with a certain number of collaborators"));
     addBarChart("numberCooperationsProductsWithNumCollaborators",translate("Number of cooperations for products with a certain number of collaborators"),["1","2","3","4","5+"],[numberCooperationsForProductsWithACertainNumberOfCollaborations(1),numberCooperationsForProductsWithACertainNumberOfCollaborations(2),numberCooperationsForProductsWithACertainNumberOfCollaborations(3),numberCooperationsForProductsWithACertainNumberOfCollaborations(4),numberCooperationsForProductsWithAtLeastACertainNumberOfCollaborations(5)]);
 
-    //Cooperations for the design of a product with at least a designer
-    addParagraph(translate("Cooperations for the design of a product with at least a designer"));
-    addBarChart("numberCooperationsProductsWithDesigner",translate("Cooperations for the design of a product with at least a designer or not"),[translate("Yesx"),translate("Nox")],[numberCooperationsProductWithADesigner(),numberCooperationsProductWithoutADesigner()]);
+    //Cooperations for the production of a product with at least a designer
+    addParagraph(translate("Cooperations for the production of a product with at least a designer"));
+    addBarChart("numberCooperationsProductsWithDesigner",translate("Cooperations for the production of a product with at least a designer or not"),[translate("Yesx"),translate("Nox")],[numberCooperationsProductWithADesigner(),numberCooperationsProductWithoutADesigner()]);
 
-    //Averange number of product for which an artisan or a designer is collaborating for the design
-    addParagraph(translate("Averange number of product for which an artisan or a designer is collaborating for the design"));
-    addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the design"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()]);
+    //Averange number of product for which an artisan or a designer is collaborating for the production
+    addParagraph(translate("Averange number of product for which an artisan or a designer is collaborating for the production"));
+    addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()]);
 
-    //Collaboration design product score in years
-    addParagraph(translate("Collaboration design product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
-    addBarChart("collaborationDesignProductScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationDesignProductScoreYears(2023),collaborationDesignProductScoreYears(2024),collaborationDesignProductScoreYears(2025),collaborationDesignProductScoreYears(2026)]);
+    //Collaboration production product score in years
+    addParagraph(translate("Collaboration production product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    addBarChart("collaborationProductionProductScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationProductionProductScoreYears(2023),collaborationProductionProductScoreYears(2024),collaborationProductionProductScoreYears(2025),collaborationProductionProductScoreYears(2026)]);
 
     //Analytics related to projects for personalized items
     addTitle(translate("Analytics related to projects for personalized items"));
@@ -99,21 +99,21 @@
     addParagraph(translate("Number of projects per state"));
     addBarChart("numProjectsPerState",translate("Number of projects per state"),[translate("Not presented to any artisan"),translate("Presented but not claimed"),translate("Claimed but not confirmed"),translate("Confirmed not completed"),translate("Completed")],[numberProjectsNotAssigned(),numberProjectsAssignedNotClaimed(),numberProjectsClaimedNotConfirmed(),numberProjectsConfirmedNotCompleted(),numberProjectsCompleted()]);
 
-    //Number of projects in cooperation for the design
-    addParagraph(translate("Number of projects in cooperation for the design"));
-    addBarChart("numProjectsCooperationDesign",translate("Number of projects in cooperation for the design or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheDesign(),numberProjectsNotInCooperationForTheDesign()]);
+    //Number of projects in cooperation for the production
+    addParagraph(translate("Number of projects in cooperation for the production"));
+    addBarChart("numProjectsCooperationProduction",translate("Number of projects in cooperation for the production or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheProduction(),numberProjectsNotInCooperationForTheProduction()]);
 
     //Number of cooperations for projects with a certain number of collaborators
     addParagraph(translate("Number of cooperations for projects with a certain number of collaborators"));
     addBarChart("numberCooperationsProjectsWithNumCollaborators",translate("Number of cooperations for projects with a certain number of collaborators"),["1","2","3","4","5+"],[numberCooperationsForProjectsWithACertainNumberOfCollaborations(1),numberCooperationsForProjectsWithACertainNumberOfCollaborations(2),numberCooperationsForProjectsWithACertainNumberOfCollaborations(3),numberCooperationsForProjectsWithACertainNumberOfCollaborations(4),numberCooperationsForProjectsWithAtLeastACertainNumberOfCollaborations(5)]);
 
-    //Averange number of projects for which an artisan or a designer is collaborating for the design
-    addParagraph(translate("Averange number of projects for which an artisan or a designer is collaborating for the design"));
-    addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the design"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()]);
+    //Averange number of projects for which an artisan or a designer is collaborating for the production
+    addParagraph(translate("Averange number of projects for which an artisan or a designer is collaborating for the production"));
+    addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()]);
 
-    //Collaboration design project score in years
-    addParagraph(translate("Collaboration design project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
-    addBarChart("collaborationDesignProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationDesignProjectScoreYears(2023),collaborationDesignProjectScoreYears(2024),collaborationDesignProjectScoreYears(2025),collaborationDesignProjectScoreYears(2026)]);
+    //Collaboration production project score in years
+    addParagraph(translate("Collaboration production project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    addBarChart("collaborationProductionProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],[collaborationProductionProjectScoreYears(2023),collaborationProductionProjectScoreYears(2024),collaborationProductionProjectScoreYears(2025),collaborationProductionProjectScoreYears(2026)]);
 
     //End of this page
   } else {

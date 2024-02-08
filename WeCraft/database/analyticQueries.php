@@ -356,10 +356,10 @@
     return $elements[0]["numberProductsSoldByAtLeastACertainNumberOfArtisans"];
   }
 
-  //Number of products in cooperation for the design
-  function numberProductsInCooperationForTheDesign(){
+  //Number of products in cooperation for the production
+  function numberProductsInCooperationForTheProduction(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProductsInCooperationForTheDesign from (select * from `CooperativeDesignProducts` group by `product`) as t;";
+    $sql = "select count(*) as numProductsInCooperationForTheDesign from (select * from `CooperativeProductionProducts` group by `product`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -374,10 +374,10 @@
     return $elements[0]["numProductsInCooperationForTheDesign"];
   }
 
-  //Number of products not in cooperation for the design
-  function numberProductsNotInCooperationForTheDesign(){
+  //Number of products not in cooperation for the production
+  function numberProductsNotInCooperationForTheProduction(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProductsNotInCooperationForTheDesign from `Product` where `id` not in (select `product` from `CooperativeDesignProducts`);";
+    $sql = "select count(*) as numProductsNotInCooperationForTheDesign from `Product` where `id` not in (select `product` from `CooperativeProductionProducts`);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -395,7 +395,7 @@
   //Number of cooperations for products with a certain number of collaborators
   function numberCooperationsForProductsWithACertainNumberOfCollaborations($numberOfCollaborators){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeDesignProducts` group by `product`) as t where t.num = ?) as tt;";
+    $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeProductionProducts` group by `product`) as t where t.num = ?) as tt;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$numberOfCollaborators);
       $statement->execute();
@@ -414,7 +414,7 @@
   //Number of cooperations for products with at least a certain number of collaborators
   function numberCooperationsForProductsWithAtLeastACertainNumberOfCollaborations($numberOfCollaborators){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeDesignProducts` group by `product`) as t where t.num >= ?) as tt;";
+    $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `product` as id, count(*) as num from `CooperativeProductionProducts` group by `product`) as t where t.num >= ?) as tt;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$numberOfCollaborators);
       $statement->execute();
@@ -430,10 +430,10 @@
     return $elements[0]["numCooperationsWithAtLeastThisNumberOfCollaborators"];
   }
 
-  //Number cooperations for the design of a product with at least a designer
+  //Number cooperations for the production of a product with at least a designer
   function numberCooperationsProductWithADesigner(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numCooperationsProductWithADesigner from (select * from `CooperativeDesignProducts` where `user` in (select `id` from `Designer`) group by `product`) as t;";
+    $sql = "select count(*) as numCooperationsProductWithADesigner from (select * from `CooperativeProductionProducts` where `user` in (select `id` from `Designer`) group by `product`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -448,10 +448,10 @@
     return $elements[0]["numCooperationsProductWithADesigner"];
   }
 
-  //Number cooperations for the design of a product without a designer
+  //Number cooperations for the production of a product without a designer
   function numberCooperationsProductWithoutADesigner(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numCooperationsProductWithoutADesigner from (select t.product from (select `product` as product from `CooperativeDesignProducts` group by `product`) as t where t.product not in (select `product` from `CooperativeDesignProducts` where `user` in (select `id` from `Designer`))) as tt;";
+    $sql = "select count(*) as numCooperationsProductWithoutADesigner from (select t.product from (select `product` as product from `CooperativeProductionProducts` group by `product`) as t where t.product not in (select `product` from `CooperativeProductionProducts` where `user` in (select `id` from `Designer`))) as tt;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -466,10 +466,10 @@
     return $elements[0]["numCooperationsProductWithoutADesigner"];
   }
 
-  //Sum number of cooperation for the design of a product for each artisan
+  //Sum number of cooperation for the production of a product for each artisan
   function sumNumberCooperationProductsArtisans(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as sumNumberCooperationProductsArtisans from `Artisan` join `CooperativeDesignProducts` on `Artisan`.`id` = `CooperativeDesignProducts`.`user`;";
+    $sql = "select count(*) as sumNumberCooperationProductsArtisans from `Artisan` join `CooperativeProductionProducts` on `Artisan`.`id` = `CooperativeProductionProducts`.`user`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -484,10 +484,10 @@
     return $elements[0]["sumNumberCooperationProductsArtisans"];
   }
 
-  //Sum number of cooperation for the design of a product for each designer
+  //Sum number of cooperation for the production of a product for each designer
   function sumNumberCooperationProductsDesigners(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as sumNumberCooperationProductsDesigners from `Designer` join `CooperativeDesignProducts` on `Designer`.`id` = `CooperativeDesignProducts`.`user`;";
+    $sql = "select count(*) as sumNumberCooperationProductsDesigners from `Designer` join `CooperativeProductionProducts` on `Designer`.`id` = `CooperativeProductionProducts`.`user`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -502,7 +502,7 @@
     return $elements[0]["sumNumberCooperationProductsDesigners"];
   }
 
-  //Averange number of products for which an artisan is collaborating for the design
+  //Averange number of products for which an artisan is collaborating for the production
   function averangeNumberProductsForWhichArtisanCollaborating(){
     $n = getNumberOfArtisans();
     $d = sumNumberCooperationProductsArtisans();
@@ -512,7 +512,7 @@
     return $n / $d;
   }
 
-  //Averange number of products for which a designer is collaborating for the design
+  //Averange number of products for which a designer is collaborating for the production
   function averangeNumberProductsForWhichDesignerCollaborating(){
     $n = getNumberOfDesigners();
     $d = sumNumberCooperationProductsDesigners();
@@ -522,7 +522,7 @@
     return $n / $d;
   }
 
-  //Averange number of products for which an artisan or a designer is collaborating for the design
+  //Averange number of products for which an artisan or a designer is collaborating for the production
   function averangeNumberProductsForWhichArtisanDesignerCollaborating(){
     $n = getNumberOfArtisans() + getNumberOfDesigners();
     $d = sumNumberCooperationProductsArtisans() + sumNumberCooperationProductsDesigners();
@@ -660,10 +660,10 @@
     return $elements[0]["numberProjectsCompleted"];
   }
 
-  //Number of projects in cooperation for the design
-  function numberProjectsInCooperationForTheDesign(){
+  //Number of projects in cooperation for the production
+  function numberProjectsInCooperationForTheProduction(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProjectsInCooperationForTheDesign from (select * from `CooperativeDesignProjects` group by `project`) as t;";
+    $sql = "select count(*) as numProjectsInCooperationForTheProduction from (select * from `CooperativeProductionProjects` group by `project`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -675,13 +675,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProjectsInCooperationForTheDesign"];
+    return $elements[0]["numProjectsInCooperationForTheProduction"];
   }
 
-  //Number of projects not in cooperation for the design
-  function numberProjectsNotInCooperationForTheDesign(){
+  //Number of projects not in cooperation for the production
+  function numberProjectsNotInCooperationForTheProduction(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProjectsNotInCooperationForTheDesign from `Project` where `id` not in (select `project` from `CooperativeDesignProjects`);";
+    $sql = "select count(*) as numProjectsNotInCooperationForTheProduction from `Project` where `id` not in (select `project` from `CooperativeProductionProjects`);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -693,13 +693,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProjectsNotInCooperationForTheDesign"];
+    return $elements[0]["numProjectsNotInCooperationForTheProduction"];
   }
 
     //Number of cooperations for projects with a certain number of collaborators
     function numberCooperationsForProjectsWithACertainNumberOfCollaborations($numberOfCollaborators){
       $connectionDB = $GLOBALS['$connectionDB'];
-      $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeDesignProjects` group by `project`) as t where t.num = ?) as tt;";
+      $sql = "select count(*) as numCooperationsWithThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeProductionProjects` group by `project`) as t where t.num = ?) as tt;";
       if($statement = $connectionDB->prepare($sql)){
         $statement->bind_param("i",$numberOfCollaborators);
         $statement->execute();
@@ -718,7 +718,7 @@
     //Number of cooperations for projects with at least a certain number of collaborators
     function numberCooperationsForProjectsWithAtLeastACertainNumberOfCollaborations($numberOfCollaborators){
       $connectionDB = $GLOBALS['$connectionDB'];
-      $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeDesignProjects` group by `project`) as t where t.num >= ?) as tt;";
+      $sql = "select count(*) as numCooperationsWithAtLeastThisNumberOfCollaborators from (select id from (select `project` as id, count(*) as num from `CooperativeProductionProjects` group by `project`) as t where t.num >= ?) as tt;";
       if($statement = $connectionDB->prepare($sql)){
         $statement->bind_param("i",$numberOfCollaborators);
         $statement->execute();
@@ -734,10 +734,10 @@
       return $elements[0]["numCooperationsWithAtLeastThisNumberOfCollaborators"];
     }
 
-  //Sum number of cooperation for the design of a project for each artisan
+  //Sum number of cooperation for the production of a project for each artisan
   function sumNumberCooperationProjectsArtisans(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as sumNumberCooperationProjectsArtisans from `Artisan` join `CooperativeDesignProjects` on `Artisan`.`id` = `CooperativeDesignProjects`.`user`;";
+    $sql = "select count(*) as sumNumberCooperationProjectsArtisans from `Artisan` join `CooperativeProductionProjects` on `Artisan`.`id` = `CooperativeProductionProjects`.`user`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -752,10 +752,10 @@
     return $elements[0]["sumNumberCooperationProjectsArtisans"];
   }
 
-  //Sum number of cooperation for the design of a project for each designer
+  //Sum number of cooperation for the production of a project for each designer
   function sumNumberCooperationProjectsDesigners(){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as sumNumberCooperationProjectsDesigners from `Designer` join `CooperativeDesignProjects` on `Designer`.`id` = `CooperativeDesignProjects`.`user`;";
+    $sql = "select count(*) as sumNumberCooperationProjectsDesigners from `Designer` join `CooperativeProductionProjects` on `Designer`.`id` = `CooperativeProductionProjects`.`user`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->execute();
     } else {
@@ -770,7 +770,7 @@
     return $elements[0]["sumNumberCooperationProjectsDesigners"];
   }
 
-  //Averange number of projects for which an artisan is collaborating for the design
+  //Averange number of projects for which an artisan is collaborating for the production
   function averangeNumberProjectsForWhichArtisanCollaborating(){
     $n = getNumberOfArtisans();
     $d = sumNumberCooperationProjectsArtisans();
@@ -780,7 +780,7 @@
     return $n / $d;
   }
 
-  //Averange number of projects for which a designer is collaborating for the design
+  //Averange number of projects for which a designer is collaborating for the production
   function averangeNumberProjectsForWhichDesignerCollaborating(){
     $n = getNumberOfDesigners();
     $d = sumNumberCooperationProjectsDesigners();
@@ -790,7 +790,7 @@
     return $n / $d;
   }
 
-  //Averange number of projects for which an artisan or a designer is collaborating for the design
+  //Averange number of projects for which an artisan or a designer is collaborating for the production
   function averangeNumberProjectsForWhichArtisanDesignerCollaborating(){
     $n = getNumberOfArtisans() + getNumberOfDesigners();
     $d = sumNumberCooperationProjectsArtisans() + sumNumberCooperationProjectsDesigners();
@@ -950,10 +950,10 @@
     return $elements[0]["numberProductsWithThisCategory"];
   }
 
-  //Number of products added from X to X where now are in cooperation for the design
-  function numberProductsInCooperationForTheDesignHistorical($start,$end){
+  //Number of products added from X to X where now are in cooperation for the production
+  function numberProductsInCooperationForTheProductionHistorical($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProductsInCooperationForTheDesign from (select * from `CooperativeDesignProducts` where `product` in (select `id` from `Product` where `added` BETWEEN ? AND ?) group by `product`) as t;";
+    $sql = "select count(*) as numProductsInCooperationForTheProduction from (select * from `CooperativeProductionProducts` where `product` in (select `id` from `Product` where `added` BETWEEN ? AND ?) group by `product`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -966,13 +966,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProductsInCooperationForTheDesign"];
+    return $elements[0]["numProductsInCooperationForTheProduction"];
   }
 
-  //Number of products added from X to X where now aren't in cooperation for the design
-  function numberProductsNotInCooperationForTheDesignHistorical($start,$end){
+  //Number of products added from X to X where now aren't in cooperation for the production
+  function numberProductsNotInCooperationForTheProductionHistorical($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProductsNotInCooperationForTheDesign from `Product` where `id` not in (select `product` from `CooperativeDesignProducts`) and `id` in (select `id` from `Product` where `added` BETWEEN ? AND ?);";
+    $sql = "select count(*) as numProductsNotInCooperationForTheProduction from `Product` where `id` not in (select `product` from `CooperativeProductionProducts`) and `id` in (select `id` from `Product` where `added` BETWEEN ? AND ?);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -985,7 +985,7 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProductsNotInCooperationForTheDesign"];
+    return $elements[0]["numProductsNotInCooperationForTheProduction"];
   }
 
   //Max product id
@@ -1006,10 +1006,10 @@
     return $elements[0]["maxProductId"];
   }
 
-  //Obtain CooperativeDesignProductsTrig
-  function obtainCooperativeDesignProductsTrigLimitDate($start,$end){
+  //Obtain CooperativeProductionProductsTrig
+  function obtainCooperativeProductionProductsTrigLimitDate($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `CooperativeDesignProductsTrig`.`id`,`CooperativeDesignProductsTrig`.`user`,`CooperativeDesignProductsTrig`.`product`,`CooperativeDesignProductsTrig`.`action`,`CooperativeDesignProductsTrig`.`timestamp` from `CooperativeDesignProductsTrig` where `CooperativeDesignProductsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeDesignProductsTrig`.`id` ASC;";
+    $sql = "select `CooperativeProductionProductsTrig`.`id`,`CooperativeProductionProductsTrig`.`user`,`CooperativeProductionProductsTrig`.`product`,`CooperativeProductionProductsTrig`.`action`,`CooperativeProductionProductsTrig`.`timestamp` from `CooperativeProductionProductsTrig` where `CooperativeProductionProductsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeProductionProductsTrig`.`id` ASC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1045,10 +1045,10 @@
     return $elements[0]["isThisProductAddedBetweenDates"];
   }
 
-  //Number products added from X to X which have never been in collaboration for the design
+  //Number products added from X to X which have never been in collaboration for the production
   function numberProductsAddedBetweenDatesNeverBeenCollaboration($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsNeverBeenCollaboration from `Product` where `added` BETWEEN ? AND ? and `id` not in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert');";
+    $sql = "select count(*) as numberProductsNeverBeenCollaboration from `Product` where `added` BETWEEN ? AND ? and `id` not in (select `product` from `CooperativeProductionProductsTrig` where `action` = 'insert');";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1064,10 +1064,10 @@
     return $elements[0]["numberProductsNeverBeenCollaboration"];
   }
 
-  //Number products added from X to X which have been in collaboration for the design but never with a designer
+  //Number products added from X to X which have been in collaboration for the production but never with a designer
   function numberProductsAddedBetweenDatesBeenCollaborationNeverDesinger($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsBeenCollaborationNeverDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert') and `id` not in (select `product` from `CooperativeDesignProductsTrig` where `user` in (select `id` from `Designer`));";
+    $sql = "select count(*) as numberProductsBeenCollaborationNeverDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeProductionProductsTrig` where `action` = 'insert') and `id` not in (select `product` from `CooperativeProductionProductsTrig` where `user` in (select `id` from `Designer`));";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1083,10 +1083,10 @@
     return $elements[0]["numberProductsBeenCollaborationNeverDesigner"];
   }
 
-  //Number products added from X to X which have been in collaboration for the design with a designer
+  //Number products added from X to X which have been in collaboration for the production with a designer
   function numberProductsAddedBetweenDatesBeenCollaborationDesinger($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsBeenCollaborationDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeDesignProductsTrig` where `action` = 'insert') and `id` in (select `product` from `CooperativeDesignProductsTrig` where `user` in (select `id` from `Designer`));";
+    $sql = "select count(*) as numberProductsBeenCollaborationDesigner from `Product` where `added` BETWEEN ? AND ? and `id` in (select `product` from `CooperativeProductionProductsTrig` where `action` = 'insert') and `id` in (select `product` from `CooperativeProductionProductsTrig` where `user` in (select `id` from `Designer`));";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1140,10 +1140,10 @@
     return $elements[0]["numCompletedProjectsInAtLeastCertainTimeRange"];
   }
 
-  //Number of projects in cooperation for the design which have been confirmed between X and X (also completed projects)
-  function numberProjectsInCooperationForTheDesignConfirmedBetweenDates($start,$end){
+  //Number of projects in cooperation for the production which have been confirmed between X and X (also completed projects)
+  function numberProjectsInCooperationForTheProductionConfirmedBetweenDates($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProjectsInCooperationForTheDesign from (select * from `CooperativeDesignProjects` where `project` in (select `id` from `Project` where `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?) group by `project`) as t;";
+    $sql = "select count(*) as numProjectsInCooperationForTheProduction from (select * from `CooperativeProductionProjects` where `project` in (select `id` from `Project` where `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?) group by `project`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1156,13 +1156,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProjectsInCooperationForTheDesign"];
+    return $elements[0]["numProjectsInCooperationForTheProduction"];
   }
 
-  //Number of projects not in cooperation for the design which have been confirmed between X and X (also completed projects)
-  function numberProjectsNotInCooperationForTheDesignConfirmedBetweenDates($start,$end){
+  //Number of projects not in cooperation for the production which have been confirmed between X and X (also completed projects)
+  function numberProjectsNotInCooperationForTheProductionConfirmedBetweenDates($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numProjectsNotInCooperationForTheDesign from `Project` where `id` not in (select `project` from `CooperativeDesignProjects`) and `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?;";
+    $sql = "select count(*) as numProjectsNotInCooperationForTheProduction from `Project` where `id` not in (select `project` from `CooperativeProductionProjects`) and `timestampPurchase` is not NULL and `timestampPurchase` BETWEEN ? AND ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1175,7 +1175,7 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["numProjectsNotInCooperationForTheDesign"];
+    return $elements[0]["numProjectsNotInCooperationForTheProduction"];
   }
 
   //Max project id
@@ -1196,10 +1196,10 @@
     return $elements[0]["maxProjectId"];
   }
 
-  //Obtain CooperativeDesignProjectsTrig
-  function obtainCooperativeDesignProjectsTrigLimitDate($start,$end){
+  //Obtain CooperativeProductionProjectsTrig
+  function obtainCooperativeProductionProjectsTrigLimitDate($start,$end){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `CooperativeDesignProjectsTrig`.`id`,`CooperativeDesignProjectsTrig`.`user`,`CooperativeDesignProjectsTrig`.`project`,`CooperativeDesignProjectsTrig`.`action`,`CooperativeDesignProjectsTrig`.`timestamp` from `CooperativeDesignProjectsTrig` where `CooperativeDesignProjectsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeDesignProjectsTrig`.`id` ASC;";
+    $sql = "select `CooperativeProductionProjectsTrig`.`id`,`CooperativeProductionProjectsTrig`.`user`,`CooperativeProductionProjectsTrig`.`project`,`CooperativeProductionProjectsTrig`.`action`,`CooperativeProductionProjectsTrig`.`timestamp` from `CooperativeProductionProjectsTrig` where `CooperativeProductionProjectsTrig`.`timestamp` BETWEEN ? AND ? order by `CooperativeProductionProjectsTrig`.`id` ASC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ss",$start,$end);
       $statement->execute();
@@ -1216,11 +1216,11 @@
     return $elements;
   }
 
-  //Collaboration design product score in years (each time an action to add a person is performed it counts as one point)
+  //Collaboration production product score in years (each time an action to add a person is performed it counts as one point)
   //(not count duplicates)
-  function collaborationDesignProductScoreYears($year){
+  function collaborationProductionProductScoreYears($year){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as collaborationDesignProductScoreYears from (select * from `CooperativeDesignProductsTrig` where YEAR(`CooperativeDesignProductsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`product`) as t;";
+    $sql = "select count(*) as collaborationProductionProductScoreYears from (select * from `CooperativeProductionProductsTrig` where YEAR(`CooperativeProductionProductsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`product`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$year);
       $statement->execute();
@@ -1233,14 +1233,14 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["collaborationDesignProductScoreYears"];
+    return $elements[0]["collaborationProductionProductScoreYears"];
   }
 
-  //Collaboration design project score in years (each time an action to add a person is performed it counts as one point)
+  //Collaboration production project score in years (each time an action to add a person is performed it counts as one point)
   //(not count duplicates)
-  function collaborationDesignProjectScoreYears($year){
+  function collaborationProductionProjectScoreYears($year){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as collaborationDesignProjectScoreYears from (select * from `CooperativeDesignProjectsTrig` where YEAR(`CooperativeDesignProjectsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`project`) as t;";
+    $sql = "select count(*) as collaborationProductionProjectScoreYears from (select * from `CooperativeProductionProjectsTrig` where YEAR(`CooperativeProductionProjectsTrig`.`timestamp`) = ? and `action` = 'insert' group by `user`,`project`) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$year);
       $statement->execute();
@@ -1253,7 +1253,7 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["collaborationDesignProjectScoreYears"];
+    return $elements[0]["collaborationProductionProjectScoreYears"];
   }
   
 ?>

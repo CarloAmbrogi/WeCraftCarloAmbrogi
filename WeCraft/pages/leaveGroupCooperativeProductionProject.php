@@ -4,9 +4,9 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for leaving the collaboration for the design of this project
+  //Page for leaving the collaboration for the production of this project
   //(get param id is te id of the project related to this collaboration)
-  //You can see this page only if the collaborating design for this project is active and if the project is not completed
+  //You can see this page only if the collaborating production for this project is active and if the project is not completed
   //You can't see this page if you are the artisan who has claimed this project
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -15,15 +15,15 @@
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
       upperPartOfThePage(translate("Leave cooperation"),"");
-      //Receive post request to delete the collaboration for the design of this project
+      //Receive post request to leave the collaboration for the production of this project
       $insertedProjectId = $_POST['insertedProjectId'];
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
       if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
         addParagraph(translate("Error of the csrf token"));
       } else if(!doesThisProjectExists($insertedProjectId)){
         addParagraph(translate("This project doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedProjectId)){
-        addParagraph(translate("You are not a collaborator for the design of this project"));
+      } else if(!isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedProjectId)){
+        addParagraph(translate("You are not a collaborator for the production of this project"));
       } else {
         //Check to not be the artisan who has claimed this project and check that the project is not completed
         $projectInfos = obtainProjectInfos($insertedProjectId);
@@ -31,8 +31,8 @@
           if(isset($projectInfos["timestampReady"]) and $projectInfos["timestampReady"] != null){
             addParagraph(translate("The project is already ready"));
           } else {
-            //leave the collaboration for the design of this project
-            removeParticipantCooperatingDesignForThisProject($_SESSION["userId"],$insertedProjectId);
+            //leave the collaboration for the production of this project
+            removeParticipantCooperatingProductionForThisProject($_SESSION["userId"],$insertedProjectId);
             addParagraph(translate("Done"));
           }
         } else {
@@ -44,7 +44,7 @@
       if(isset($_GET["id"])){
         if(doesThisProjectExists($_GET["id"])){
           //Check you are a collaborator
-          if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
             //Check to not be the artisan who has claimed this project and check that the project is not completed
             $projectInfos = obtainProjectInfos($_GET["id"]);
             if($projectInfos["claimedByThisArtisan"] != $_SESSION["userId"]){
@@ -56,8 +56,8 @@
                 upperPartOfThePage(translate("Leave cooperation"),"cookieBack");
                 //Real content of the page
                 addParagraph(translate("Project").": ".$projectInfos["name"]);
-                addParagraph(translate("Leave this cooperation for the design for this project")."?");
-                //Form to insert data to leave this cooperation for the design for this project
+                addParagraph(translate("Leave this cooperation for the production for this project")."?");
+                //Form to insert data to leave this cooperation for the production for this project
                 startForm1();
                 startForm2($_SERVER['PHP_SELF']);
                 addHiddenField("insertedProjectId",$_GET["id"]);
@@ -70,7 +70,7 @@
             }
           } else {
             upperPartOfThePage(translate("Error"),"");
-            addParagraph(translate("You are not a collaborator for the design of this project"));
+            addParagraph(translate("You are not a collaborator for the production of this project"));
           }
         } else {
           upperPartOfThePage(translate("Error"),"");

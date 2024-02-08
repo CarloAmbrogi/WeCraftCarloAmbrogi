@@ -4,18 +4,18 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page for adding a participant (artisan or designer) as collaborator for the design of this product
+  //Page for adding a participant (artisan or designer) as collaborator for the production of this product
   //(get param id is te id of the product related to this collaboration)
   //You need to be the owner of the product
-  //You can see this page only if the collaborating design for this product is active
+  //You can see this page only if the collaborating production for this product is active
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
 
   if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
-      upperPartOfThePage(translate("Cooperative design"),"cookieBack");
-      //Receive post request to add a new participant to the cooperative design for this product
+      upperPartOfThePage(translate("Cooperative production"),"cookieBack");
+      //Receive post request to add a new participant to the cooperative production for this product
       $insertedProductId = $_POST['insertedProductId'];
       $insertedParticipant = trim($_POST['insertedParticipant']);
       $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
@@ -23,8 +23,8 @@
         addParagraph(translate("Error of the csrf token"));
       } else if(!doesThisProductExists($insertedProductId)){
         addParagraph(translate("This product doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedProductId)){
-        addParagraph(translate("You are not a collaborator for the design of this product"));
+      } else if(!isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$insertedProductId)){
+        addParagraph(translate("You are not a collaborator for the production of this product"));
       } else if($insertedParticipant == ""){
         addParagraph(translate("You have missed to insert the new participant"));
       } else if(strlen($insertedParticipant) > 49){
@@ -36,21 +36,21 @@
         $productInfos = obtainProductInfos($insertedProductId);
         if($_SESSION["userId"] == $productInfos["artisan"]){
           //Check that the user you are going to add exists and it is an artisan or a designer
-          //and is not already collaborating for the design of this product
+          //and is not already collaborating for the production of this product
           if(doesThisUserGivenEmailExists($insertedParticipant)){
             $userToAdd = idUserWithThisEmail($insertedParticipant);
             $kindUserToAdd = getKindOfThisAccount($userToAdd);
             if($kindUserToAdd == "Artisan" || $kindUserToAdd == "Designer"){
-              if(!isThisUserCollaboratingForTheDesignOfThisProduct($userToAdd,$insertedProductId)){
+              if(!isThisUserCollaboratingForTheProductionOfThisProduct($userToAdd,$insertedProductId)){
                 //The new user is added to the collaboration of this product
-                startCooperatingDesignForThisProduct($userToAdd,$insertedProductId);
+                startCooperatingProductionForThisProduct($userToAdd,$insertedProductId);
                 //Send a notification to the user
-                sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"You have been added to the collaboration for the design of this product","product",$insertedProductId);
+                sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$userToAdd,"You have been added to the collaboration for the production of this product","product",$insertedProductId);
                 //Show that the user has been added
                 $userInfos = obtainUserInfos($userToAdd);
                 addParagraph(translate("The user")." ".$userInfos["name"]." ".$userInfos["surname"]." (".$userInfos["email"].") ".translate("has been added"));
               } else {
-                addParagraph(translate("The user is already collaborating for the design of this product"));
+                addParagraph(translate("The user is already collaborating for the production of this product"));
               }
             } else {
               addParagraph(translate("The user you are going to add is not an artisan or a designer"));
@@ -58,7 +58,7 @@
           } else {
             addParagraph(translate("The user you are going to add doesnt exists"));
           }
-          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeDesignProduct.php?id=".urlencode($insertedProductId));
+          addButtonLink(translate("Add another user"),"./addParticipantsCooperativeProductionProduct.php?id=".urlencode($insertedProductId));
         } else {
           addParagraph(translate("You are not the owner of the product related to this collaboration"));
         }
@@ -68,18 +68,18 @@
       if(isset($_GET["id"])){
         if(doesThisProductExists($_GET["id"])){
           //Check you are a collaborator
-          if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["id"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["id"])){
             //Check you are the owner of the related product
             $productInfos = obtainProductInfos($_GET["id"]);
             if($_SESSION["userId"] == $productInfos["artisan"]){
               addScriptAddThisPageToCronology();
-              upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+              upperPartOfThePage(translate("Cooperative production"),"cookieBack");
               //Real content of the page
               addParagraph(translate("Product").": ".$productInfos["name"]);
               //Form to insert data to add the new participant
               startForm1();
               startForm2($_SERVER['PHP_SELF']);
-              addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the design of this product"),"insertedParticipant",49);
+              addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the production of this product"),"insertedParticipant",49);
               addHiddenField("insertedProductId",$_GET["id"]);
               endForm(translate("Submit"));
               ?>
@@ -112,7 +112,7 @@
             }
           } else {
             upperPartOfThePage(translate("Error"),"");
-            addParagraph(translate("You are not a collaborator for the design of this product"));
+            addParagraph(translate("You are not a collaborator for the production of this product"));
           }
         } else {
           upperPartOfThePage(translate("Error"),"");

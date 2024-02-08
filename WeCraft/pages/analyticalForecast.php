@@ -76,11 +76,11 @@
     }
     addBarChart("numberOfProductsYear",translate("New products in years"),["2023","2024","2025","2026"],$vv);
 
-    //Collaboration design product score in years
-    addParagraph(translate("Collaboration design product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    //Collaboration production product score in years
+    addParagraph(translate("Collaboration production product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
     $currentYear = date("Y");
     $percentageCurrentYear = (date("m") / 12.0) + ((date("d") / 31.0) / 12.0);
-    $vv = [collaborationDesignProductScoreYears(2023),collaborationDesignProductScoreYears(2024),collaborationDesignProductScoreYears(2025),collaborationDesignProductScoreYears(2026)];
+    $vv = [collaborationProductionProductScoreYears(2023),collaborationProductionProductScoreYears(2024),collaborationProductionProductScoreYears(2025),collaborationProductionProductScoreYears(2026)];
     $startYear = 2023;
     $endYear = 2026;
     $yearCounter = $startYear;
@@ -95,8 +95,8 @@
         $totalPrev += $vv[$yearCounter-$startYear];
         $totalPrev = $totalPrev / $percentageCurrentYear;
         $vv[$yearCounter-$startYear] = $totalPrev;
-        if(collaborationDesignProductScoreYears($yearCounter-1) > 0.0){
-          $increment = $totalPrev / collaborationDesignProductScoreYears($yearCounter-1);
+        if(collaborationProductionProductScoreYears($yearCounter-1) > 0.0){
+          $increment = $totalPrev / collaborationProductionProductScoreYears($yearCounter-1);
         }
       }
       if($yearCounter > $currentYear){
@@ -105,13 +105,13 @@
       }
       $yearCounter++;
     }
-    addBarChart("collaborationDesignProductScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
+    addBarChart("collaborationProductionProductScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
 
-    //Collaboration design project score in years
-    addParagraph(translate("Collaboration design project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
+    //Collaboration production project score in years
+    addParagraph(translate("Collaboration production project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
     $currentYear = date("Y");
     $percentageCurrentYear = (date("m") / 12.0) + ((date("d") / 31.0) / 12.0);
-    $vv = [collaborationDesignProjectScoreYears(2023),collaborationDesignProjectScoreYears(2024),collaborationDesignProjectScoreYears(2025),collaborationDesignProjectScoreYears(2026)];
+    $vv = [collaborationProductionProjectScoreYears(2023),collaborationProductionProjectScoreYears(2024),collaborationProductionProjectScoreYears(2025),collaborationProductionProjectScoreYears(2026)];
     $startYear = 2023;
     $endYear = 2026;
     $yearCounter = $startYear;
@@ -126,8 +126,8 @@
         $totalPrev += $vv[$yearCounter-$startYear];
         $totalPrev = $totalPrev / $percentageCurrentYear;
         $vv[$yearCounter-$startYear] = $totalPrev;
-        if(collaborationDesignProjectScoreYears($yearCounter-1) > 0.0){
-          $increment = $totalPrev / collaborationDesignProjectScoreYears($yearCounter-1);
+        if(collaborationProductionProjectScoreYears($yearCounter-1) > 0.0){
+          $increment = $totalPrev / collaborationProductionProjectScoreYears($yearCounter-1);
         }
       }
       if($yearCounter > $currentYear){
@@ -136,7 +136,7 @@
       }
       $yearCounter++;
     }
-    addBarChart("collaborationDesignProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
+    addBarChart("collaborationProductionProjectScoreYears",translate("Score"),["2023","2024","2025","2026"],$vv);
 
     //End of this page
   } else {

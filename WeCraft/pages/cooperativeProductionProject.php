@@ -6,7 +6,7 @@
 
   //Page for the collaboration for a project (get param id is te id of the project related to this collaboration)
   //You need to be an artisan or a designer
-  //You can see this page only if you are collaborating for the design of this project
+  //You can see this page only if you are collaborating for the production of this project
   //If you are the owner of the project you can add or remove participants
   //The collaboration terminates automatically when the project is completed
   //In this page there is a collaboration sheet
@@ -17,9 +17,9 @@
     if(doesThisProjectExists($_GET["id"])){
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer" || $_SESSION["userId"] == "admin"){        
         //Check you are a collaborator
-        if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
+        if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
           addScriptAddThisPageToCronology();
-          upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+          upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $projectInfos = obtainProjectInfos($_GET["id"]);
           //Show in the left col the related project and in the right col some options related to the collaboration
@@ -44,17 +44,17 @@
           if(!$thisProjectIsCompleted){
             if($projectInfos["claimedByThisArtisan"] == $_SESSION["userId"]){
               //Options in case you are the owner
-              addButtonLink(translate("Add participants"),"./addParticipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
-              addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Add participants"),"./addParticipantsCooperativeProductionProject.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Remove participants"),"./removeParticipantsCooperativeProductionProject.php?id=".urlencode($_GET["id"]));
               addButtonLink(translate("Coordinate collaboration"),"./");
             } else {
               //Options in case you aren't the owner
-              addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+              addButtonLink(translate("Leave the group"),"./leaveGroupCooperativeProductionProject.php?id=".urlencode($_GET["id"]));
             }
           }
           //Options for every collaborator
           addButtonLink(translate("Send message"),"./chat.php?chatKind=".urlencode("project")."&chatWith=".urlencode($_GET["id"]));
-          addButtonLink(translate("See participants"),"./seeParticipantsCooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+          addButtonLink(translate("See participants"),"./seeParticipantsCooperativeProductionProject.php?id=".urlencode($_GET["id"]));
           endCol();
           endRow();
           //Show the sheet
@@ -82,7 +82,7 @@
                 insertedSheet.value = "<?= newlineForJs($sheetContent["content"]) ?>";
               </script>
             <?php
-            addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProject.php?id=".urlencode($_GET["id"]));
+            addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeProductionProject.php?id=".urlencode($_GET["id"]));
           } else {
             addParagraphNewlineCapabilities($sheetContent["content"]);
             addParagraph(translate("Is not possible to modify the sheet because the project is completed"));
@@ -90,7 +90,7 @@
           forceThisPageReloadWhenBrowserBackButton();
         } else {
           upperPartOfThePage(translate("Error"),"");
-          addParagraph(translate("You are not a collaborator for the design of this project"));
+          addParagraph(translate("You are not a collaborator for the production of this project"));
         }
       } else {
         upperPartOfThePage(translate("Error"),"");

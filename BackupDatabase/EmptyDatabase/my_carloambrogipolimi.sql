@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Feb 05, 2024 alle 19:48
+-- Creato il: Feb 08, 2024 alle 16:49
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -66,33 +66,33 @@ CREATE TABLE `ContentPurchase` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `CooperativeDesignProducts`
+-- Struttura della tabella `CooperativeProductionProducts`
 --
 
-CREATE TABLE `CooperativeDesignProducts` (
+CREATE TABLE `CooperativeProductionProducts` (
   `user` int NOT NULL,
   `product` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Trigger `CooperativeDesignProducts`
+-- Trigger `CooperativeProductionProducts`
 --
 DELIMITER $$
-CREATE TRIGGER `deleteCooperativeDesignProducts` AFTER DELETE ON `CooperativeDesignProducts` FOR EACH ROW insert into `CooperativeDesignProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, old.`user`, old.`product`,'delete',CURRENT_TIMESTAMP())
+CREATE TRIGGER `deleteCooperativeProductionProducts` AFTER DELETE ON `CooperativeProductionProducts` FOR EACH ROW insert into `CooperativeProductionProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, old.`user`, old.`product`,'delete',CURRENT_TIMESTAMP())
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `insertCooperativeDesignProducts` AFTER INSERT ON `CooperativeDesignProducts` FOR EACH ROW insert into `CooperativeDesignProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, new.`user`,new.`product`,'insert',CURRENT_TIMESTAMP())
+CREATE TRIGGER `insertCooperativeProductionProducts` AFTER INSERT ON `CooperativeProductionProducts` FOR EACH ROW insert into `CooperativeProductionProductsTrig` (`id`,`user`,`product`,`action`,`timestamp`) values (NULL, new.`user`,new.`product`,'insert',CURRENT_TIMESTAMP())
 $$
 DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `CooperativeDesignProductsTrig`
+-- Struttura della tabella `CooperativeProductionProductsTrig`
 --
 
-CREATE TABLE `CooperativeDesignProductsTrig` (
+CREATE TABLE `CooperativeProductionProductsTrig` (
   `id` int NOT NULL,
   `user` int NOT NULL,
   `product` int NOT NULL,
@@ -103,33 +103,33 @@ CREATE TABLE `CooperativeDesignProductsTrig` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `CooperativeDesignProjects`
+-- Struttura della tabella `CooperativeProductionProjects`
 --
 
-CREATE TABLE `CooperativeDesignProjects` (
+CREATE TABLE `CooperativeProductionProjects` (
   `user` int NOT NULL,
   `project` int NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
--- Trigger `CooperativeDesignProjects`
+-- Trigger `CooperativeProductionProjects`
 --
 DELIMITER $$
-CREATE TRIGGER `deleteCooperativeDesignProjects` AFTER DELETE ON `CooperativeDesignProjects` FOR EACH ROW insert into `CooperativeDesignProjectsTrig` (`id`,`user`,`project `,`action`,`timestamp`) values (NULL, old.`user`, old.`project`,'delete',CURRENT_TIMESTAMP())
+CREATE TRIGGER `deleteCooperativeProductionProjects` AFTER DELETE ON `CooperativeProductionProjects` FOR EACH ROW insert into `CooperativeProductionProjectsTrig` (`id`,`user`,`project `,`action`,`timestamp`) values (NULL, old.`user`, old.`project`,'delete',CURRENT_TIMESTAMP())
 $$
 DELIMITER ;
 DELIMITER $$
-CREATE TRIGGER `insertCooperativeDesignProjects` AFTER INSERT ON `CooperativeDesignProjects` FOR EACH ROW insert into `CooperativeDesignProjectsTrig` (`id`,`user`,`project`,`action`,`timestamp`) values (NULL, new.`user`,new.`project`,'insert',CURRENT_TIMESTAMP())
+CREATE TRIGGER `insertCooperativeProductionProjects` AFTER INSERT ON `CooperativeProductionProjects` FOR EACH ROW insert into `CooperativeProductionProjectsTrig` (`id`,`user`,`project`,`action`,`timestamp`) values (NULL, new.`user`,new.`project`,'insert',CURRENT_TIMESTAMP())
 $$
 DELIMITER ;
 
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `CooperativeDesignProjectsTrig`
+-- Struttura della tabella `CooperativeProductionProjectsTrig`
 --
 
-CREATE TABLE `CooperativeDesignProjectsTrig` (
+CREATE TABLE `CooperativeProductionProjectsTrig` (
   `id` int NOT NULL,
   `user` int NOT NULL,
   `project` int NOT NULL,
@@ -557,27 +557,27 @@ ALTER TABLE `ContentPurchase`
   ADD PRIMARY KEY (`purchaseId`,`product`,`artisan`);
 
 --
--- Indici per le tabelle `CooperativeDesignProducts`
+-- Indici per le tabelle `CooperativeProductionProducts`
 --
-ALTER TABLE `CooperativeDesignProducts`
+ALTER TABLE `CooperativeProductionProducts`
   ADD PRIMARY KEY (`user`,`product`);
 
 --
--- Indici per le tabelle `CooperativeDesignProductsTrig`
+-- Indici per le tabelle `CooperativeProductionProductsTrig`
 --
-ALTER TABLE `CooperativeDesignProductsTrig`
+ALTER TABLE `CooperativeProductionProductsTrig`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `CooperativeDesignProjects`
+-- Indici per le tabelle `CooperativeProductionProjects`
 --
-ALTER TABLE `CooperativeDesignProjects`
+ALTER TABLE `CooperativeProductionProjects`
   ADD PRIMARY KEY (`user`,`project`);
 
 --
--- Indici per le tabelle `CooperativeDesignProjectsTrig`
+-- Indici per le tabelle `CooperativeProductionProjectsTrig`
 --
-ALTER TABLE `CooperativeDesignProjectsTrig`
+ALTER TABLE `CooperativeProductionProjectsTrig`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -736,15 +736,15 @@ ALTER TABLE `Users`
 --
 
 --
--- AUTO_INCREMENT per la tabella `CooperativeDesignProductsTrig`
+-- AUTO_INCREMENT per la tabella `CooperativeProductionProductsTrig`
 --
-ALTER TABLE `CooperativeDesignProductsTrig`
+ALTER TABLE `CooperativeProductionProductsTrig`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `CooperativeDesignProjectsTrig`
+-- AUTO_INCREMENT per la tabella `CooperativeProductionProjectsTrig`
 --
-ALTER TABLE `CooperativeDesignProjectsTrig`
+ALTER TABLE `CooperativeProductionProjectsTrig`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --

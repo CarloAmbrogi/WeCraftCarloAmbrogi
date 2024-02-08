@@ -4,19 +4,19 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Page to see the participants of the cooperation for the design of this project
+  //Page to see the participants of the cooperation for the production of this project
   //(get param id is te id of the project to this collaboration)
   //You need to be an artisan or a designer
-  //You can see this page only if you are collaborating for the design of this project
+  //You can see this page only if you are collaborating for the production of this project
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(doesThisProjectExists($_GET["id"])){
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){        
         //Check you are a collaborator
-        if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["id"])){
+        if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"])){
           addScriptAddThisPageToCronology();
-          upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+          upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $projectInfos = obtainProjectInfos($_GET["id"]);
           addParagraph(translate("Project").": ".$projectInfos["name"]);
@@ -54,7 +54,7 @@
           }
         } else {
           upperPartOfThePage(translate("Error"),"");
-          addParagraph(translate("You are not a collaborator for the design of this project"));
+          addParagraph(translate("You are not a collaborator for the production of this project"));
         }
       } else {
         upperPartOfThePage(translate("Error"),"");

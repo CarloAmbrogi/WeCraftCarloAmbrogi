@@ -1876,10 +1876,10 @@
     }
   }
 
-  //Obtain a preview of products for which this user is collaborating for a cooperative design
-  function obtainProductsPreviewCooperativeDesign($userId){
+  //Obtain a preview of products for which this user is collaborating for a cooperative production
+  function obtainProductsPreviewCooperativeProduction($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Product`.`id` as productId,`Product`.`name` as productName,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`artisan` as ownerId,`User`.`name` as ownerName,`User`.`surname` as ownerSurname,count(`CooperativeDesignProducts`.`user`) as numberOfCollaborators from (`Product` join `User` on `Product`.`artisan` = `User`.`id`) left join `CooperativeDesignProducts` on `Product`.`id` = `CooperativeDesignProducts`.`product` where `Product`.`id` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?) group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
+    $sql = "select `Product`.`id` as productId,`Product`.`name` as productName,`Product`.`iconExtension` as iconExtension,`Product`.`icon` as icon,`Product`.`artisan` as ownerId,`User`.`name` as ownerName,`User`.`surname` as ownerSurname,count(`CooperativeProductionProducts`.`user`) as numberOfCollaborators from (`Product` join `User` on `Product`.`artisan` = `User`.`id`) left join `CooperativeProductionProducts` on `Product`.`id` = `CooperativeProductionProducts`.`product` where `Product`.`id` in (select `CooperativeProductionProducts`.`product` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`user` = ?) group by `Product`.`id` ORDER BY `Product`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1899,7 +1899,7 @@
   //Obtain number of collaborators for this product
   function obtainNumberCollaboratorsForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberCollaboratorsForThisProduct from (select * from `CooperativeDesignProducts` where `product` = ?) as t;";
+    $sql = "select count(*) as numberCollaboratorsForThisProduct from (select * from `CooperativeProductionProducts` where `product` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -1915,10 +1915,10 @@
     return $elements[0]["numberCollaboratorsForThisProduct"];
   }
 
-  //Obtain a preview of other artisans (who are not the owner) who have collaborated for the design of this product
+  //Obtain a preview of other artisans (who are not the owner) who have collaborated for the production of this product
   function obtainPreviewArtisansCollaboratorsOfThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesignProducts`.`user` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`product` = ?) and `User`.`id` not in (select `Product`.`artisan` from `Product` where `Product`.`id` = ?) group by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeProductionProducts`.`user` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`product` = ?) and `User`.`id` not in (select `Product`.`artisan` from `Product` where `Product`.`id` = ?) group by `User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$productId,$productId);
       $statement->execute();
@@ -1935,10 +1935,10 @@
     return $elements;
   }
 
-  //Obtain a preview of other designers (who are not the owner) who have collaborated for the design of this product
+  //Obtain a preview of other designers (who are not the owner) who have collaborated for the production of this product
   function obtainPreviewDesignersCollaboratorsOfThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesignProducts`.`user` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`product` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeProductionProducts`.`user` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`product` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
       $statement->execute();
@@ -1955,11 +1955,11 @@
     return $elements;
   }
 
-  //Number of products for witch this user (artisan or designer) is collaborating for a cooperating design
+  //Number of products for witch this user (artisan or designer) is collaborating for a cooperating production
   //except, in case he is an artisan, its product, products he sells and products he is sponsoring
   function numberOfOtherProductsThisUserIsCollaboratingFor($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberOfOtherProductsThisUserIsCollaboratingFor from (select * from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
+    $sql = "select count(*) as numberOfOtherProductsThisUserIsCollaboratingFor from (select * from `Product` where `id` in (select `product` from `CooperativeProductionProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?)) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
@@ -1975,11 +1975,11 @@
     return $elements[0]["numberOfOtherProductsThisUserIsCollaboratingFor"];
   }
 
-  //Obtain a preview of products for witch this user (artisan or designer) is collaborating for a cooperating design
+  //Obtain a preview of products for witch this user (artisan or designer) is collaborating for a cooperating production
   //except, in case he is an artisan, its product, products he sells and products he is sponsoring
   function previewOtherProductsThisUserIsCollaboratingFor($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
+    $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`category` from `Product` where `id` in (select `product` from `CooperativeProductionProducts` where `user` = ?) and `id` not in (select `id` from `Product` where `artisan` = ?) and `id` not in (select `product` from `ExchangeProduct` where `artisan` = ?) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$artisanId,$artisanId,$artisanId,$artisanId);
       $statement->execute();
@@ -1996,10 +1996,10 @@
     return $elements;
   }
 
-  //Number of products of this artisan whitch are in collaboration for the design (in groups of at least 2)
+  //Number of products of this artisan whitch are in collaboration for the production (in groups of at least 2)
   function numberProductsOfThisArtisanInCollaboration($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberProductsOfThisArtisanInCollaboration from (select * from `Product` where `id` in (select `product` from `CooperativeDesignProducts` where `user` <> ?) and `artisan` = ?) as t;";
+    $sql = "select count(*) as numberProductsOfThisArtisanInCollaboration from (select * from `Product` where `id` in (select `product` from `CooperativeProductionProducts` where `user` <> ?) and `artisan` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$artisanId,$artisanId);
       $statement->execute();
@@ -2015,10 +2015,10 @@
     return $elements[0]["numberProductsOfThisArtisanInCollaboration"];
   }
 
-  //Return if this user is collaborating for the design of this product
-  function isThisUserCollaboratingForTheDesignOfThisProduct($userId,$productId){
+  //Return if this user is collaborating for the production of this product
+  function isThisUserCollaboratingForTheProductionOfThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProduct from (select * from `CooperativeDesignProducts` where `user` = ? and `product` = ?) as t;";
+    $sql = "select count(*) as isThisUserCollaboratingForTheProductionOfThisProduct from (select * from `CooperativeProductionProducts` where `user` = ? and `product` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
       $statement->execute();
@@ -2031,13 +2031,13 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["isThisUserCollaboratingForTheDesignOfThisProduct"];
+    return $elements[0]["isThisUserCollaboratingForTheProductionOfThisProduct"];
   }
 
-  //start the collaboration for the cooperating design for this product
-  function startCooperatingDesignForThisProduct($userId,$productId){
+  //start the collaboration for the cooperating production for this product
+  function startCooperatingProductionForThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "insert into `CooperativeDesignProducts` (`user`,`product`) VALUES (?,?);";
+    $sql = "insert into `CooperativeProductionProducts` (`user`,`product`) VALUES (?,?);";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
@@ -2047,10 +2047,10 @@
     }
   }
 
-  //remove participant collaboration for the cooperating design for this product
-  function removeParticipantCooperatingDesignForThisProduct($userId,$productId){
+  //remove participant collaboration for the cooperating production for this product
+  function removeParticipantCooperatingProductionForThisProduct($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `CooperativeDesignProducts` where `user` = ? and `product` = ?;";
+    $sql = "delete from `CooperativeProductionProducts` where `user` = ? and `product` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
@@ -2060,8 +2060,8 @@
     }
   }
 
-  //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this product)
-  function addSheetCooperatingDesignForThisProduct($productId){
+  //add the sheet for the cooperating production (when you start the collaboration for the cooperating production for this product)
+  function addSheetCooperatingProductionForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "insert into `SheetProducts` (`product`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
     
@@ -2092,10 +2092,10 @@
     return $elements[0]["doesThisUserExists"];
   }
 
-  //terminate the collaboration for the cooperating design for this product
-  function terminateCooperatingDesignForThisProduct($productId){
+  //terminate the collaboration for the cooperating production for this product
+  function terminateCooperatingProductionForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `CooperativeDesignProducts` WHERE `product` = ?;";
+    $sql = "delete from `CooperativeProductionProducts` WHERE `product` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$productId);
@@ -2105,8 +2105,8 @@
     }
   }
 
-  //delete the sheet of a collaboration for the cooperating design for this product
-  function deleteSheetCooperatingDesignForThisProduct($productId){
+  //delete the sheet of a collaboration for the cooperating production for this product
+  function deleteSheetCooperatingProductionForThisProduct($productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `SheetProducts` WHERE `product` = ?;";
     
@@ -2158,7 +2158,7 @@
     return $elements[0];
   }
 
-  //Update the sheet (for the cooperative design for a product)
+  //Update the sheet (for the cooperative production for a product)
   function updateSheetProduct($newContent,$lastUpdateFrom,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "update `SheetProducts` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `product` = ?;";
@@ -2577,10 +2577,10 @@
   //Designer: only the designer creator of the project
   //Customer: only the customer for which is the project
   //Artisans: only the artisan who has claimed the project and, in case the project is not confirmed, also the artisans who are presented to this project
-  //Designer and Artisans: also the ones who are collaborating fo the design of the project
+  //Designer and Artisans: also the ones who are collaborating fo the production of the project
   function doesThisUserCanSeeThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `ProjectAssignArtisans`.`project` as e from `ProjectAssignArtisans` join `Project` on `ProjectAssignArtisans`.`project` = `Project`.`id` where `ProjectAssignArtisans`.`artisan` = ? and `ProjectAssignArtisans`.`project` = ? and `Project`.`confirmedByTheCustomer` = 0) union (select `user` as e from `CooperativeDesignProjects` where `user` = ? and `project` = ?) limit 1) as t;";
+    $sql = "select count(*) as doesThisUserCanSeeThisProject from ((select `id` as e from `Project` where `designer` = ? and `id` = ?) union (select `id` as e from `Project` where `customer` = ? and `id` = ?) union (select `id` as e from `Project` where `claimedByThisArtisan` is not null and `claimedByThisArtisan` = ? and `id` = ?) union (select `ProjectAssignArtisans`.`project` as e from `ProjectAssignArtisans` join `Project` on `ProjectAssignArtisans`.`project` = `Project`.`id` where `ProjectAssignArtisans`.`artisan` = ? and `ProjectAssignArtisans`.`project` = ? and `Project`.`confirmedByTheCustomer` = 0) union (select `user` as e from `CooperativeProductionProjects` where `user` = ? and `project` = ?) limit 1) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiiiiiii",$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId,$userId,$projectId);
       $statement->execute();
@@ -2790,7 +2790,7 @@
   //Obtain number of collaborators for this project
   function obtainNumberCollaboratorsForThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberCollaboratorsForThisProject from (select * from `CooperativeDesignProjects` where `project` = ?) as t;";
+    $sql = "select count(*) as numberCollaboratorsForThisProject from (select * from `CooperativeProductionProjects` where `project` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
       $statement->execute();
@@ -2806,10 +2806,11 @@
     return $elements[0]["numberCollaboratorsForThisProject"];
   }
 
-  //Obtain a preview of other artisans (who are not the claimed artisan) who have collaborated for the design of this customized product
+  //Obtain a preview of other artisans (who are not the artisan who has claimed) who have collaborated for the production of this
+  //customized product
   function obtainPreviewArtisansCollaboratorsOfThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeDesignProjects`.`user` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`project` = ?) and `User`.`id` not in (select `Project`.`claimedByThisArtisan` from `Project` where `Project`.`id` = ?) group by `User`.`id`;";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeProductionProjects`.`user` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`project` = ?) and `User`.`id` not in (select `Project`.`claimedByThisArtisan` from `Project` where `Project`.`id` = ?) group by `User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$projectId,$projectId);
       $statement->execute();
@@ -2826,10 +2827,11 @@
     return $elements;
   }
 
-  //Obtain a preview of other designers (ho are not the claimed artisan) who have collaborated for the design of this customized product
+  //Obtain a preview of other designers (ho are not the claimed artisan) who have collaborated for the production of this customized
+  //product
   function obtainPreviewDesignersCollaboratorsOfThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeDesignProjects`.`user` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`project` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeProductionProjects`.`user` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`project` = ?) and `User`.`id` in (select `Designer`.`id` from `Designer`);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
       $statement->execute();
@@ -2846,10 +2848,10 @@
     return $elements;
   }
 
-  //start the collaboration for the cooperating design for this project
-  function startCooperatingDesignForThisProject($userId,$projectId){
+  //start the collaboration for the cooperating production for this project
+  function startCooperatingProductionForThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "insert into `CooperativeDesignProjects` (`user`,`project`) VALUES (?,?);";
+    $sql = "insert into `CooperativeProductionProjects` (`user`,`project`) VALUES (?,?);";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$projectId);
@@ -2859,8 +2861,8 @@
     }
   }
 
-  //add the sheet for the cooperating design (when you start the collaboration for the cooperating design for this project)
-  function addSheetCooperatingDesignForThisProject($projectId){
+  //add the sheet for the cooperating production (when you start the collaboration for the cooperating production for this project)
+  function addSheetCooperatingProductionForThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "insert into `SheetProjects` (`project`,`content`,`lastUpdateFrom`,`lastUpdateWhen`) VALUES (?,'',NULL,CURRENT_TIMESTAMP());";
     
@@ -2872,10 +2874,10 @@
     }
   }
 
-  //Return if this user is collaborating for the design of this project
-  function isThisUserCollaboratingForTheDesignOfThisProject($userId,$projectId){
+  //Return if this user is collaborating for the production of this project
+  function isThisUserCollaboratingForTheProductionOfThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as isThisUserCollaboratingForTheDesignOfThisProject from (select * from `CooperativeDesignProjects` where `user` = ? and `project` = ?) as t;";
+    $sql = "select count(*) as isThisUserCollaboratingForTheProductionOfThisProject from (select * from `CooperativeProductionProjects` where `user` = ? and `project` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$projectId);
       $statement->execute();
@@ -2888,7 +2890,7 @@
       $elements[] = $element;
     }
 
-    return $elements[0]["isThisUserCollaboratingForTheDesignOfThisProject"];
+    return $elements[0]["isThisUserCollaboratingForTheProductionOfThisProject"];
   }
 
   //Obtain the content of the sheet (projects)
@@ -2911,10 +2913,12 @@
     return $elements[0];
   }
 
-  //terminate the collaboration for the cooperating design for this project
-  function terminateCooperatingDesignForThisProject($projectId){
+  //terminate the collaboration for the cooperating production for this project
+  //(function never used because it's not possible to terminate a collaboration for the production of a project, but it terminates
+  //automatically when the project is marked as complete)
+  function terminateCooperatingProductionForThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `CooperativeDesignProjects` WHERE `project` = ?;";
+    $sql = "delete from `CooperativeProductionProjects` WHERE `project` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
@@ -2924,8 +2928,8 @@
     }
   }
 
-  //delete the sheet of a collaboration for the cooperating design for this project
-  function deleteSheetCooperatingDesignForThisProject($projectId){
+  //delete the sheet of a collaboration for the cooperating production for this project
+  function deleteSheetCooperatingProductionForThisProject($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "delete from `SheetProjects` WHERE `project` = ?;";
     
@@ -2937,10 +2941,10 @@
     }
   }
 
-  //remove i collaboration for the cooperating design for this project
-  function removeParticipantCooperatingDesignForThisProject($userId,$projectId){
+  //remove i collaboration for the cooperating production for this project
+  function removeParticipantCooperatingProductionForThisProject($userId,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "delete from `CooperativeDesignProjects` where `user` = ? and `project` = ?;";
+    $sql = "delete from `CooperativeProductionProjects` where `user` = ? and `project` = ?;";
     
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$projectId);
@@ -2950,7 +2954,7 @@
     }
   }
 
-  //Update the sheet (for the cooperative design for a project)
+  //Update the sheet (for the cooperative production for a project)
   function updateSheetProject($newContent,$lastUpdateFrom,$projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "update `SheetProjects` set `content` = ?, `lastUpdateFrom` = ?, `lastUpdateWhen` = CURRENT_TIMESTAMP() where `project` = ?;";
@@ -2963,10 +2967,10 @@
     }
   }
 
-  //Obtain a preview of projects for which this user is collaborating for a cooperative design
-  function obtainProductsPreviewCooperativeDesignPersonalizedProducts($userId){
+  //Obtain a preview of projects for which this user is collaborating for a cooperative production
+  function obtainProductsPreviewCooperativeProductionPersonalizedProducts($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Project`.`id` as projectId,`Project`.`name` as projectName, `Project`.`timestampReady` as timestampReady,`Project`.`iconExtension` as iconExtension,`Project`.`icon` as icon,count(`CooperativeDesignProjects`.`user`) as numberOfCollaborators from `Project` left join `CooperativeDesignProjects` on `Project`.`id` = `CooperativeDesignProjects`.`project` where `Project`.`id` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?) group by `Project`.`id` ORDER BY `Project`.`id` DESC;";
+    $sql = "select `Project`.`id` as projectId,`Project`.`name` as projectName, `Project`.`timestampReady` as timestampReady,`Project`.`iconExtension` as iconExtension,`Project`.`icon` as icon,count(`CooperativeProductionProjects`.`user`) as numberOfCollaborators from `Project` left join `CooperativeProductionProjects` on `Project`.`id` = `CooperativeProductionProjects`.`project` where `Project`.`id` in (select `CooperativeProductionProjects`.`project` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`user` = ?) group by `Project`.`id` ORDER BY `Project`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -2986,7 +2990,7 @@
   //Obtain a preview chat list for this user
   function obtainPreviewChatList($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.chatWith as chatWith, t.chatKind as chatKind from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t group by t.chatWith, t.chatKind order by MAX(t.messageId) DESC;";
+    $sql = "select t.chatWith as chatWith, t.chatKind as chatKind from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeProductionProducts`.`product` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeProductionProjects`.`project` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`user` = ?))) as t group by t.chatWith, t.chatKind order by MAX(t.messageId) DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiii",$userId,$userId,$userId,$userId);
       $statement->execute();
@@ -3006,7 +3010,7 @@
   //Number messages to read in this chat
   function numberMessagesToReadInThisChat($userId,$chatWith,$chatKind){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberMessagesToReadInThisChat from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ? and t.fromWho <> ? and t.messageId not in (select `messageId` from `ReadMessage` where `readBy` = ?)) as tt;";
+    $sql = "select count(*) as numberMessagesToReadInThisChat from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeProductionProducts`.`product` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind, `Messages`.`fromWho` as fromWho from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeProductionProjects`.`project` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ? and t.fromWho <> ? and t.messageId not in (select `messageId` from `ReadMessage` where `readBy` = ?)) as tt;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiisii",$userId,$userId,$userId,$userId,$chatWith,$chatKind,$userId,$userId);
       $statement->execute();
@@ -3025,7 +3029,7 @@
   //Obtain a preview of this chat with all messages (we pass user for security reason)
   function obtainPreviewChat($userId,$chatWith,$chatKind){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Messages`.`id`, `Messages`.`fromWho`, `Messages`.`toKind`, `Messages`.`toWho`, `Messages`.`timestamp`, `Messages`.`isANotification`, `Messages`.`text`, `Messages`.`imgExtension`, `Messages`.`image`, `Messages`.`linkKind`, `Messages`.`linkTo`, `Messages`.`extraText` from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?) as tt join `Messages` on tt.messageId = `Messages`.`id` order by `Messages`.`id` DESC;";
+    $sql = "select `Messages`.`id`, `Messages`.`fromWho`, `Messages`.`toKind`, `Messages`.`toWho`, `Messages`.`timestamp`, `Messages`.`isANotification`, `Messages`.`text`, `Messages`.`imgExtension`, `Messages`.`image`, `Messages`.`linkKind`, `Messages`.`linkTo`, `Messages`.`extraText` from (select t.messageId as messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeProductionProducts`.`product` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeProductionProjects`.`project` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?) as tt join `Messages` on tt.messageId = `Messages`.`id` order by `Messages`.`id` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiis",$userId,$userId,$userId,$userId,$chatWith,$chatKind);
       $statement->execute();
@@ -3064,7 +3068,7 @@
   //Mark all message of this chat as read
   function markMessagesInThisChatRead($userId,$chatWith,$chatKind){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "insert into `ReadMessage` (`readBy`,`messageId`) select ?, `Messages`.`id` from `Messages` where `Messages`.`id` not in (select `ReadMessage`.`messageId` from `ReadMessage` where `ReadMessage`.`readBy` = ?) and `Messages`.`id` in (select t.messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeDesignProducts`.`product` from `CooperativeDesignProducts` where `CooperativeDesignProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeDesignProjects`.`project` from `CooperativeDesignProjects` where `CooperativeDesignProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?);";
+    $sql = "insert into `ReadMessage` (`readBy`,`messageId`) select ?, `Messages`.`id` from `Messages` where `Messages`.`id` not in (select `ReadMessage`.`messageId` from `ReadMessage` where `ReadMessage`.`readBy` = ?) and `Messages`.`id` in (select t.messageId from ((select `Messages`.`fromWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`toWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'personal' as chatKind from `Messages` where `Messages`.`toKind` = 'personal' and `Messages`.`fromWho` = ?) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'product' as chatKind from `Messages` where `Messages`.`toKind` = 'product' and `Messages`.`toWho` in (select `CooperativeProductionProducts`.`product` from `CooperativeProductionProducts` where `CooperativeProductionProducts`.`user` = ?)) union (select `Messages`.`toWho` as chatWith, `Messages`.`id` as messageId, 'project' as chatKind from `Messages` where `Messages`.`toKind` = 'project' and `Messages`.`toWho` in (select `CooperativeProductionProjects`.`project` from `CooperativeProductionProjects` where `CooperativeProductionProjects`.`user` = ?))) as t where t.chatWith = ? and t.chatKind = ?);";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("iiiiiiis",$userId,$userId,$userId,$userId,$userId,$userId,$chatWith,$chatKind);
       $statement->execute();

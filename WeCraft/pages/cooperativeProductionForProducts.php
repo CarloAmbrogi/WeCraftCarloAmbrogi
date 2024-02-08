@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Cooperative design for products
+  //Cooperative production for products
   doInitialScripts();
   addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -14,12 +14,12 @@
     addParagraph(translate("This page is visible only to artisans and designers"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    upperPartOfThePage(translate("Cooperative design"),"./cooperate.php");
+    upperPartOfThePage(translate("Cooperative production"),"./cooperate.php");
     addTitle(translate("Cooperation with others to realize a product"));
     addParagraph(translate("Here will be shown the products for witch you are collaborating with other artisans and designers"));
-    //Show the products for whitch you are collaborating in a cooperative design
+    //Show the products for whitch you are collaborating in a cooperative production
     addButtonOnOffShowHide(translate("Visualise only product of which you are the owner"),"youArentTheOwner");
-    $productsForWhitchYouAreCollaborating = obtainProductsPreviewCooperativeDesign($_SESSION["userId"]);
+    $productsForWhitchYouAreCollaborating = obtainProductsPreviewCooperativeProduction($_SESSION["userId"]);
     startCardGrid();
     foreach($productsForWhitchYouAreCollaborating as &$singleProductPreview){
       $fileImageToVisualize = genericProductImage;
@@ -31,7 +31,7 @@
       if($_SESSION["userId"] != $singleProductPreview["ownerId"]){
         startDivShowHideMultiple("youArentTheOwner");
       }
-      addACardForTheGrid("./cooperativeDesignProduct.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),$text1,$text2);
+      addACardForTheGrid("./cooperativeProductionProduct.php?id=".urlencode($singleProductPreview["productId"]),$fileImageToVisualize,htmlentities($singleProductPreview["productName"]),$text1,$text2);
       if($_SESSION["userId"] != $singleProductPreview["ownerId"]){
         endDivShowHideMultiple();
       }

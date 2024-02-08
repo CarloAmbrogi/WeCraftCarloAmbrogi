@@ -17,7 +17,7 @@
       upperPartOfThePage(translate("Cooperate"),"");
       addTitle(translate("Different ways to cooperate")."...");
       startSquare();
-      addButtonLink(translate("Cooperative design"),"./cooperativeDesignForProducts.php");
+      addButtonLink(translate("Cooperative production"),"./cooperativeProductionForProducts.php");
       addParagraph(translate("More artisans and designers cooperate together to realize the same artifact"));
       endSquare();
       startSquare();
@@ -29,7 +29,7 @@
       addParagraph(translate("Artisans sell other artisans products at their stores and WeCrafts system helps by suggesting possible artisans who create complementary products"));
       endSquare();
       startSquare();
-      addButtonLink(translate("Cooperative design for personalized items"),"./cooperativeDesignForProjects.php");
+      addButtonLink(translate("Cooperative production for personalized items"),"./cooperativeProductionForProjects.php");
       addParagraph(translate("More artisans and designers cooperate together to realize a personalized item and if you want you can collaborate with the designer who has created the project and with the artisans that the designer has selected"));
       endSquare();
     }
@@ -37,11 +37,11 @@
       upperPartOfThePage(translate("Cooperate"),"");
       addParagraph(translate("Designers can cooperate with artisans to help them realizing products"));
       startSquare();
-      addButtonLink(translate("Cooperative design"),"./cooperativeDesignForProducts.php");
+      addButtonLink(translate("Cooperative production"),"./cooperativeProductionForProducts.php");
       addParagraph(translate("You can collaborate together with other artisans to realize artifacts"));
       endSquare();
       startSquare();
-      addButtonLink(translate("Cooperative design for personalized items"),"./cooperativeDesignForProjects.php");
+      addButtonLink(translate("Cooperative production for personalized items"),"./cooperativeProductionForProjects.php");
       addParagraph(translate("More artisans and designers cooperate together to realize a personalized item"));
       endSquare();
     }

@@ -4,7 +4,7 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Cooperative design for projects
+  //Cooperative production for projects
   doInitialScripts();
   addScriptAddThisPageToCronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
@@ -14,7 +14,7 @@
     addParagraph(translate("This page is visible only to artisans and designers"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    upperPartOfThePage(translate("Cooperative design"),"./cooperate.php");
+    upperPartOfThePage(translate("Cooperative production"),"./cooperate.php");
     addTitle(translate("Cooperation with others to realize a personalized product"));
     $category = "v1";
     if(isset($_GET["insertedCategory"])){
@@ -24,14 +24,14 @@
     }
     if($category == "v1"){
       addParagraph(translate("Here will be shown the projects for witch you are now collaborating with other artisans and designers"));
-      addButtonLink(translate("Visualize instead the precedent projects"),"./cooperativeDesignForProjects.php?insertedCategory=v2");
+      addButtonLink(translate("Visualize instead the precedent projects"),"./cooperativeProductionForProjects.php?insertedCategory=v2");
     }
     if($category == "v2"){
       addParagraph(translate("Here will be shown the completed projects for witch you have collaborated with other artisans and designers in the past"));
-      addButtonLink(translate("Visualize instead the current projects"),"./cooperativeDesignForProjects.php?insertedCategory=v1");
+      addButtonLink(translate("Visualize instead the current projects"),"./cooperativeProductionForProjects.php?insertedCategory=v1");
     }
-    //Show the projects for whitch you are collaborating in a cooperative design
-    $projectsForWhitchYouAreCollaborating = obtainProductsPreviewCooperativeDesignPersonalizedProducts($_SESSION["userId"]);
+    //Show the projects for whitch you are collaborating in a cooperative production
+    $projectsForWhitchYouAreCollaborating = obtainProductsPreviewCooperativeProductionPersonalizedProducts($_SESSION["userId"]);
     startCardGrid();
     foreach($projectsForWhitchYouAreCollaborating as &$singleProjectPreview){
       $isCompleted = false;
@@ -45,7 +45,7 @@
         }
         $text1 = translate("Number of collaborators").": ".$singleProjectPreview["numberOfCollaborators"];
         $text2 = "";
-        addACardForTheGrid("./cooperativeDesignProject.php?id=".urlencode($singleProjectPreview["projectId"]),$fileImageToVisualize,htmlentities($singleProjectPreview["projectName"]),$text1,$text2);  
+        addACardForTheGrid("./cooperativeProductionProject.php?id=".urlencode($singleProjectPreview["projectId"]),$fileImageToVisualize,htmlentities($singleProjectPreview["projectName"]),$text1,$text2);  
       }
     }
     endCardGrid();

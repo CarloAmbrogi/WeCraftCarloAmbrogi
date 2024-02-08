@@ -112,7 +112,7 @@
         }
       }
       endCardGrid();
-      //Show a paragraph if at least a product of this artisan is in collaboration for the design
+      //Show a paragraph if at least a product of this artisan is in collaboration for the production
       $numberProductsOfThisArtisanInCollaboration = numberProductsOfThisArtisanInCollaboration($_GET["id"]);
       if($numberProductsOfThisArtisanInCollaboration > 0){
         addParagraph(translate("Some of the products of this artisans are created in collaboration with other artisans or designers"));
@@ -144,7 +144,7 @@
         }
         endCardGrid();
       }
-      //This artisan is suggests also theese products of other artisans
+      //This artisan suggests also theese products of other artisans
       $numberProductsThisArtisanIsSponsoring = numberProductsThisArtisanIsSponsoringExceptOnesIsExchangeSelling($_GET["id"]);
       if($numberProductsThisArtisanIsSponsoring > 0){
         addParagraph(translate("This artisan suggests also these products of other artisans")." (".$numberProductsThisArtisanIsSponsoring."):");
@@ -161,10 +161,10 @@
         }
         endCardGrid();
       }
-      //This artisan has collaborated for the design of theese other products
+      //This artisan is collaborating for the production of theese other products
       $numberOfOtherProductsThisUserIsCollaboratingFor = numberOfOtherProductsThisUserIsCollaboratingFor($_GET["id"]);
       if($numberOfOtherProductsThisUserIsCollaboratingFor > 0){
-        addParagraph(translate("This artisan has collaborated for the design of theese other products")." (".$numberOfOtherProductsThisUserIsCollaboratingFor."):");
+        addParagraph(translate("This artisan is collaborating for the production of theese other products")." (".$numberOfOtherProductsThisUserIsCollaboratingFor."):");
         $productsPreviewOtherProductsThisUserIsCollaboratingFor = previewOtherProductsThisUserIsCollaboratingFor($_GET["id"]);
         startCardGrid();
         foreach($productsPreviewOtherProductsThisUserIsCollaboratingFor as &$singleProductPreview){
@@ -181,8 +181,8 @@
       //Manage visibility products quantity 0
       addScriptShowHideMultiple("notAvailableProduct");
       forceThisPageReloadWhenBrowserBackButton();
-      //Show button to see the collaborations for the design of this artisan
-      addButtonLink(translate("See products in collaboration for the design with this artisan"),"./cooperativeDesignThisArtisan.php?id=".urlencode($_GET["id"]));
+      //Show button to see the collaborations for the production of this artisan
+      addButtonLink(translate("See products in collaboration for the production with this artisan"),"./cooperativeProductionThisArtisan.php?id=".urlencode($_GET["id"]));
     }
   } else {
     if($kindOfTheAccountInUse == "Artisan"){

@@ -4,8 +4,8 @@
   include "./../database/access.php";
   include "./../database/functions.php";
 
-  //Cooperating design this artisan
-  //This page show the products in collaboration for the design with the specified artisan
+  //Cooperating production this artisan
+  //This page show the products in collaboration for the production with the specified artisan
   //This page could work also for designers but the visualizatio of this information for designers is moved in the designer page
   //A check permit to load this page only for artisans
   doInitialScripts();
@@ -15,16 +15,16 @@
       addParagraph(translate("This user is not an artisan"));
     } else {
       //Page ok
-      upperPartOfThePage(translate("Artisan cooperative design"),"cookieBack");
+      upperPartOfThePage(translate("Artisan cooperative production"),"cookieBack");
       addScriptAddThisPageToCronology();
       $userInfos = obtainUserInfos($_GET["id"]);
       $artisanInfos = obtainArtisanInfos($_GET["id"]);
       $nameAndSurname = $userInfos["name"]." ".$userInfos["surname"];
       addParagraph(translate("Artisan").": ".$nameAndSurname." (".$artisanInfos["shopName"].")");
       addParagraph(translate("Here will be shown the products for witch this artisan is collaborating with other artisans and designers"));
-      //Show the products for whitch this artisan collaborating in a cooperative design
+      //Show the products for whitch this artisan collaborating in a cooperative production
       addButtonOnOffShowHide(translate("Visualise only product of which this artisan is the owner"),"thisArtisanIsntTheOwner");
-      $productsForWhitchThisArtisanIsCollaborating = obtainProductsPreviewCooperativeDesign($_GET["id"]);
+      $productsForWhitchThisArtisanIsCollaborating = obtainProductsPreviewCooperativeProduction($_GET["id"]);
       startCardGrid();
       foreach($productsForWhitchThisArtisanIsCollaborating as &$singleProductPreview){
         $fileImageToVisualize = genericProductImage;

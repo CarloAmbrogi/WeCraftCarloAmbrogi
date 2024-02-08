@@ -6,14 +6,14 @@
 
   //Send a modfication of the sheet here
   //You need to be an artisan or a designer
-  //You can use this page only if you are collaborating for the design of this product
+  //You can use this page only if you are collaborating for the production of this product
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
 
   if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){
     if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Page with post request
-      upperPartOfThePage(translate("Cooperative design"),"cookieBack");
+      upperPartOfThePage(translate("Cooperative production"),"cookieBack");
       //Receive post request from the sheet to update it
       $insertedSheet = $_POST['insertedSheet'];
       $insertedProductId = $_POST['insertedProductId'];
@@ -23,8 +23,8 @@
         addParagraph(translate("Error of the csrf token"));
       } else if(!doesThisProductExists($insertedProductId)){
         addParagraph(translate("This product doesnt exists"));
-      } else if(!isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedProductId)){
-        addParagraph(translate("You are not a collaborator for the design of this product"));
+      } else if(!isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$insertedProductId)){
+        addParagraph(translate("You are not a collaborator for the production of this product"));
       } else {
         //Real content of the page
         //Check if the sheet is sendable
@@ -32,7 +32,7 @@
         if($sheetContent["content"] == $insertedOldSheet || $sheetContent["content"] == $insertedSheet){
           //Send the sheet and redirect
           updateSheetProduct($insertedSheet,$_SESSION["userId"],$insertedProductId);
-          addRedirect("./cooperativeDesignProduct.php?id=".urlencode($insertedProductId));
+          addRedirect("./cooperativeProductionProduct.php?id=".urlencode($insertedProductId));
         } else {
           //Show merge page
           addTitle(translate("Merge the sheet"));
@@ -56,7 +56,7 @@
               insertedSheet.value = "<?= newlineForJs($sheetContent["content"]) ?>";
             </script>
           <?php
-          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeDesignProduct.php?id=".urlencode($_GET["id"]));
+          addButtonLinkJsVersion(translate("Discard changes"),"./cooperativeProductionProduct.php?id=".urlencode($_GET["id"]));
         }
       }  
     } else {

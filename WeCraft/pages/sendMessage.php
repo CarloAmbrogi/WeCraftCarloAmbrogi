@@ -42,12 +42,12 @@
           }
         }
         if($insertedChatKind == "product"){
-          if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$insertedChatWith)){
+          if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$insertedChatWith)){
             $checkIsOk = true;
           }
         }
         if($insertedChatKind == "project"){
-          if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$insertedChatWith)){
+          if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$insertedChatWith)){
             $checkIsOk = true;
           }
         }
@@ -112,12 +112,12 @@
           }
         }
         if($_GET["chatKind"] == "product"){
-          if(isThisUserCollaboratingForTheDesignOfThisProduct($_SESSION["userId"],$_GET["chatWith"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["chatWith"])){
             $checkIsOk = true;
           }
         }
         if($_GET["chatKind"] == "project"){
-          if(isThisUserCollaboratingForTheDesignOfThisProject($_SESSION["userId"],$_GET["chatWith"])){
+          if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["chatWith"])){
             $checkIsOk = true;
           }
         }
@@ -188,7 +188,7 @@
               addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
             }
           } else if($_GET["chatKind"] == "product" || $_GET["chatKind"] == "project"){
-            addParagraph(translate("You are not in this group for this cooperative design"));
+            addParagraph(translate("You are not in this group for this cooperative production"));
           } else {
             addParagraph(translate("This kind of chat doesnt exists"));
           }
