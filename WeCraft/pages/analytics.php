@@ -5,6 +5,7 @@
   include "./../database/functions.php";
 
   //Page reserved for the admin
+  //Analytics
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
@@ -45,13 +46,9 @@
     addParagraph(translate("New products in years"));
     addBarChart("numberOfProductsYear",translate("New products in years"),["2023","2024","2025","2026"],[numberNewProductsYear(2023),numberNewProductsYear(2024),numberNewProductsYear(2025),numberNewProductsYear(2026)]);
 
-    //Averange number of sells of a product
-    addParagraph(translate("Averange number of sells of a product"));
-    addBarChart("averangeNumberSells",translate("Averange number of sells of a product"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[averangeNumberSellsOfAProduct(),averangeNumberSellsOfAProductWithThisCategory("Nonee"),averangeNumberSellsOfAProductWithThisCategory("Jewerly"),averangeNumberSellsOfAProductWithThisCategory("Home decoration"),averangeNumberSellsOfAProductWithThisCategory("Pottery"),averangeNumberSellsOfAProductWithThisCategory("Teppiches"),averangeNumberSellsOfAProductWithThisCategory("Bedware Bathroomware"),averangeNumberSellsOfAProductWithThisCategory("Artisan craft")],false);
-
-    //Number of products sold for at least a certain number of units
-    addParagraph(translate("Number of products sold for at least a certain number of units"));
-    addBarChart("numberProductsSoldAtLeastQuantity",translate("Number of products sold for at least a certain number of units"),[0,1,5,10,15,25],[numberProductsSoldAtLeastNUnits(0),numberProductsSoldAtLeastNUnits(1),numberProductsSoldAtLeastNUnits(5),numberProductsSoldAtLeastNUnits(10),numberProductsSoldAtLeastNUnits(15),numberProductsSoldAtLeastNUnits(25)]);
+    //Total number of sells of a product
+    addParagraph(translate("Total number of sells of a product"));
+    addBarChart("totalNumberSells",translate("Total number of sells of a product"),[translate("All products"),translate("Nonee"),translate("Jewerly"),translate("Home decoration"),translate("Pottery"),translate("Teppiches"),translate("Bedware Bathroomware"),translate("Artisan craft")],[getNumberOfSells(),getNumberOfProductsWithThisCategory("Nonee"),getNumberOfProductsWithThisCategory("Jewerly"),getNumberOfProductsWithThisCategory("Home decoration"),getNumberOfProductsWithThisCategory("Pottery"),getNumberOfProductsWithThisCategory("Teppiches"),getNumberOfProductsWithThisCategory("Bedware Bathroomware"),getNumberOfProductsWithThisCategory("Artisan craft")]);
 
     //Analytics related to collaboration
     addTitle(translate("Analytics related to collaboration"));
@@ -95,9 +92,9 @@
     addParagraph(translate("Number of completed projects that have been completed in time or not"));
     addBarChart("numProjectsComplInTime",translate("Number of projects that have been completed in time"),[translate("Completed in time"),translate("Completed but not in time"),translate("Not completed and in delay")],[numberOfProjectsCompletedInTime(),numberOfProjectsNotCompletedInTime(),numberOfProjectsNotCompletedInDelay()]);
 
-    //Number of projects that have been completed within a certain time range
-    addParagraph(translate("Number of projects that have been completed within a certain time range"));
-    addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRange(0,86400),numberCompletedProjectsInCertainTimeRange(86400,604800),numberCompletedProjectsInAtLeastCertainTimeRange(604800)]);
+    //Duration of projects
+    addParagraph(translate("Duration of projects"));
+    addBarChart("durationOfProjects",translate("Duration of projects"),[translate("Within a month"),translate("Within two months"),translate("More than two months")],[numberCompletedProjectsInCertainTimeRange(0,2592000),numberCompletedProjectsInCertainTimeRange(2592000,5184000),numberCompletedProjectsInAtLeastCertainTimeRange(5184000)]);
 
     //Number of projects per state
     addParagraph(translate("Number of projects per state"));

@@ -5,6 +5,12 @@
   include "./../database/functions.php";
 
   //Page reserved for the admin
+  //Analytical forecast
+  doInitialScripts();
+  $kindOfTheAccountInUse = getKindOfTheAccountInUse();
+  upperPartOfThePage(translate("Error"),"");
+  addParagraph(translate("This page is not available"));
+  /*
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
@@ -142,6 +148,7 @@
   } else {
     upperPartOfThePage(translate("Error"),"");
   }
+  */
   lowerPartOfThePage(tabBarForTheAccountInUse());
   include "./../database/closeConnectionDB.php";
 ?>

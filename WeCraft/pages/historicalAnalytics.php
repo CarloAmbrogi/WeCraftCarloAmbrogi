@@ -5,6 +5,7 @@
   include "./../database/functions.php";
 
   //Page reserved for the admin
+  //Hystorical analytics
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
@@ -128,9 +129,9 @@
     addParagraph(translate("Number of completed projects that have been completed in time or not")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
     addBarChart("numProjectsComplInTime",translate("Number of projects that have been completed in time"),[translate("Completed in time"),translate("Completed but not in time"),translate("Not completed and in delay")],[numberOfProjectsCompletedInTimeHistorical($startDate,$endDate),numberOfProjectsNotCompletedInTimeHistorical($startDate,$endDate),numberOfProjectsNotCompletedInDelayHistorical($startDate,$endDate)]);
 
-    //Number of projects that have been completed within a certain time range historical (projects confirmed between X and X)
-    addParagraph(translate("Number of projects that have been completed within a certain time range")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
-    addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRangeHistorical(0,86400,$startDate,$endDate),numberCompletedProjectsInCertainTimeRangeHistorical(86400,604800,$startDate,$endDate),numberCompletedProjectsInAtLeastCertainTimeRangeHistorical(604800,$startDate,$endDate)]);
+    //Duration of projects historical (projects confirmed between X and X)
+    addParagraph(translate("Duration of projects")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
+    addBarChart("durationOfProjects",translate("Duration of projects"),[translate("Within a month"),translate("Within two months"),translate("More than two months")],[numberCompletedProjectsInCertainTimeRangeHistorical(0,2592000,$startDate,$endDate),numberCompletedProjectsInCertainTimeRangeHistorical(2592000,5184000,$startDate,$endDate),numberCompletedProjectsInAtLeastCertainTimeRangeHistorical(5184000,$startDate,$endDate)]);
 
     //Number of projects in cooperation for the production which have been confirmed between X and X (also completed project)
     addParagraph(translate("Number of projects in cooperation for the production")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
