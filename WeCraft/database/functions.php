@@ -2470,12 +2470,12 @@
   }
 
   //insert on Project a new project (without specifying an icon image)
-  function addANewProjectWithoutIcon($designerId,$customerId,$name,$description,$price,$percentageToDesigner){
+  function addANewProjectWithoutIcon($designerId,$customerId,$name,$description,$price,$percentageToDesigner,$estimatedTime){
     //insert on Project
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, ?, ?, NULL, 0, NULL, NULL, NULL);";
+    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`, `estimatedTime`) VALUES (NULL, ?, ?, ?, ?, NULL, NULL, ?, ?, NULL, 0, NULL, NULL, NULL,?);";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("iissdd",$designerId,$customerId,$name,$description,$price,$percentageToDesigner);
+      $statement->bind_param("iissddi",$designerId,$customerId,$name,$description,$price,$percentageToDesigner,$estimatedTime);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -2483,12 +2483,12 @@
   }
 
   //insert on Project a new project (specifying an icon image)
-  function addANewProjectWithIcon($designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner){
+  function addANewProjectWithIcon($designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner,$estimatedTime){
     //insert on Project
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, NULL, NULL, NULL);";
+    $sql = "INSERT INTO `Project` (`id`, `designer`, `customer`, `name`, `description`, `iconExtension`, `icon`, `price`, `percentageToDesigner`, `claimedByThisArtisan`, `confirmedByTheCustomer`, `timestampPurchase`, `address`, `timestampReady`, `estimatedTime`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, NULL, 0, NULL, NULL, NULL,?);";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("iissssdd",$designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner);
+      $statement->bind_param("iissssddi",$designerId,$customerId,$name,$description,$imgExtension,$imgData,$price,$percentageToDesigner,$estimatedTime);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -2517,7 +2517,7 @@
   //Obtain a project infos of a project given the id
   function obtainProjectInfos($projectId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady`,`Project`.`isPublic` from `Project` where `Project`.`id` = ?;";
+    $sql = "select `Project`.`id`,`Project`.`designer`,`Project`.`customer`,`Project`.`name`,`Project`.`description`,`Project`.`iconExtension`,`Project`.`icon`,`Project`.`price`,`Project`.`percentageToDesigner`,`Project`.`claimedByThisArtisan`,`Project`.`confirmedByTheCustomer`,`Project`.`timestampPurchase`,`Project`.`address`,`Project`.`timestampReady`,`Project`.`isPublic`,`Project`.`estimatedTime` from `Project` where `Project`.`id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$projectId);
       $statement->execute();
@@ -2530,7 +2530,7 @@
       $elements[] = $element;
     }
 
-    //return an array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady isPublic
+    //return an array with id designer customer name description iconExtension icon price percentageToDesigner claimedByThisArtisan confirmedByTheCustomer timestampPurchase address timestampReady isPublic estimatedTime
     return $elements[0];
   }
 
@@ -2636,11 +2636,11 @@
   }
 
   //update the general info of a project
-  function updateGeneralInfoOfAProject($projectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner){
+  function updateGeneralInfoOfAProject($projectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$estimatedTime){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "update `Project` set `name` = ?, `description` = ?, `price` = ?, `percentageToDesigner` = ?, `claimedByThisArtisan` = null where `id` = ?;";
+    $sql = "update `Project` set `name` = ?, `description` = ?, `price` = ?, `percentageToDesigner` = ?, `claimedByThisArtisan` = null, `estimatedTime` = ? where `id` = ?;";
     if($statement = $connectionDB->prepare($sql)){
-      $statement->bind_param("ssddi",$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$projectId);
+      $statement->bind_param("ssddii",$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$estimatedTime,$projectId);
       $statement->execute();
     } else {
       echo "Error not possible execute the query: $sql. " . $connectionDB->error;
@@ -3634,6 +3634,25 @@
 
     //return an array of associative array with id name surname email icon iconExtension shopName numberOfProductsOfThisArtisanWithThisCategory
     return $elements;
+  }
+
+  //Has this completed project completed in time
+  function hasThisProjectCompletedInTime($projectId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as hasThisProjectCompletedInTime from `Project` where `id` = ? and `timestampReady` is not null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) < `estimatedTime`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$projectId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["hasThisProjectCompletedInTime"];
   }
 
   //Include also analytic queries

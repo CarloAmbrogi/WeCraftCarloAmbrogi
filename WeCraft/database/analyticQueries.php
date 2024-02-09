@@ -1255,5 +1255,116 @@
 
     return $elements[0]["collaborationProductionProjectScoreYears"];
   }
+
+  //Number of projects completed in time
+  function numberOfProjectsCompletedInTime(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsCompletedInTime from `Project` where `timestampReady` is not null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) < `estimatedTime`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsCompletedInTime"];
+  }
+
+  //Number of projects completed but not in time
+  function numberOfProjectsNotCompletedInTime(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsNotCompletedInTime from `Project` where `timestampReady` is not null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= `estimatedTime`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsNotCompletedInTime"];
+  }
+
+  //Number of projects not completed and in delay
+  function numberOfProjectsNotCompletedInDelay(){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsNotCompletedInDelay from `Project` where `timestampReady` is null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, CURRENT_TIMESTAMP()) >= `estimatedTime`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsNotCompletedInDelay"];
+  }
+
+  //Number of projects (confirmed between X and X) completed in time
+  function numberOfProjectsCompletedInTimeHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsCompletedInTime from `Project` where `timestampReady` is not null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) < `estimatedTime`) and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsCompletedInTime"];
+  }
+
+  //Number of projects completed but not in time
+  function numberOfProjectsNotCompletedInTimeHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsNotCompletedInTime from `Project` where `timestampReady` is not null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, `timestampReady`) >= `estimatedTime`) and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsNotCompletedInTime"];
+  }
+
+  //Number of projects not completed and in delay
+  function numberOfProjectsNotCompletedInDelayHistorical($start,$end){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as numberOfProjectsNotCompletedInDelay from `Project` where `timestampReady` is null and `timestampPurchase` is not null and (TIMESTAMPDIFF(SECOND, `timestampPurchase`, CURRENT_TIMESTAMP()) >= `estimatedTime`) and `timestampPurchase` BETWEEN ? AND ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ss",$start,$end);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["numberOfProjectsNotCompletedInDelay"];
+  }
   
 ?>

@@ -44,6 +44,7 @@
         addTitle($projectInfos["name"]);
         addParagraph(translate("Price").": ".floatToPrice($projectInfos["price"]));
         addParagraph(translate("Percentage to the designer").": ".$projectInfos["percentageToDesigner"]."%");
+        addParagraph(translate("Estimated time").": ".showEstimatedTime($projectInfos["estimatedTime"]));
         endCol();
         endRow();
         addParagraphUnsafe(adjustTextWithYouTubeLinks($projectInfos["description"]));
@@ -160,6 +161,12 @@
         if(isset($projectInfos["timestampReady"]) and $projectInfos["timestampReady"] != null){
           $thisProjectIsReady = true;
           addParagraph(translate("This project is completed and ready from")." ".$projectInfos["timestampReady"]);
+          //Check if this project has been completed in time or not
+          if(hasThisProjectCompletedInTime($_GET["id"])){
+            addParagraph(translate("The project has been completed in time"));
+          } else {
+            addParagraph(translate("The project has not been completed in time"));
+          }
         }
         //Commands for the designer
         if($kindOfTheAccountInUse == "Designer"){

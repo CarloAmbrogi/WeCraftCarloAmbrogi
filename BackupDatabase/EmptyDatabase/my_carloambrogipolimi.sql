@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Feb 08, 2024 alle 16:49
+-- Creato il: Feb 09, 2024 alle 16:33
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -352,6 +352,7 @@ CREATE TABLE `Project` (
   `timestampPurchase` timestamp NULL DEFAULT NULL,
   `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `timestampReady` timestamp NULL DEFAULT NULL,
+  `estimatedTime` bigint NOT NULL,
   `isPublic` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 

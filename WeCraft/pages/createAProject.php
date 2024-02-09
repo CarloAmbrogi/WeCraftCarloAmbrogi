@@ -21,6 +21,8 @@
     $insertedIcon = $_POST['insertedIcon'];
     $insertedPrice = $_POST['insertedPrice'];
     $insertedPercentageToDesigner = $_POST['insertedPercentageToDesigner'];
+    $insertedEstimatedTime = $_POST['insertedEstimatedTime'];
+    $insertedEstimatedTimeDuration = $_POST['insertedEstimatedTimeDuration'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -47,7 +49,23 @@
       addParagraph(translate("The inserted percentage to the designer is not valid"));
     } else if($insertedPercentageToDesigner < 0.0 || $insertedPercentageToDesigner > 100.0){
       addParagraph(translate("The percentage is not between z and h"));
+    } else if($insertedEstimatedTime == ""){
+      addParagraph(translate("You have missed to insert the estimated time"));
+    } else if(!isValidQuantity($insertedEstimatedTime)){
+      addParagraph(translate("The estimated time is not a valid number"));
+    } else if($insertedEstimatedTime == 0){
+      addParagraph(translate("The estimated time cant be zero"));
+    } else if($insertedEstimatedTimeDuration != "days" && $insertedEstimatedTimeDuration != "weeks"){
+      addParagraph(translate("The estimated time duration is wrong"));
     } else {
+      //Calc estimated time
+      $calcEstimatedTime = $insertedEstimatedTime;
+      if($insertedEstimatedTimeDuration == "days"){
+        $calcEstimatedTime = $calcEstimatedTime * 24 * 60 * 60;
+      }
+      if($insertedEstimatedTimeDuration == "weeks"){
+        $calcEstimatedTime = $calcEstimatedTime * 24 * 60 * 60 * 7;
+      }
       //Verify that the user is a designer
       if($kindOfTheAccountInUse == "Designer"){
         //Verify that this user exists and it is a customer
@@ -72,18 +90,18 @@
                 $insertCorrectlyTheIcon = true;
                 //add the new project with file icon
                 $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-                addANewProjectWithIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedPercentageToDesigner);
+                addANewProjectWithIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$fileExtension,$imgData,$insertedPrice,$insertedPercentageToDesigner,$calcEstimatedTime);
                 addParagraph(translate("Your data has been loaded correctly"));
               }
               if($insertCorrectlyTheIcon == false){
                 //add the new product without file icon (because of error in the icon)
-                addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
+                addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$calcEstimatedTime);
                 addParagraph(translate("Your data has been loaded correctly except for the icon but you will be able to change the icon later"));
               }
             } else {
               //add the new product without file icon
               addParagraph(translate("Your data has been loaded correctly"));
-              addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
+              addANewProjectWithoutIcon($_SESSION["userId"],$insertedCustomerId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$calcEstimatedTime);
             }
             //Show button to go to the personalized items page v1
             addParagraph(translate("You can see the project you have created in the personalized item page and youll be able to present this project to some artisans"));
@@ -111,13 +129,25 @@
             //Content of this page
             $userInfos = obtainUserInfos($_GET["id"]);
             addParagraph(translate("Create a project for")." ".$userInfos["name"]." ".$userInfos["surname"]);
-            //Form to insert data edit product general info of this product
+            //Form to insert data to create a project
             startForm1();
             startForm2($_SERVER['PHP_SELF']);
             addShortTextField(translate("Name"),"insertedName",24);
             addLongTextField(translate("Description"),"insertedDescription",2046);
             addShortTextField(translate("Price"),"insertedPrice",24);
             addShortTextField(translate("Percentage to the designer"),"insertedPercentageToDesigner",5);
+            startSquare();
+            ?>
+              <div class="mb-3">
+                <label for="insertedEstimatedTime" class="form-label"><?= translate("Estimated time") ?></label>
+                <input class="form-control" id="insertedEstimatedTime" type="text" name="insertedEstimatedTime" maxlength="24">
+                <select id="insertedEstimatedTimeDuration" name="insertedEstimatedTimeDuration">
+                  <option value="days"><?= translate("days") ?></option>
+                  <option value="weeks"><?= translate("weeks") ?></option>
+                </select>
+              </div>
+            <?php
+            endSquare();
             addHiddenField("insertedCustomerId",$_GET["id"]);
             addFileField(translate("Icon optional"),"insertedIcon");
             endForm(translate("Submit"));
@@ -129,6 +159,7 @@
                 const insertedDescription = document.getElementById('insertedDescription');
                 const insertedPrice = document.getElementById('insertedPrice');
                 const insertedPercentageToDesigner = document.getElementById('insertedPercentageToDesigner');
+                const insertedEstimatedTime = document.getElementById('insertedEstimatedTime');
       
                 function isValidPrice(price){
                   //The price shoud have at least an integer digit and exactly 2 digits after the floating point
@@ -176,6 +207,15 @@
                   } else if(Number(insertedPercentageToDesigner.value) < 0.0 || Number(insertedPercentageToDesigner.value) > 100.0){
                     e.preventDefault();
                     alert("<?= translate("The percentage is not between z and h") ?>");
+                  } else if(insertedEstimatedTime.value.trim() == ""){
+                    e.preventDefault();
+                    alert("<?= translate("You have missed to insert the estimated time") ?>");
+                  } else if(!isValidQuantity(insertedEstimatedTime.value)){
+                    e.preventDefault();
+                    alert("<?= translate("The estimated time is not a valid number") ?>");
+                  } else if(insertedEstimatedTime.value == 0){
+                    e.preventDefault();
+                    alert("<?= translate("The estimated time cant be zero") ?>");
                   } else if(inputFile.files[0]){
                     let file = inputFile.files[0];
                     let fileSize = file.size;

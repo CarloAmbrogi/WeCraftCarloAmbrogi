@@ -16,6 +16,8 @@
     $insertedDescription = trim($_POST['insertedDescription']);
     $insertedPrice = $_POST['insertedPrice'];
     $insertedPercentageToDesigner = $_POST['insertedPercentageToDesigner'];
+    $insertedEstimatedTime = $_POST['insertedEstimatedTime'];
+    $insertedEstimatedTimeDuration = $_POST['insertedEstimatedTimeDuration'];
     $csrftoken = filter_input(INPUT_POST, 'csrftoken', FILTER_SANITIZE_STRING);
     //Check on the input form data
     if (!$csrftoken || $csrftoken !== $_SESSION['csrftoken']){
@@ -42,7 +44,23 @@
       addParagraph(translate("The inserted percentage to the designer is not valid"));
     } else if($insertedPercentageToDesigner < 0.0 || $insertedPercentageToDesigner > 100.0){
       addParagraph(translate("The percentage is not between z and h"));
+    } else if($insertedEstimatedTime == ""){
+      addParagraph(translate("You have missed to insert the estimated time"));
+    } else if(!isValidQuantity($insertedEstimatedTime)){
+      addParagraph(translate("The estimated time is not a valid number"));
+    } else if($insertedEstimatedTime == 0){
+      addParagraph(translate("The estimated time cant be zero"));
+    } else if($insertedEstimatedTimeDuration != "days" && $insertedEstimatedTimeDuration != "weeks"){
+      addParagraph(translate("The estimated time duration is wrong"));
     } else {
+      //Calc estimated time
+      $calcEstimatedTime = $insertedEstimatedTime;
+      if($insertedEstimatedTimeDuration == "days"){
+        $calcEstimatedTime = $calcEstimatedTime * 24 * 60 * 60;
+      }
+      if($insertedEstimatedTimeDuration == "weeks"){
+        $calcEstimatedTime = $calcEstimatedTime * 24 * 60 * 60 * 7;
+      }
       //Check that this project exists, the user is who has created the project, the project is not confirmed
       if(doesThisProjectExists($insertedProjectId)){
         $projectInfos = obtainProjectInfos($insertedProjectId);
@@ -53,7 +71,7 @@
           }
           if(!$thisProjectIsConfirmed){
             //Edit general info of this project and make it unclaimed
-            updateGeneralInfoOfAProject($insertedProjectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner);
+            updateGeneralInfoOfAProject($insertedProjectId,$insertedName,$insertedDescription,$insertedPrice,$insertedPercentageToDesigner,$calcEstimatedTime);
             //Send notification to the customer and to the presented artisans
             sendAutomaticMessageWithLink($_SESSION["userId"],"personal",$projectInfos["customer"],"The designer has applied some modifications to the project","project",$insertedProjectId);
             $previewArtisansToWitchIsAssignedThisProject = obtainPreviewArtisansToWitchIsAssignedThisProject($insertedProjectId);
@@ -94,6 +112,18 @@
             addLongTextField(translate("Description"),"insertedDescription",2046);
             addShortTextField(translate("Price"),"insertedPrice",24);
             addShortTextField(translate("Percentage to the designer"),"insertedPercentageToDesigner",5);
+            startSquare();
+            ?>
+              <div class="mb-3">
+                <label for="insertedEstimatedTime" class="form-label"><?= translate("Estimated time") ?></label>
+                <input class="form-control" id="insertedEstimatedTime" type="text" name="insertedEstimatedTime" maxlength="24">
+                <select id="insertedEstimatedTimeDuration" name="insertedEstimatedTimeDuration">
+                  <option value="days"><?= translate("days") ?></option>
+                  <option value="weeks"><?= translate("weeks") ?></option>
+                </select>
+              </div>
+            <?php
+            endSquare();
             addHiddenField("insertedProjectId",$_GET["id"]);
             endForm(translate("Submit"));
             ?>
@@ -104,12 +134,14 @@
                 const insertedDescription = document.getElementById('insertedDescription');
                 const insertedPrice = document.getElementById('insertedPrice');
                 const insertedPercentageToDesigner = document.getElementById('insertedPercentageToDesigner');
+                const insertedEstimatedTime = document.getElementById('insertedEstimatedTime');
 
                 //Load form fields starting values
                 insertedName.value = "<?= $projectInfos["name"] ?>";
                 insertedDescription.value = "<?= newlineForJs($projectInfos["description"]) ?>";
                 insertedPrice.value = "<?= floatToPrice($projectInfos["price"]) ?>";
                 insertedPercentageToDesigner.value = "<?= $projectInfos["percentageToDesigner"] ?>";
+                insertedEstimatedTime.value = "<?= intdiv($projectInfos["estimatedTime"],24*60*60) ?>";
       
                 function isValidPrice(price){
                   //The price shoud have at least an integer digit and exactly 2 digits after the floating point
@@ -157,7 +189,16 @@
                   } else if(Number(insertedPercentageToDesigner.value) < 0.0 || Number(insertedPercentageToDesigner.value) > 100.0){
                     e.preventDefault();
                     alert("<?= translate("The percentage is not between z and h") ?>");
-                  } 
+                  } else if(insertedEstimatedTime.value.trim() == ""){
+                    e.preventDefault();
+                    alert("<?= translate("You have missed to insert the estimated time") ?>");
+                  } else if(!isValidQuantity(insertedEstimatedTime.value)){
+                    e.preventDefault();
+                    alert("<?= translate("The estimated time is not a valid number") ?>");
+                  } else if(insertedEstimatedTime.value == 0){
+                    e.preventDefault();
+                    alert("<?= translate("The estimated time cant be zero") ?>");
+                  }
                 }
               </script>
             <?php

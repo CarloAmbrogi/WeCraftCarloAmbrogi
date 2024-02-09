@@ -449,6 +449,27 @@
     return $result;
   }
 
+  //Show the estimated time converting it in days or weeks
+  function showEstimatedTime($estimatedTime){
+    if($estimatedTime % (60 * 60 * 24 * 7) == 0){
+      $r = $estimatedTime / (60 * 60 * 24 * 7);
+      if($r == 1){
+        return $r." ".translate("week");
+      } else {
+        return $r." ".translate("weeks");
+      }
+    }
+    if($estimatedTime % (60 * 60 * 24) == 0){
+      $r = $estimatedTime / (60 * 60 * 24);
+      if($r == 1){
+        return $r." ".translate("day");
+      } else {
+        return $r." ".translate("days");
+      }
+    }
+    return $estimatedTime." ".translate("seconds");
+  }
+
   //Remove the quotes from this string (to prevent sql injection)
   function removeQuotes($str){
     $str = str_replace("'","",$str);

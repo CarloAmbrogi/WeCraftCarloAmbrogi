@@ -124,6 +124,10 @@
     //Analytics related to projects for personalized items
     addTitle(translate("Analytics related to projects for personalized items"));
 
+    //Number of completed projects that have been completed in time or not historical (projects confirmed between X and X)
+    addParagraph(translate("Number of completed projects that have been completed in time or not")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
+    addBarChart("numProjectsComplInTime",translate("Number of projects that have been completed in time"),[translate("Completed in time"),translate("Completed but not in time"),translate("Not completed and in delay")],[numberOfProjectsCompletedInTimeHistorical($startDate,$endDate),numberOfProjectsNotCompletedInTimeHistorical($startDate,$endDate),numberOfProjectsNotCompletedInDelayHistorical($startDate,$endDate)]);
+
     //Number of projects that have been completed within a certain time range historical (projects confirmed between X and X)
     addParagraph(translate("Number of projects that have been completed within a certain time range")." (".translate("projects confirmed between")." ".$startDate." ".translate("and")." ".$endDate.")");
     addBarChart("numCompletedProjectsInCertainTimeRange",translate("Number of projects that have been completed within a certain time range"),[translate("Within a day"),translate("Within a week and at least one day"),translate("More than one week")],[numberCompletedProjectsInCertainTimeRangeHistorical(0,86400,$startDate,$endDate),numberCompletedProjectsInCertainTimeRangeHistorical(86400,604800,$startDate,$endDate),numberCompletedProjectsInAtLeastCertainTimeRangeHistorical(604800,$startDate,$endDate)]);
@@ -133,7 +137,7 @@
     addBarChart("numProjectsCooperationProduction",translate("Number of projects in cooperation for the production or not"),[translate("Yesx"),translate("Nox")],[numberProjectsInCooperationForTheProductionConfirmedBetweenDates($startDate,$endDate),numberProjectsNotInCooperationForTheProductionConfirmedBetweenDates($startDate,$endDate)]);
 
     //Number of projects confirmed from X that in date X have a certain number of collaborators
-    addParagraph(translate("Number of projects added from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
+    addParagraph(translate("Number of projects confirmed from")." ".$startDate." ".translate("that in date")." ".$endDate." ".translate("have a certain number of collaborators"));
     $maxProjectId = maxProjectId();
     $projectArray = [];
     $countArrayCreator = 0;
