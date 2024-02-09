@@ -164,7 +164,7 @@
                 $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
               }
               $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($singleMessagePreview["linkTo"]);
-              addACard("./artisan.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+              addACard("./artisan.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artisan").": ".$numberOfProductsOfThisArtisan);
             }
             if($linkKind == "project"){
               $projectLinkInfos = obtainProjectInfos($singleMessagePreview["linkTo"]);

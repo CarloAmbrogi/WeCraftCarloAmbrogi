@@ -117,7 +117,7 @@
                     if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
                       $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
                     }
-                    addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
+                    addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
                   }            
                 }
                 if($needToEndCardGrid == true){

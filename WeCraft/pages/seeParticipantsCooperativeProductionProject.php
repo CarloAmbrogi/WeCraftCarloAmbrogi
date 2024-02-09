@@ -28,7 +28,7 @@
           if(isset($previewArtisanWhoHasClaimedThisProject['icon']) && ($previewArtisanWhoHasClaimedThisProject['icon'] != null)){
             $fileImageToVisualize = blobToFile($previewArtisanWhoHasClaimedThisProject["iconExtension"],$previewArtisanWhoHasClaimedThisProject['icon']);
           }
-          addACardForTheGrid("./artisan.php?id=".urlencode($previewArtisanWhoHasClaimedThisProject["id"]),$fileImageToVisualize,htmlentities($previewArtisanWhoHasClaimedThisProject["name"]." ".$previewArtisanWhoHasClaimedThisProject["surname"]),htmlentities($previewArtisanWhoHasClaimedThisProject["shopName"]),translate("Total products of this artsan").": ".$previewArtisanWhoHasClaimedThisProject["numberOfProductsOfThisArtisan"]);
+          addACardForTheGrid("./artisan.php?id=".urlencode($previewArtisanWhoHasClaimedThisProject["id"]),$fileImageToVisualize,htmlentities($previewArtisanWhoHasClaimedThisProject["name"]." ".$previewArtisanWhoHasClaimedThisProject["surname"]),htmlentities($previewArtisanWhoHasClaimedThisProject["shopName"]),translate("Total products of this artisan").": ".$previewArtisanWhoHasClaimedThisProject["numberOfProductsOfThisArtisan"]);
           endCardGrid();
           $numberCollaboratorsForThisProject = obtainNumberCollaboratorsForThisProject($_GET["id"]);
           if($numberCollaboratorsForThisProject >= 2){
@@ -41,7 +41,7 @@
               if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
                 $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
               }
-              addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+              addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
             }
             foreach($previewDesignersCollaboratorsOfThisProject as &$singleDesignerPreview){
               $fileImageToVisualize = genericUserImage;

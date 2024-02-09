@@ -89,7 +89,7 @@
           } else {
             addParagraph(translate("This project has been claimed by this artisan").":");
           }
-          addACardForTheGrid("./artisan.php?id=".urlencode($artisanUserInfos["id"]),$fileImageToVisualize,htmlentities($artisanUserInfos["name"]." ".$artisanUserInfos["surname"]),htmlentities($artisanArtisanInfos["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+          addACardForTheGrid("./artisan.php?id=".urlencode($artisanUserInfos["id"]),$fileImageToVisualize,htmlentities($artisanUserInfos["name"]." ".$artisanUserInfos["surname"]),htmlentities($artisanArtisanInfos["shopName"]),translate("Total products of this artisan").": ".$numberOfProductsOfThisArtisan);
         }
         //Confimation by the customer
         $thisProjectIsConfirmed = false;
@@ -118,7 +118,7 @@
                 if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
                   $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
                 }
-                addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+                addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
               }            
             }
             endCardGrid();
@@ -143,7 +143,7 @@
             if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
               $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
             }
-            addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+            addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
           }
           foreach($previewDesignersCollaboratorsOfThisProject as &$singleDesignerPreview){
             $fileImageToVisualize = genericUserImage;

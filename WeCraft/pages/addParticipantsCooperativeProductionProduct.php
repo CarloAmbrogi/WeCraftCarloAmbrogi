@@ -82,6 +82,108 @@
               addShortTextField(translate("Insert the email address of the new participant to add for the collaboration for the production of this product"),"insertedParticipant",49);
               addHiddenField("insertedProductId",$_GET["id"]);
               endForm(translate("Submit"));
+              //Suggested artisans and designers
+              addTitle(translate("Suggested artisans and designers"));
+              //Artisans with which you have collaborated before
+              addParagraph(translate("Artisans with which you have collaborated before"));
+              $previewArtisansWithWitchYouHaveWorkedBefore = obtainPreviewArtisansWithWitchYouHaveWorkedBefore($_SESSION["userId"]);
+              $firstArtisan = true;
+              $needToEndCardGrid = false;
+              foreach($previewArtisansWithWitchYouHaveWorkedBefore as &$singleArtisanPreview){
+                if(!isThisUserCollaboratingForTheProductionOfThisProduct($singleArtisanPreview["id"],$_GET["id"])){
+                  if($firstArtisan){
+                    startCardGrid();
+                    $needToEndCardGrid = true;
+                    $firstArtisan = false;
+                  }
+                  $fileImageToVisualize = genericUserImage;
+                  if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+                    $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+                  }
+                  addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
+                }
+              }
+              if($needToEndCardGrid == true){
+                endCardGrid();
+              } else {
+                addParagraph(translate("No result"));
+              }
+              //Designers with which you have collaborated before
+              addParagraph(translate("Designers with which you have collaborated before"));
+              $previewDesignersWithWitchYouHaveWorkedBefore = obtainPreviewDesignersWithWitchYouHaveWorkedBefore($_SESSION["userId"]);
+              $firstDesigner = true;
+              $needToEndCardGrid = false;
+              foreach($previewDesignersWithWitchYouHaveWorkedBefore as &$singleDesignerPreview){
+                if(!isThisUserCollaboratingForTheProductionOfThisProduct($singleDesignerPreview["id"],$_GET["id"])){
+                  if($firstDesigner){
+                    startCardGrid();
+                    $needToEndCardGrid = true;
+                    $firstDesigner = false;
+                  }
+                  $fileImageToVisualize = genericUserImage;
+                  if(isset($singleDesignerPreview['icon']) && ($singleDesignerPreview['icon'] != null)){
+                    $fileImageToVisualize = blobToFile($singleDesignerPreview["iconExtension"],$singleDesignerPreview['icon']);
+                  }
+                  addACardFunctionToCallAfter("./designer.php?id=".urlencode($singleDesignerPreview["id"]),$fileImageToVisualize,htmlentities($singleDesignerPreview["name"]." ".$singleDesignerPreview["surname"]),translate("Designer"),"","insertInInsertedParticipant",$singleDesignerPreview["email"]);
+                }
+              }
+              if($needToEndCardGrid == true){
+                endCardGrid();
+              } else {
+                addParagraph(translate("No result"));
+              }
+              //Artisans near to your position
+              addParagraph(translate("Artisans near to your position"));
+              $yourArtisanInfos = obtainArtisanInfos($_SESSION["userId"]);
+              $previewArtisansNearToYourPosition = obtainPreviewArtisansNearPosition($yourArtisanInfos["latitude"],$yourArtisanInfos["longitude"],$_SESSION["userId"],8);
+              $firstArtisan = true;
+              $needToEndCardGrid = false;
+              foreach($previewArtisansNearToYourPosition as &$singleArtisanPreview){
+                if(!isThisUserCollaboratingForTheProductionOfThisProduct($singleArtisanPreview["id"],$_GET["id"])){
+                  if($firstArtisan){
+                    startCardGrid();
+                    $needToEndCardGrid = true;
+                    $firstArtisan = false;
+                  }
+                  $fileImageToVisualize = genericUserImage;
+                  if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+                    $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+                  }
+                  addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Distance").": ".$singleArtisanPreview["distance"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
+                }
+              }
+              if($needToEndCardGrid == true){
+                endCardGrid();
+              } else {
+                addParagraph(translate("No result"));
+              }
+              //Artisans who work on the same category
+              $category = $productInfos["category"];
+              if($category != "Nonee"){
+                addParagraph(translate("Artisans who work on the same category"));
+                $previewArtisansWhoWorkOnTheSameCategory = obtainPreviewArtisansWhoWorkOnTheSameCategory($category,$_SESSION["userId"],8);
+                $firstArtisan = true;
+                $needToEndCardGrid = false;
+                foreach($previewArtisansWhoWorkOnTheSameCategory as &$singleArtisanPreview){
+                  if(!isThisUserCollaboratingForTheProductionOfThisProduct($singleArtisanPreview["id"],$_GET["id"])){
+                    if($firstArtisan){
+                      startCardGrid();
+                      $needToEndCardGrid = true;
+                      $firstArtisan = false;
+                    }
+                    $fileImageToVisualize = genericUserImage;
+                    if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
+                      $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
+                    }
+                    addACardFunctionToCallAfter("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of the same category of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisanWithThisCategory"],"insertInInsertedParticipant",$singleArtisanPreview["email"]);
+                  }
+                }
+                if($needToEndCardGrid == true){
+                  endCardGrid();
+                } else {
+                  addParagraph(translate("No result"));
+                }
+              }
               ?>
                 <script>
                   //form inserted parameters
@@ -102,6 +204,12 @@
                       e.preventDefault();
                       alert("<?= translate("The email address of this new participant is not valid") ?>");
                     }
+                  }
+
+                  //function to insert suggested artisans and designers
+                  function insertInInsertedParticipant(parteceipantToInsert){
+                    insertedParticipant.value = parteceipantToInsert;
+                    $("#submit").unbind('click').click();
                   }
                 </script>
               <?php

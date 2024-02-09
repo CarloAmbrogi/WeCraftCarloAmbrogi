@@ -79,7 +79,7 @@
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($_GET["id"]);
       startRow();
       startCol();
-      addParagraph(translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      addParagraph(translate("Total products of this artisan").": ".$numberOfProductsOfThisArtisan);
       endCol();
       startCol();
       addButtonOnOffShowHide(translate("Show hide not available products from this artisan"),"notAvailableProduct");

@@ -3556,6 +3556,86 @@
     return $elements;
   }
 
+  //Obtain a preview of artisans with which this artisan has worked before for the production of a product or of a project
+  function obtainPreviewArtisansWithWitchYouHaveWorkedBefore($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` in (select `CooperativeProductionProductsTrig`.`user` from `CooperativeProductionProductsTrig` where `CooperativeProductionProductsTrig`.`action` = 'insert' and `CooperativeProductionProductsTrig`.`product` in ((select `CooperativeProductionProductsTrig`.`product` from `CooperativeProductionProductsTrig` where `CooperativeProductionProductsTrig`.`action` = 'insert' and `CooperativeProductionProductsTrig`.`user` = ?)) or `User`.`id` in (select `CooperativeProductionProjectsTrig`.`user` from `CooperativeProductionProjectsTrig` where `CooperativeProductionProjectsTrig`.`action` = 'insert' and `CooperativeProductionProjectsTrig`.`project` in (select `CooperativeProductionProjectsTrig`.`project` from `CooperativeProductionProjectsTrig` where `CooperativeProductionProjectsTrig`.`action` = 'insert' and `CooperativeProductionProjectsTrig`.`user` = ?))) and `User`.`id` <> ? group by `User`.`id`;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$userId,$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname email icon iconExtension shopName numberOfProductsOfThisArtisan
+    return $elements;
+  }
+
+  //Obtain a preview of designers with which this artisan has worked before for the production of a product or of a project
+  function obtainPreviewDesignersWithWitchYouHaveWorkedBefore($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension` from `User` where `User`.`id` in (select `CooperativeProductionProductsTrig`.`user` from `CooperativeProductionProductsTrig` where `CooperativeProductionProductsTrig`.`action` = 'insert' and `CooperativeProductionProductsTrig`.`product` in ((select `CooperativeProductionProductsTrig`.`product` from `CooperativeProductionProductsTrig` where `CooperativeProductionProductsTrig`.`action` = 'insert' and `CooperativeProductionProductsTrig`.`user` = ?)) or `User`.`id` in (select `CooperativeProductionProjectsTrig`.`user` from `CooperativeProductionProjectsTrig` where `CooperativeProductionProjectsTrig`.`action` = 'insert' and `CooperativeProductionProjectsTrig`.`project` in (select `CooperativeProductionProjectsTrig`.`project` from `CooperativeProductionProjectsTrig` where `CooperativeProductionProjectsTrig`.`action` = 'insert' and `CooperativeProductionProjectsTrig`.`user` = ?))) and `User`.`id` <> ? and `User`.`id` in (select `id` from `Designer`);";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("iii",$userId,$userId,$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname email icon iconExtension
+    return $elements;
+  }
+
+  //Obtain a preview of artisans near to this position
+  function obtainPreviewArtisansNearPosition($latitude,$longitude,$idArtisanToExclude,$limit){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension`,artisanDistance.`shopName`,count(`Product`.`id`) as numberOfProductsOfThisArtisan,artisanDistance.distance from (`User` join (select `Artisan`.`id`,`Artisan`.`shopName`,sqrt((`Artisan`.`latitude` - ?) * (`Artisan`.`latitude` - ?)) + ((`Artisan`.`longitude` - ?) * (`Artisan`.`longitude` - ?)) as distance from `Artisan`) as artisanDistance on `User`.`id` = artisanDistance.`id`) left join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` <> ? group by `User`.`id` order by artisanDistance.distance limit ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("ddddii",$latitude,$latitude,$longitude,$longitude,$idArtisanToExclude,$limit);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname email icon iconExtension shopName numberOfProductsOfThisArtisan distance
+    return $elements;
+  }
+
+  //Obtain a preview of artisans who work on the same category specified
+  function obtainPreviewArtisansWhoWorkOnTheSameCategory($category,$idArtisanToExclude,$limit){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`email`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(productCat.`id`) as numberOfProductsOfThisArtisanWithThisCategory from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) left join (select `Product`.`id`,`Product`.`artisan` from `Product` where `Product`.`category` = ?) as productCat on `User`.`id` = productCat.`artisan` where `User`.`id` <> ? group by `User`.`id` order by numberOfProductsOfThisArtisanWithThisCategory limit ?;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("sii",$category,$idArtisanToExclude,$limit);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    //return an array of associative array with id name surname email icon iconExtension shopName numberOfProductsOfThisArtisanWithThisCategory
+    return $elements;
+  }
+
   //Include also analytic queries
   include dirname(__FILE__)."/analyticQueries.php";
 

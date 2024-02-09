@@ -105,7 +105,7 @@
         $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
       }
       $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($productInfos["artisan"]);
-      addACard("./artisan.php?id=".urlencode($productInfos["artisan"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artsan").": ".$numberOfProductsOfThisArtisan);
+      addACard("./artisan.php?id=".urlencode($productInfos["artisan"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artisan").": ".$numberOfProductsOfThisArtisan);
       //Carousel with images of this product
       addCarouselImagesOfThisProduct($_GET["id"]);
       //Add to shopping cart this product (for customers and for other users) (in case the available quantity of this product is 0, this button is not shown)
@@ -156,7 +156,7 @@
           if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
             $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
           }
-          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
         }
         foreach($previewDesignersCollaboratorsOfThisProduct as &$singleDesignerPreview){
           $fileImageToVisualize = genericUserImage;
@@ -179,7 +179,7 @@
           if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
             $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
           }
-          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+          addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
         }
         endCardGrid();
       }

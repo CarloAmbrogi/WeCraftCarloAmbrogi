@@ -28,7 +28,7 @@
           if(isset($previewArtisanOwner['icon']) && ($previewArtisanOwner['icon'] != null)){
             $fileImageToVisualize = blobToFile($previewArtisanOwner["iconExtension"],$previewArtisanOwner['icon']);
           }
-          addACardForTheGrid("./artisan.php?id=".urlencode($previewArtisanOwner["id"]),$fileImageToVisualize,htmlentities($previewArtisanOwner["name"]." ".$previewArtisanOwner["surname"]),htmlentities($previewArtisanOwner["shopName"]),translate("Total products of this artsan").": ".$previewArtisanOwner["numberOfProductsOfThisArtisan"]);
+          addACardForTheGrid("./artisan.php?id=".urlencode($previewArtisanOwner["id"]),$fileImageToVisualize,htmlentities($previewArtisanOwner["name"]." ".$previewArtisanOwner["surname"]),htmlentities($previewArtisanOwner["shopName"]),translate("Total products of this artisan").": ".$previewArtisanOwner["numberOfProductsOfThisArtisan"]);
           endCardGrid();
           $numberCollaboratorsForThisProduct = obtainNumberCollaboratorsForThisProduct($_GET["id"]);
           if($numberCollaboratorsForThisProduct >= 2){
@@ -41,7 +41,7 @@
               if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){
                 $fileImageToVisualize = blobToFile($singleArtisanPreview["iconExtension"],$singleArtisanPreview['icon']);
               }
-              addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artsan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
+              addACardForTheGrid("./artisan.php?id=".urlencode($singleArtisanPreview["id"]),$fileImageToVisualize,htmlentities($singleArtisanPreview["name"]." ".$singleArtisanPreview["surname"]),htmlentities($singleArtisanPreview["shopName"]),translate("Total products of this artisan").": ".$singleArtisanPreview["numberOfProductsOfThisArtisan"]);
             }
             foreach($previewDesignersCollaboratorsOfThisProduct as &$singleDesignerPreview){
               $fileImageToVisualize = genericUserImage;
