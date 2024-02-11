@@ -24,7 +24,7 @@
 
     //Form to set start date and end date
     startFormGet("./historicalAnalytics.php");
-    addParagraph(translate("Use the format")." "."yyyy-mm-dd hh-mm-ss");
+    addParagraph(translate("Use the format")." "."yyyy-mm-dd hh:mm:ss");
     addShortTextField(translate("Start date"),"startDate",49);
     addShortTextField(translate("End date"),"endDate",49);
     endFormGet(translate("Submit"));

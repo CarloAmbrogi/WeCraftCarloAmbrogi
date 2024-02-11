@@ -847,6 +847,27 @@
     <?php
   }
 
+  //Add a selector with a label
+  function addSelectorWithLabel($text,$id,$valueArray,$valueTextsArray){
+    ?>
+      <div class="mb-3">
+        <label for="<?= $id ?>" class="form-label"><?= $text ?></label>
+        <select id="<?= $id ?>" name="<?= $id ?>">
+          <?php
+            $counter = 0;
+            foreach($valueArray as &$value){
+              $valueText = $valueTextsArray[$counter];
+              ?>
+                <option value="<?= $value ?>"><?= $valueText ?></option>
+              <?php
+              $counter++;
+            }
+          ?>
+        </select>
+      </div>
+    <?php
+  }
+
   //Add a long text field in a form
   function addLongTextField($text,$id,$maxLenghtInsertedText){
     ?>

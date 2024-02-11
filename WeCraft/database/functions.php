@@ -1750,6 +1750,30 @@
     return $elements;
   }
 
+  //Exectue select multiple rows and cols sql (do not show the error)
+  function executeSqlDoNotShowTheError($sqlStatement){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = $sqlStatement;
+    try {
+      if($statement = $connectionDB->prepare($sql)){
+        $statement->execute();
+  
+        $results = $statement->get_result();
+        while($element = $results->fetch_assoc()){
+          $elements[] = $element;
+        }
+  
+        return $elements;
+      } else {
+        addParagraph(translate("Error"));
+      }
+      return [];
+    } catch (Exception $e) {
+      addParagraph(translate("Error"));
+      return [];
+    }
+  }
+
   //Obtain a preview of products with this category
   function obtainPreviewProductsWithThisCategory($category){
     $connectionDB = $GLOBALS['$connectionDB'];
