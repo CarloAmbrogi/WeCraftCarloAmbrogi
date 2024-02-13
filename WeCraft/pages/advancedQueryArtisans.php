@@ -12,7 +12,7 @@
     addScriptAddThisPageToCronology();
     //Content of this page
 
-    addTitle(translate("Advanced query artisan"));
+    addTitle(translate("Advanced query artisans"));
     
     //Email verified
     //Active
@@ -39,11 +39,11 @@
     addParagraph("*".translate("Some fields with min and max values automatically filter that there is at least one"));
     addSelectorWithLabel(translate("Email verified"),"emailVerified",["","y","n"],[translate("Dont specify"),translate("Yesx"),translate("Nox")]);
     addSelectorWithLabel(translate("Active"),"active",["","y","n"],[translate("Dont specify"),translate("Yesx"),translate("Nox")]);
-    addShortTextField(translate("Time registration from")." ".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss","timeRegistrationFrom",49);
-    addShortTextField(translate("Time registration to")." ".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss","timeRegistrationTo",49);
+    addShortTextField(translate("Time registration from")." (".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss)","timeRegistrationFrom",49);
+    addShortTextField(translate("Time registration to")." (".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss)","timeRegistrationTo",49);
     startSquare();
-    addShortTextField(translate("Consider in next filters only products added from")." ".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss","consideProductsFrom",49);
-    addShortTextField(translate("Consider in next filters only products added to")." ".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss","consideProductsTo",49);
+    addShortTextField(translate("Consider in next filters only products added from")." (".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss)","consideProductsFrom",49);
+    addShortTextField(translate("Consider in next filters only products added to")." (".translate("Use the format")." "."yyyy-mm-dd hh:mm:ss)","consideProductsTo",49);
     endSquare();
     addShortTextField(translate("Min number of products"),"minNumOfProducts",49);
     addShortTextField(translate("Max number of products"),"maxNumOfProducts",49);
@@ -70,6 +70,12 @@
       addShortTextField(translate("Min number of his products of this category").": ".translate($singleCategory),"minNum".removeSpaces($singleCategory),49);
       addShortTextField(translate("Max number of his products of this category").": ".translate($singleCategory),"maxNum".removeSpaces($singleCategory),49);
     }
+    addShortTextField(translate("Min number of products which are now in cooperation for the production")."*","minNumProductsInCoopProd",49);
+    addShortTextField(translate("Max number of products which are now in cooperation for the production")."*","maxNumProductsInCoopProd",49);
+    addShortTextField(translate("Min number of products which are now in cooperation for the production with at least a designer in the group")."*","minNumProductsInCoopProdAtLeastDesigner",49);
+    addShortTextField(translate("Max number of products which are now in cooperation for the production with at least a designer in the group")."*","maxNumProductsInCoopProdAtLeastDesigner",49);
+    addShortTextField(translate("Min number of products which has been in cooperation for the production")."*","minNumProductsBeenInCoopProd",49);
+    addShortTextField(translate("Max number of products which has been in cooperation for the production")."*","maxNumProductsBeenInCoopProd",49);
     endFormGet(translate("Submit"));
     addButtonLink(translate("Clean research"),"./advancedQueryArtisans.php");
     //Load previous inserted values in the form
@@ -111,6 +117,12 @@
             <?php
           }
         ?>
+        const minNumProductsInCoopProd = document.getElementById('minNumProductsInCoopProd');
+        const maxNumProductsInCoopProd = document.getElementById('maxNumProductsInCoopProd');
+        const minNumProductsInCoopProdAtLeastDesigner = document.getElementById('minNumProductsInCoopProdAtLeastDesigner');
+        const maxNumProductsInCoopProdAtLeastDesigner = document.getElementById('maxNumProductsInCoopProdAtLeastDesigner');
+        const minNumProductsBeenInCoopProd = document.getElementById('minNumProductsBeenInCoopProd');
+        const maxNumProductsBeenInCoopProd = document.getElementById('maxNumProductsBeenInCoopProd');
 
         //Load form fields starting values
         emailVerified.value = "<?= $_GET["emailVerified"] ?>";
@@ -147,6 +159,12 @@
             <?php
           }
         ?>
+        minNumProductsInCoopProd.value = "<?= $_GET["minNumProductsInCoopProd"] ?>";
+        maxNumProductsInCoopProd.value = "<?= $_GET["maxNumProductsInCoopProd"] ?>";
+        minNumProductsInCoopProdAtLeastDesigner.value = "<?= $_GET["minNumProductsInCoopProdAtLeastDesigner"] ?>";
+        maxNumProductsInCoopProdAtLeastDesigner.value = "<?= $_GET["maxNumProductsInCoopProdAtLeastDesigner"] ?>";
+        minNumProductsBeenInCoopProd.value = "<?= $_GET["minNumProductsBeenInCoopProd"] ?>";
+        maxNumProductsBeenInCoopProd.value = "<?= $_GET["maxNumProductsBeenInCoopProd"] ?>";
       </script>
     <?php
     //sql
@@ -247,9 +265,26 @@
         $sqlMid.=" and `User`.`id` in (select artisan from ((select `artisan` as artisan, count(*) as n from ".$tableProducts." where `category` = '".$singleCategory."' group by `artisan`) union (select `id` as artisan, 0 as n from `Artisan` where `id` not in (select `artisan` from ".$tableProducts." where `category` = '".$singleCategory."'))) as t where n <= ".$_GET["maxNum".removeSpaces($singleCategory)].") ";
       }
     }
+    if($_GET["minNumProductsInCoopProd"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProducts`) group by `artisan`) as t where n >= ".$_GET["minNumProductsInCoopProd"].") ";
+    }
+    if($_GET["maxNumProductsInCoopProd"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProducts`) group by `artisan`) as t where n <= ".$_GET["maxNumProductsInCoopProd"].") ";
+    }
+    if($_GET["minNumProductsInCoopProdAtLeastDesigner"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProducts` where `user` in (select `id` from `Designer`)) group by `artisan`) as t where n >= ".$_GET["minNumProductsInCoopProdAtLeastDesigner"].") ";
+    }
+    if($_GET["maxNumProductsInCoopProdAtLeastDesigner"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProducts` where `user` in (select `id` from `Designer`)) group by `artisan`) as t where n <= ".$_GET["maxNumProductsInCoopProdAtLeastDesigner"].") ";
+    }
+    if($_GET["minNumProductsBeenInCoopProd"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProductsTrig` where `action` = 'insert') group by `artisan`) as t where n >= ".$_GET["minNumProductsBeenInCoopProd"].") ";
+    }
+    if($_GET["maxNumProductsBeenInCoopProd"] != ""){
+      $sqlMid.=" and `User`.`id` in (select artisan from (select `artisan` as artisan, count(*) as n from ".$tableProducts." where `id` in (select `product` from `CooperativeProductionProductsTrig` where `action` = 'insert') group by `artisan`) as t where n <= ".$_GET["maxNumProductsBeenInCoopProd"].") ";
+    }
     $sql = $sqlInitial.$sqlMid.$sqlFinal;
     //Show results
-    addParagraph($sql);
     $SearchPreviewArtisans = executeSqlDoNotShowTheError($sql);
     $numberResults = 0;
     startCardGrid();

@@ -47,6 +47,7 @@
 
     //Products
 
+    //Added by an active artisan
     //Price
     //Quantity from the owner
     //Category
@@ -59,13 +60,14 @@
     //Number of extra artisans who sell this product
     //If it is now in cooperation for the production
     //If it is now in cooperation for the production with at least a designer in the group
-    //If it is now in cooperation for the production with a certain number of partecpans in the group
+    //If it is now in cooperation for the production with a certain number of participants in the group
     //If it has been in cooperation for the production
     //Number of tags
 
 
     //Projects
 
+    //Added by an active designer
     //Price
     //Percentage to designer
     //State
@@ -74,8 +76,10 @@
     //Timestamp ready
     //If it is now in cooperation for the production
     //If it is now in cooperation for the production with at least a designer in the group
-    //If it is now in cooperation for the production with a certain number of partecpans in the group
+    //If it is now in cooperation for the production with a certain number of participants in the group
     //If it has been in cooperation for the production
+    //Estimated duration
+    //Completed and in time
 
 
     addButtonLink(translate("Users"),"./advancedQueryUsers.php");
