@@ -11,6 +11,7 @@
   //automatically with email address verified
   doInitialScripts();
   if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $possibilityToUseThisTest = true;
     $insertedEmail = $_POST['insertedEmail'];
     $insertedPassword = $_POST['insertedPassword'];
     if($insertedPassword == ""){
@@ -21,18 +22,20 @@
     $insertedSurname = $_POST['insertedSurname'];
     $insertedDescription = $_POST['insertedDescription'];
     $verificationCode = generateAVerificationCode();
-    if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
-      //You have chosen to send the file icon
-      $fileName = $_FILES["insertedIcon"]["name"];
-      $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-      $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-      addANewDesignerWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedDescription);
-    } else {
-      //create account without file icon
-      addANewDesignerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedDescription);
+    if($possibilityToUseThisTest == true){
+      if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
+        //You have chosen to send the file icon
+        $fileName = $_FILES["insertedIcon"]["name"];
+        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
+        addANewDesignerWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedDescription);
+      } else {
+        //create account without file icon
+        addANewDesignerWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedDescription);
+      }
+      $userId = idUserWithThisEmail($insertedEmail);
+      registerEmailVerified($userId);
     }
-    $userId = idUserWithThisEmail($insertedEmail);
-    registerEmailVerified($userId);
   }
   include dirname(__FILE__)."/../database/closeConnectionDB.php";
 ?>

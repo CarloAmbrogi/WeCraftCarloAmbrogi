@@ -11,6 +11,7 @@
   //automatically with email address verified
   doInitialScripts();
   if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $possibilityToUseThisTest = true;
     $insertedEmail = $_POST['insertedEmail'];
     $insertedPassword = $_POST['insertedPassword'];
     if($insertedPassword == ""){
@@ -27,28 +28,30 @@
     $insertedLongitude = $_POST['insertedLongitude'];
     $insertedAddress = $_POST['insertedAddress'];
     $verificationCode = generateAVerificationCode();
-    if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
-      //You have chosen to send the file icon
-      $fileName = $_FILES["insertedIcon"]["name"];
-      $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-      $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
-      addANewArtisanWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
-      //sync also on Magis
-      $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
-      $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
-      $imageUrl = blobToFile($fileExtension,$imgData);
-      doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
-    } else {
-      //create account without file icon
-      addANewArtisanWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
-      //sync also on Magis
-      $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
-      $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
-      $imageUrl = genericUserImage;
-      doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
+    if($possibilityToUseThisTest == true){
+      if(isset($_FILES['insertedIcon']) && $_FILES['insertedIcon']['error'] == 0){
+        //You have chosen to send the file icon
+        $fileName = $_FILES["insertedIcon"]["name"];
+        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        $imgData = file_get_contents($_FILES['insertedIcon']['tmp_name']);
+        addANewArtisanWithIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$fileExtension,$imgData,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
+        //sync also on Magis
+        $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
+        $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
+        $imageUrl = blobToFile($fileExtension,$imgData);
+        doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
+      } else {
+        //create account without file icon
+        addANewArtisanWithoutIcon($insertedEmail,$passwordHash,$insertedName,$insertedSurname,$verificationCode,$insertedShopName,$insertedOpeningHours,$insertedDescription,$insertedPhoneNumber,$insertedLatitude,$insertedLongitude,$insertedAddress);
+        //sync also on Magis
+        $titleMetadata = $insertedShopName." (".$insertedName." ".$insertedSurname.")";
+        $idOfThisArtisan = getIdOfLastUserWithThisNameAndSurname($insertedName,$insertedSurname);
+        $imageUrl = genericUserImage;
+        doGetRequest(MagisBaseUrl."apiForWeCraft/addNewMetadata.php?password=".urlencode(PasswordCommunicationWithMagis)."&title=".urlencode($titleMetadata)."&description=".urlencode($insertedDescription)."&url=".urlencode(WeCraftBaseUrl."pages/artisan.php?id=".$idOfThisArtisan)."&address=".urlencode($insertedAddress)."&imageUrl=".urlencode($imageUrl)."&latitude=".urlencode($insertedLatitude)."&longitude=".urlencode($insertedLongitude)."&tag=".urlencode("Artisan")."&tagEn=".urlencode(translateQuickly("Artisan","en"))."&tagIt=".urlencode(translateQuickly("Artisan","it"))."&shopName=".urlencode($insertedShopName));
+      }
+      $userId = idUserWithThisEmail($insertedEmail);
+      registerEmailVerified($userId);
     }
-    $userId = idUserWithThisEmail($insertedEmail);
-    registerEmailVerified($userId);
   }
   include dirname(__FILE__)."/../database/closeConnectionDB.php";
 ?>
