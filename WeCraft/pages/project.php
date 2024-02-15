@@ -201,7 +201,7 @@
         }
         //Commands for the artisans
         if($kindOfTheAccountInUse == "Artisan"){
-          if(!isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"]) && $projectInfos["isPublic"] == 1){
+          if(!isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"]) && $projectInfos["isPublic"] == 1 && !$isTheProjectClaimed){
             addButtonLink(translate("Present yourself to this project"),"./assignYourselfToThisProject.php?id=".urlencode($_GET["id"]));
           }
           if(isThisArtisanAssignedToThisProject($_SESSION["userId"],$_GET["id"])){
