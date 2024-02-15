@@ -3,7 +3,13 @@ html {
 }
 
 .paragraphForTabBar {
-  font-size: 10px;
+  font-size: 20px;
+  transform: translateY(-9px);
+}
+
+.miniIconForTheFooter {
+  height: 27px;
+  width: 27px;
 }
 
 nav {
@@ -46,7 +52,13 @@ nav {
 
   .paragraphForTabBar {
     font-size: 20px;
-  }  
+    transform: translateY(0px);
+  }
+
+  .miniIconForTheFooter {
+    height: 25px;
+    width: 25px;
+  }
 
   .btn-group {
     padding-bottom: 3px;
