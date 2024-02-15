@@ -15,7 +15,7 @@
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer"){        
         //Check you are a collaborator
         if(isThisUserCollaboratingForTheProductionOfThisProduct($_SESSION["userId"],$_GET["id"])){
-          addScriptAddThisPageToCronology();
+          addScriptAddThisPageToChronology();
           upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $productInfos = obtainProductInfos($_GET["id"]);

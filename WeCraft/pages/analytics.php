@@ -9,7 +9,7 @@
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Content of this page
 
     //Artisans who have started to sell products of other artisan without having sold at least a certain quantity of their items in last period

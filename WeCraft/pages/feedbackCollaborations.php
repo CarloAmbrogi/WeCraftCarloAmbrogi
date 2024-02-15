@@ -8,7 +8,7 @@
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Content of this page
     addTitle(translate("Feedback collaborations"));
     $feedbacks = obtainFeedbacksPreview();

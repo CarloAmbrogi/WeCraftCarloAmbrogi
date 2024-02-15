@@ -16,7 +16,7 @@
     } else {
       //Page ok
       upperPartOfThePage(translate("Artisan cooperative production"),"cookieBack");
-      addScriptAddThisPageToCronology();
+      addScriptAddThisPageToChronology();
       $userInfos = obtainUserInfos($_GET["id"]);
       $artisanInfos = obtainArtisanInfos($_GET["id"]);
       $nameAndSurname = $userInfos["name"]." ".$userInfos["surname"];

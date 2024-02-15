@@ -8,7 +8,7 @@
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Map"),"");
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   lowerPartOfThePage(tabBarForTheAccountInUse(),true);
   ?>
     <div id="spaceAfterNavBar2" style="height:100px;">

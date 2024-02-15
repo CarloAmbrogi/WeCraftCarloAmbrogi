@@ -16,7 +16,7 @@
     } else {
       //Page ok
       upperPartOfThePage(translate("Designer"),"cookieBack");
-      addScriptAddThisPageToCronology();
+      addScriptAddThisPageToChronology();
       //Show the designer
       $userInfos = obtainUserInfos($_GET["id"]);
       if($userInfos["isActive"] == 0){

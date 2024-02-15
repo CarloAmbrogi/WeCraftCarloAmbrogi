@@ -18,7 +18,7 @@
       if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Designer" || $_SESSION["userId"] == "admin"){        
         //Check you are a collaborator
         if(isThisUserCollaboratingForTheProductionOfThisProject($_SESSION["userId"],$_GET["id"]) || $_SESSION["userId"] == "admin"){
-          addScriptAddThisPageToCronology();
+          addScriptAddThisPageToChronology();
           upperPartOfThePage(translate("Cooperative production"),"cookieBack");
           //Real content of this page
           $projectInfos = obtainProjectInfos($_GET["id"]);

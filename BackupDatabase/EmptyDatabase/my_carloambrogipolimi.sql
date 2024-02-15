@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Creato il: Feb 14, 2024 alle 18:57
+-- Creato il: Feb 15, 2024 alle 15:53
 -- Versione del server: 8.0.30
 -- Versione PHP: 8.0.22
 
@@ -383,10 +383,10 @@ CREATE TABLE `ProjectImages` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `PurchasesCronology`
+-- Struttura della tabella `PurchasesChronology`
 --
 
-CREATE TABLE `PurchasesCronology` (
+CREATE TABLE `PurchasesChronology` (
   `id` int NOT NULL,
   `customer` int NOT NULL,
   `timestamp` timestamp NOT NULL,
@@ -672,9 +672,9 @@ ALTER TABLE `ProjectImages`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indici per le tabelle `PurchasesCronology`
+-- Indici per le tabelle `PurchasesChronology`
 --
-ALTER TABLE `PurchasesCronology`
+ALTER TABLE `PurchasesChronology`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -809,9 +809,9 @@ ALTER TABLE `ProjectImages`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `PurchasesCronology`
+-- AUTO_INCREMENT per la tabella `PurchasesChronology`
 --
-ALTER TABLE `PurchasesCronology`
+ALTER TABLE `PurchasesChronology`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --

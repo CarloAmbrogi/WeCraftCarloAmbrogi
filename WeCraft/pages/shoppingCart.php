@@ -27,8 +27,8 @@
           addParagraph(translate("You cant proceed with the order because one or more products of this oreder is not any more available with your selected quantity"));
         } else {
           //The order is sent and the payment is done
-          //Move the current shopping cart in the purchases cronology
-          moveCurrentShoppingCartOfThisUserPurchasesCronology($_SESSION["userId"],$insertedAddress);
+          //Move the current shopping cart in the purchases chronology
+          moveCurrentShoppingCartOfThisUserPurchasesChronology($_SESSION["userId"],$insertedAddress);
           //Update data last sell
           updateDataLastSellBasedOnShoppingCartOfThisUser($_SESSION["userId"]);
           //Notify the artisans about this sell (remember also about the percentage resell)

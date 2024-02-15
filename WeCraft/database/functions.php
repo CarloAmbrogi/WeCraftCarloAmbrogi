@@ -995,10 +995,10 @@
     return $elements[0]["totalPrice"];
   }
 
-  //The current shopping cart of this user (witch is a customer) is moved in the purchases cronology
-  function moveCurrentShoppingCartOfThisUserPurchasesCronology($userId,$address){
+  //The current shopping cart of this user (witch is a customer) is moved in the purchases chronology
+  function moveCurrentShoppingCartOfThisUserPurchasesChronology($userId,$address){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql1 = "insert into `PurchasesCronology` (`id`,`customer`,`timestamp`,`address`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?);";
+    $sql1 = "insert into `PurchasesChronology` (`id`,`customer`,`timestamp`,`address`) VALUES (NULL,?,CURRENT_TIMESTAMP(),?);";
     $sql2 = "insert into `ContentPurchase` (`purchaseId`,`product`,`artisan`,`singleItemCost`,`quantity`) select last_insert_id(),`ShoppingCart`.`product`,`ShoppingCart`.`artisan`,`Product`.`price`,`ShoppingCart`.`quantity` from `ShoppingCart` join `Product` on `ShoppingCart`.`product` = `Product`.`id` where `customer` = ?;";
     if($statement = $connectionDB->prepare($sql1)){
       $statement->bind_param("is",$userId,$address);
@@ -1017,7 +1017,7 @@
   //Get the number of purchases of this user (witch is a customer)
   function numberPurchasesOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as numberPurchasesOfThisUser from (select * from `PurchasesCronology` where `customer` = ?) as t;";
+    $sql = "select count(*) as numberPurchasesOfThisUser from (select * from `PurchasesChronology` where `customer` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1034,9 +1034,9 @@
   }
 
   //Obtain a preview of purchases of this user (witch is a customer)
-  function obtainPreviewPurchasesCronologyOfThisUser($userId){
+  function obtainPreviewPurchasesChronologyOfThisUser($userId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.`id`,t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesCronology`.`id`,`PurchasesCronology`.`timestamp`,`PurchasesCronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesCronology` join `ContentPurchase` on `PurchasesCronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesCronology`.`customer` = ? group by `PurchasesCronology`.`id`) as t order by t.`timestamp` DESC;";
+    $sql = "select t.`id`,t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesChronology`.`id`,`PurchasesChronology`.`timestamp`,`PurchasesChronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesChronology` join `ContentPurchase` on `PurchasesChronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesChronology`.`customer` = ? group by `PurchasesChronology`.`id`) as t order by t.`timestamp` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("i",$userId);
       $statement->execute();
@@ -1058,7 +1058,7 @@
   //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful both to semplify the query and to improve the security
   function doesThisPurchaseExists($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as 'doesThisPurchaseExists' from (select * from `PurchasesCronology` where `customer` = ? and `id` = ?) as t;";
+    $sql = "select count(*) as 'doesThisPurchaseExists' from (select * from `PurchasesChronology` where `customer` = ? and `id` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$purchaseId);
       $statement->execute();
@@ -1078,7 +1078,7 @@
   //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful both to semplify the query and to improve the security
   function purchaseGeneralInfos($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesCronology`.`id`,`PurchasesCronology`.`timestamp`,`PurchasesCronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesCronology` join `ContentPurchase` on `PurchasesCronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesCronology`.`customer` = ? and `PurchasesCronology`.`id` = ?) as t;";
+    $sql = "select t.`timestamp`,t.`address`,totalCost,numberOfProducts,numberOfDifferentProducts FROM (select `PurchasesChronology`.`id`,`PurchasesChronology`.`timestamp`,`PurchasesChronology`.`address`,sum(`ContentPurchase`.`singleItemCost` * `ContentPurchase`.`quantity`) as totalCost, sum(`ContentPurchase`.`quantity`) as numberOfProducts, count(distinct `ContentPurchase`.`product`) as numberOfDifferentProducts from `PurchasesChronology` join `ContentPurchase` on `PurchasesChronology`.`id` = `ContentPurchase`.`purchaseId` WHERE `PurchasesChronology`.`customer` = ? and `PurchasesChronology`.`id` = ?) as t;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$purchaseId);
       $statement->execute();
@@ -1100,7 +1100,7 @@
   //$userId shouldn't be necessary because we can obtain the $userId from the $purchaseId but it's useful to improve the security
   function obtainPurchase($userId,$purchaseId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "SELECT `product`,`artisan`,`singleItemCost`,`quantity` FROM `ContentPurchase` WHERE `purchaseId` = ? and `purchaseId` in (select `id` from `PurchasesCronology` where `customer` = ?) order by `product` DESC;";
+    $sql = "SELECT `product`,`artisan`,`singleItemCost`,`quantity` FROM `ContentPurchase` WHERE `purchaseId` = ? and `purchaseId` in (select `id` from `PurchasesChronology` where `customer` = ?) order by `product` DESC;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$purchaseId,$userId);
       $statement->execute();
@@ -3070,6 +3070,25 @@
     return $elements;
   }
 
+  //Does this user exists
+  function doesThisUserExists($userId){
+    $connectionDB = $GLOBALS['$connectionDB'];
+    $sql = "select count(*) as doesThisUserExists from (select * from `User` where `id` = ?) as t;";
+    if($statement = $connectionDB->prepare($sql)){
+      $statement->bind_param("i",$userId);
+      $statement->execute();
+    } else {
+      echo "Error not possible execute the query: $sql. " . $connectionDB->error;
+    }
+
+    $results = $statement->get_result();
+    while($element = $results->fetch_assoc()){
+      $elements[] = $element;
+    }
+
+    return $elements[0]["doesThisUserExists"];
+  }
+
   //You can send messages to a customer only if the customer has started first to send messages to you
   function canYouSendMessagesToThisCustomer($userId,$customerId){
     $connectionDB = $GLOBALS['$connectionDB'];
@@ -3327,7 +3346,7 @@
   //has this user purchased this item
   function hasThisUserPurchasedThisItem($userId,$productId){
     $connectionDB = $GLOBALS['$connectionDB'];
-    $sql = "select count(*) as hasThisUserPurchasedThisItem from `ContentPurchase` where `purchaseId` in (select `id` from `PurchasesCronology` where `customer` = ?) and `product` = ?;";
+    $sql = "select count(*) as hasThisUserPurchasedThisItem from `ContentPurchase` where `purchaseId` in (select `id` from `PurchasesChronology` where `customer` = ?) and `product` = ?;";
     if($statement = $connectionDB->prepare($sql)){
       $statement->bind_param("ii",$userId,$productId);
       $statement->execute();

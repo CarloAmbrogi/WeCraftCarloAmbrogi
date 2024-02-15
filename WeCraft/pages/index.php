@@ -8,7 +8,7 @@
   doInitialScripts();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   upperPartOfThePage(translate("Welcome to WeCraft"),"");
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   //if you are logged in, you are redirect to your starting page (according if you are a customer or an artisan or a designer)
   // Title Welcome to WeCraft
   addTitle(translate("Welcome to WeCraft"));

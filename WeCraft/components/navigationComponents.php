@@ -2,31 +2,31 @@
 
   //Here some functions to manage the navigation with the back button
 
-  //Reset cronology
+  //Reset chronology
   //for pages you reach directly from the tab
   //via js
-  function addScriptResetCronology(){
+  function addScriptResetChronology(){
     ?>
       <script>
-        document.cookie = "cronology="+escape("");
-        document.cookie = "cronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "chronology="+escape("");
+        document.cookie = "chronology=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       </script>
     <?php
   }
 
-  //Reset cronology
+  //Reset chronology
   //for pages you reach directly from the tab
   //via php
-  function resetCronology(){
-    if(isset($_COOKIE['cronology'])){
-      setcookie("cronology", "", time() + (86400 * 30), "/");
-      setcookie("cronology", "", time() - 3600);
+  function resetChronology(){
+    if(isset($_COOKIE['chronology'])){
+      setcookie("chronology", "", time() + (86400 * 30), "/");
+      setcookie("chronology", "", time() - 3600);
     }
   }
 
-  //Add this page to the cronology
+  //Add this page to the chronology
   //for pages where you can return back
-  function addScriptAddThisPageToCronology(){
+  function addScriptAddThisPageToChronology(){
     ?>
       <script>
         function getCookie(cname) {
@@ -45,7 +45,7 @@
           return "";
         }
 
-        let cronologyNow = unescape(getCookie("cronology"));
+        let chronologyNow = unescape(getCookie("chronology"));
         let pageNow = window.location.href;
         let langEn = "&language=en";
         let langIt = "&language=it";
@@ -54,14 +54,14 @@
           pageNow = pageNow.slice(0, -langLenght);
         }
 
-        let cronologyNowArray = cronologyNow.split("{");
+        let chronologyNowArray = chronologyNow.split("{");
         let lastElement = "";
-        if(cronologyNowArray.length > 0){
-          lastElement = cronologyNowArray[cronologyNowArray.length - 1];
+        if(chronologyNowArray.length > 0){
+          lastElement = chronologyNowArray[chronologyNowArray.length - 1];
         }
         if(lastElement != pageNow){
-          let content = cronologyNow + "{" + pageNow;
-          document.cookie = "cronology="+escape(content);
+          let content = chronologyNow + "{" + pageNow;
+          document.cookie = "chronology="+escape(content);
         }
       </script>
     <?php

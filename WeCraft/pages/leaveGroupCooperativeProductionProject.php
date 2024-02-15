@@ -52,7 +52,7 @@
                 upperPartOfThePage(translate("Error"),"");
                 addParagraph(translate("The project is already ready"));
               } else {
-                addScriptAddThisPageToCronology();
+                addScriptAddThisPageToChronology();
                 upperPartOfThePage(translate("Leave cooperation"),"cookieBack");
                 //Real content of the page
                 addParagraph(translate("Project").": ".$projectInfos["name"]);

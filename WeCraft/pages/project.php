@@ -26,7 +26,7 @@
       //Check possibility to see this project
       $projectInfos = obtainProjectInfos($_GET["id"]);
       if(doesThisUserCanSeeThisProject($_SESSION["userId"],$_GET["id"]) || ($projectInfos["isPublic"] == 1 && $kindOfTheAccountInUse != "Guest") || $_SESSION["userId"] == "admin"){
-        addScriptAddThisPageToCronology();
+        addScriptAddThisPageToChronology();
         upperPartOfThePage(translate("Project"),"cookieBack");
         //Real content of this page
         //General info of this project

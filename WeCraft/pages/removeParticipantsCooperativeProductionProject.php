@@ -71,7 +71,7 @@
             //Check you are the artisan who has claimed this project
             $projectInfos = obtainProjectInfos($_GET["id"]);
             if($_SESSION["userId"] == $projectInfos["claimedByThisArtisan"]){
-              addScriptAddThisPageToCronology();
+              addScriptAddThisPageToChronology();
               upperPartOfThePage(translate("Cooperative production"),"cookieBack");
               //Real content of the page
               addParagraph(translate("Project").": ".$projectInfos["name"]);

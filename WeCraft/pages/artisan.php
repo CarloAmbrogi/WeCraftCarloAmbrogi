@@ -23,7 +23,7 @@
         //Products of this artisan (of the specified id with the get)
         upperPartOfThePage(translate("Artisan"),"cookieBack");
       }
-      addScriptAddThisPageToCronology();
+      addScriptAddThisPageToChronology();
       //Show the artisan
       $userInfos = obtainUserInfos($_GET["id"]);
       if($userInfos["isActive"] == 0){
@@ -187,7 +187,7 @@
   } else {
     if($kindOfTheAccountInUse == "Artisan"){
       //Redirect to this page of the artisan
-      resetCronology();
+      resetChronology();
       header('Location: ./artisan.php?id='.urlencode($_SESSION["userId"]));
     } else {
       upperPartOfThePage(translate("Error"),"");

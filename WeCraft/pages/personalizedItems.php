@@ -43,7 +43,7 @@
   upperPartOfThePage(translate("Personalized items"),"");
   //Check you are not a guest
   if($kindOfTheAccountInUse == "Artisan" || $kindOfTheAccountInUse == "Customer" || $kindOfTheAccountInUse == "Designer" || $_SESSION["userId"] == "admin"){
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Page for designers
     if($kindOfTheAccountInUse == "Designer"){
       addParagraph(translate("In this page there are your projects for the personalized items"));

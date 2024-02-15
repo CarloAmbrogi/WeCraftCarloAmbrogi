@@ -182,10 +182,14 @@
         } else {
           //Show error you cant chat here
           if($_GET["chatKind"] == "personal"){
-            if($kindOfTheAccountInUse == "Customer"){
-              addParagraph(translate("A customer cant chat with other customers"));
+            if(doesThisUserExists($_GET["chatWith"]) == true){
+              if($kindOfTheAccountInUse == "Customer"){
+                addParagraph(translate("A customer cant chat with other customers"));
+              } else {
+                addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
+              }
             } else {
-              addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
+              addParagraph(translate("This user doesnt exists"));
             }
           } else if($_GET["chatKind"] == "product" || $_GET["chatKind"] == "project"){
             addParagraph(translate("You are not in this group for this cooperative production"));

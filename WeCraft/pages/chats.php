@@ -13,7 +13,7 @@
     addParagraph(translate("This page is not visible without being logged in"));
     addButtonLink(translate("Return to home"),"./index.php");
   } else {
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Content of the page chats
     $previewChatList = obtainPreviewChatList($_SESSION["userId"]);
     startCardGrid();

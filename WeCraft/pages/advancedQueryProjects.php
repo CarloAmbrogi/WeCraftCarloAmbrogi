@@ -9,7 +9,7 @@
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"./advancedQuery.php");
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Content of this page
 
     addTitle(translate("Advanced query projects"));

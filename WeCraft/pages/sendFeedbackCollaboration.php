@@ -66,7 +66,7 @@
     } else {
       if(isset($_GET["id"]) && isset($_GET["kind"])){
         upperPartOfThePage(translate("Send feedback collaboration"),"cookieBack");
-        addScriptAddThisPageToCronology();
+        addScriptAddThisPageToChronology();
         if($_GET["kind"] == "product" || $_GET["kind"] == "project"){
           //Check existence product or project
           $checkExistenceProductOrProjectOk = false;

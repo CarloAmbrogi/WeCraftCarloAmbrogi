@@ -6,7 +6,7 @@
 
   //Search
   doInitialScripts();
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   upperPartOfThePage(translate("Search"),"");
   //Content of the page
   addTitle(translate("Search on WeCraft"));

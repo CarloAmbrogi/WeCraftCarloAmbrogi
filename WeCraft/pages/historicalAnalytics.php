@@ -9,7 +9,7 @@
   doInitialScripts();
   if($_SESSION["userId"] == "admin"){
     upperPartOfThePage(translate("Admin"),"");
-    addScriptAddThisPageToCronology();
+    addScriptAddThisPageToChronology();
     //Content of this page
 
     //default start date and end date

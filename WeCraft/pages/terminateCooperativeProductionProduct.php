@@ -63,7 +63,7 @@
             //Check you are the owner of the related product
             $productInfos = obtainProductInfos($_GET["id"]);
             if($_SESSION["userId"] == $productInfos["artisan"]){
-              addScriptAddThisPageToCronology();
+              addScriptAddThisPageToChronology();
               upperPartOfThePage(translate("Terminate cooperation"),"cookieBack");
               //Real content of the page
               addParagraph(translate("Product").": ".$productInfos["name"]);

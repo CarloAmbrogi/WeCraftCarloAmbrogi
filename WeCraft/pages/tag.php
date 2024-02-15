@@ -7,7 +7,7 @@
   //Tag
   //This page is when you click on a tag, to see the products with that tag
   doInitialScripts();
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   upperPartOfThePage(translate("Tag"),"cookieBack");
   addTitle("#".$_GET["tag"]);
   addButtonOnOffShowHide(translate("Show hide not products not available from the owner"),"notAvailableProduct");

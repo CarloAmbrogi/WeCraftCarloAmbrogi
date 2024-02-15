@@ -10,7 +10,7 @@
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if(isset($_GET["id"])){
     if(doesThisProductExists($_GET["id"])){
-      addScriptAddThisPageToCronology();
+      addScriptAddThisPageToChronology();
       //Real content of this page
       //General info of this product
       $productInfos = obtainProductInfos($_GET["id"]);

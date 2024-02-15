@@ -42,7 +42,7 @@
         }
       }
       if($checkIsOk == true){
-        addScriptAddThisPageToCronology();
+        addScriptAddThisPageToChronology();
         //Content of the page chat
         //Show with who you are chatting
         addParagraph(translate("You are chatting with").":");
@@ -212,10 +212,72 @@
       } else {
         //Show error you cant chat here
         if($_GET["chatKind"] == "personal"){
-          if($kindOfTheAccountInUse == "Customer"){
-            addParagraph(translate("A customer cant chat with other customers"));
+          if(doesThisUserExists($_GET["chatWith"]) == true){
+            if($kindOfTheAccountInUse == "Customer"){
+              addParagraph(translate("A customer cant chat with other customers"));
+            } else {
+              addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
+              //Quick preview automatic messages
+              //Show the messages
+              $foundAMessage = false;
+              $previewChat = obtainPreviewChat($_SESSION["userId"],$_GET["chatWith"],$_GET["chatKind"]);
+              foreach($previewChat as &$singleMessagePreview){
+                if($foundAMessage == false){
+                  $foundAMessage = true;
+                  addParagraph(translate("Quick preview automatic messages"));
+                }
+                startSquare();
+                $userInfosThisFrom = obtainUserInfos($singleMessagePreview["fromWho"]);
+                $textParagraphFrom = translate("From").": ".$userInfosThisFrom["name"]." ".$userInfosThisFrom["surname"];
+                $textParagraphFrom.=" (".translate("you").")";
+                addParagraphWithoutMb3($textParagraphFrom);
+                $textParagraphWhen = $singleMessagePreview["timestamp"];
+                $textParagraphWhen.=" (".translate("Automatic message").")";
+                addParagraphWithoutMb3($textParagraphWhen);
+                $extraText = "";
+                if(isset($singleMessagePreview["extraText"]) && $singleMessagePreview["extraText"] != null){
+                  $extraText = $singleMessagePreview["extraText"];
+                }
+                addParagraphWithoutMb3(translate($singleMessagePreview["text"]).$extraText);
+                if(isset($singleMessagePreview["linkTo"]) && $singleMessagePreview["linkTo"] != null){
+                  $linkKind = $singleMessagePreview["linkKind"];
+                  if($linkKind == "artisan"){
+                    $artisanInfosUser = obtainUserInfos($singleMessagePreview["linkTo"]);
+                    $artisanInfosArtisan = obtainArtisanInfos($singleMessagePreview["linkTo"]);
+                    $fileImageToVisualizeArtisan = genericUserImage;
+                    if(isset($artisanInfosUser['icon']) && ($artisanInfosUser['icon'] != null)){
+                      $fileImageToVisualizeArtisan = blobToFile($artisanInfosUser["iconExtension"],$artisanInfosUser['icon']);
+                    }
+                    $numberOfProductsOfThisArtisan = getNumberOfProductsOfThisArtisan($singleMessagePreview["linkTo"]);
+                    addACard("./artisan.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualizeArtisan,htmlentities($artisanInfosUser["name"]." ".$artisanInfosUser["surname"]),htmlentities($artisanInfosArtisan["shopName"]),translate("Total products of this artisan").": ".$numberOfProductsOfThisArtisan);
+                  }
+                  if($linkKind == "project"){
+                    $projectLinkInfos = obtainProjectInfos($singleMessagePreview["linkTo"]);
+                    $fileImageToVisualize = genericProjectImage;
+                    if(isset($projectLinkInfos['icon']) && ($projectLinkInfos['icon'] != null)){
+                      $fileImageToVisualize = blobToFile($projectLinkInfos["iconExtension"],$projectLinkInfos['icon']);
+                    }
+                    $text1 = translate("Price").": ".floatToPrice($projectLinkInfos["price"]);
+                    $text2 = translate("Percentage to designer").": ".$projectLinkInfos["percentageToDesigner"]."%";
+                    addACard("./project.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualize,htmlentities($projectLinkInfos["name"]),$text1,$text2);
+                  }
+                  if($linkKind == "product"){
+                    $productLinkInfos = obtainProductInfos($singleMessagePreview["linkTo"]);
+                    $fileImageToVisualize = genericProductImage;
+                    if(isset($productLinkInfos['icon']) && ($productLinkInfos['icon'] != null)){
+                      $fileImageToVisualize = blobToFile($productLinkInfos["iconExtension"],$productLinkInfos['icon']);
+                    }
+                    $text1 = translate("Category").": ".translate($productLinkInfos["category"]).'<br>'.translate("Price").": ".floatToPrice($productLinkInfos["price"]);
+                    $text2 = "";
+                    addACard("./product.php?id=".urlencode($singleMessagePreview["linkTo"]),$fileImageToVisualize,htmlentities($productLinkInfos["name"]),$text1,$text2);
+                  }
+                }
+                endSquare();
+              }
+              //End quick preview automatic messages
+            }
           } else {
-            addParagraph(translate("You cant chat with customer who hasnt started a chat with you"));
+            addParagraph(translate("This user doesnt exists"));
           }
         } else if($_GET["chatKind"] == "product" || $_GET["chatKind"] == "project"){
           addParagraph(translate("You are not in this group for this cooperative production"));

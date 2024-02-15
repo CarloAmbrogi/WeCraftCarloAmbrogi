@@ -8,9 +8,9 @@
   //See the content of a specific purchase
   //This page is visible only to customers and other users
   doInitialScripts();
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
-  upperPartOfThePage(translate("Purchase"),"./purchasesCronology.php");
+  upperPartOfThePage(translate("Purchase"),"./purchasesChronology.php");
   if($kindOfTheAccountInUse != "Guest"){
     if(isset($_GET["id"])){
       $doesThisPurchaseExists = doesThisPurchaseExists($_SESSION["userId"],$_GET["id"]);

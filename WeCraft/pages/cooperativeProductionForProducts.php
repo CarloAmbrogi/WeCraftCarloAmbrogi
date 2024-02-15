@@ -6,7 +6,7 @@
 
   //Cooperative production for products
   doInitialScripts();
-  addScriptAddThisPageToCronology();
+  addScriptAddThisPageToChronology();
   $kindOfTheAccountInUse = getKindOfTheAccountInUse();
   if($kindOfTheAccountInUse != "Artisan" && $kindOfTheAccountInUse != "Designer"){
     //This page is visible only to artisans and designers
