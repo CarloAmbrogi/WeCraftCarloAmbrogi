@@ -436,7 +436,7 @@
       if($sql != ""){
         $sql.=$cond." ";
       }
-      $sql.="`Artisan`.`description` ";
+      $sql.="`Product`.`description` ";
       if($descriptionL == "exactly"){
         $sql.="= '".$description."' ";
       } else {
