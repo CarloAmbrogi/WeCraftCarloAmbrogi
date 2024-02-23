@@ -1,7 +1,7 @@
 <?php
 
   //This script clear the database
-  $possibilityToExecuteThisScript = true;
+  $possibilityToExecuteThisScript = false;
   if($possibilityToExecuteThisScript == true){
     $connection = mysqli_connect("localhost","carloambrogipolimi","","my_carloambrogipolimi");
     mysqli_set_charset($connection, "utf8mb4");

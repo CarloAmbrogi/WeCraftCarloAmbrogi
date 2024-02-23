@@ -1,7 +1,7 @@
 <?php
 
   //This script populate the database white theese data (if there are some data, the script could not work)
-  $possibilityToExecuteThisScript = true;
+  $possibilityToExecuteThisScript = false;
   if($possibilityToExecuteThisScript == true){
     $connection = mysqli_connect("localhost","carloambrogipolimi","","my_carloambrogipolimi");
     mysqli_set_charset($connection, "utf8mb4");
