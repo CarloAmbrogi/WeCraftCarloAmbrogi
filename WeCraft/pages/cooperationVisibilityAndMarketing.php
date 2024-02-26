@@ -58,12 +58,12 @@
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
-    addParagraph(translate("Products of artisans whoose you are sponsoring some other products").":");
-    //Show some products of artisans whoose you are sponsoring some other products
-    $productsPreviewSuggestionProductsOfArtisansWhooseYouAreSponsoringSomeOtherProducts = obtainProductsPreviewSuggestionProductsOfArtisansWhooseYouAreSponsoringSomeOtherProducts($_SESSION["userId"]);
+    addParagraph(translate("Products of artisans whose you are sponsoring some other products").":");
+    //Show some products of artisans whose you are sponsoring some other products
+    $productsPreviewSuggestionProductsOfArtisansWhoseYouAreSponsoringSomeOtherProducts = obtainProductsPreviewSuggestionProductsOfArtisansWhoseYouAreSponsoringSomeOtherProducts($_SESSION["userId"]);
     startCardGrid();
     $foundAResult = false;
-    foreach($productsPreviewSuggestionProductsOfArtisansWhooseYouAreSponsoringSomeOtherProducts as &$singleProductPreview){
+    foreach($productsPreviewSuggestionProductsOfArtisansWhoseYouAreSponsoringSomeOtherProducts as &$singleProductPreview){
       $foundAResult = true;
       $fileImageToVisualize = genericProductImage;
       if(isset($singleProductPreview['icon']) && ($singleProductPreview['icon'] != null)){
@@ -98,12 +98,12 @@
     if($foundAResult == false){
       addParagraph(translate("No result"));
     }
-    addParagraph(translate("Artisans whoose you are sponsoring some products").":");
-    //Show artisans whoose you are sponsoring some products
-    $previewArtisansWhooseYouAreSponsoringSomeProducts = obtainPreviewArtisansWhooseThisArtisanIsSponsoringSomeProducts($_SESSION["userId"]);
+    addParagraph(translate("Artisans whose you are sponsoring some products").":");
+    //Show artisans whose you are sponsoring some products
+    $previewArtisansWhoseYouAreSponsoringSomeProducts = obtainPreviewArtisansWhoseThisArtisanIsSponsoringSomeProducts($_SESSION["userId"]);
     startCardGrid();
     $foundAResult = false;
-    foreach($previewArtisansWhooseYouAreSponsoringSomeProducts as &$singleArtisanPreview){
+    foreach($previewArtisansWhoseYouAreSponsoringSomeProducts as &$singleArtisanPreview){
       $foundAResult = true;
       $fileImageToVisualize = genericUserImage;
       if(isset($singleArtisanPreview['icon']) && ($singleArtisanPreview['icon'] != null)){

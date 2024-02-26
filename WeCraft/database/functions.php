@@ -1333,7 +1333,7 @@
 
   //Obtain a preview of products about a suggestion of products of artisans who you are sponsoring other theim products
   // show in this preview only products you are not sponsoring and quantity > 0 and limit 100
-  function obtainProductsPreviewSuggestionProductsOfArtisansWhooseYouAreSponsoringSomeOtherProducts($artisanId){
+  function obtainProductsPreviewSuggestionProductsOfArtisansWhoseYouAreSponsoringSomeOtherProducts($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `id`,`name`,`iconExtension`,`icon`,`price`,`quantity`,`category` from `Product` where `quantity` > 0 and `artisan` in (select `artisan` from `Product` where `id` in (select `product` from `Advertisement` where `artisan` = ?)) and `id` not in (select `product` from `Advertisement` where `artisan` = ?) ORDER BY `id` DESC LIMIT 100;";
     if($statement = $connectionDB->prepare($sql)){
@@ -1605,8 +1605,8 @@
     return $elements;
   }
 
-  //obtain preview of artisans whoose this artisan is sponsoring some products (exclude artisans who are sponsoring some of your products)
-  function obtainPreviewArtisansWhooseThisArtisanIsSponsoringSomeProducts($artisanId){
+  //obtain preview of artisans whose this artisan is sponsoring some products (exclude artisans who are sponsoring some of your products)
+  function obtainPreviewArtisansWhoseThisArtisanIsSponsoringSomeProducts($artisanId){
     $connectionDB = $GLOBALS['$connectionDB'];
     $sql = "select `User`.`id`,`User`.`name`,`User`.`surname`,`User`.`icon`,`User`.`iconExtension`,`Artisan`.`shopName`,count(`Product`.`id`) as numberProductsIsSponsoring from (`User` join `Artisan` on `User`.`id` = `Artisan`.`id`) join `Product` on `User`.`id` = `Product`.`artisan` where `User`.`id` not in (select `User`.`id` from `User` join `Artisan` on `User`.`id` = `Artisan`.`id` where `User`.`id` <> ? and `User`.`id` in (select `Advertisement`.`artisan` from `Advertisement` join `Product` on `Product`.`id` = `Advertisement`.`product` where `Product`.`artisan` = ?) and `User`.`id` in (select `Product`.`artisan` from `Product` where `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?))) and `Product`.`id` in (select `Advertisement`.`product` from `Advertisement` where `Advertisement`.`artisan` = ?) group by `User`.`id` order by numberProductsIsSponsoring DESC,`User`.`id`;";
     if($statement = $connectionDB->prepare($sql)){
