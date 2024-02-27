@@ -186,8 +186,8 @@
     return $elements[0]["numberSells"];
   }
 
-  //Averange number of sells of a product
-  function averangeNumberSellsOfAProduct(){
+  //Average number of sells of a product
+  function averageNumberSellsOfAProduct(){
     $numProducts = getNumberOfProducts();
     $numSells = getNumberOfSells();
     if($numProducts == 0){
@@ -215,8 +215,8 @@
     return $elements[0]["numberSellsWithThisCategory"];
   }
 
-  //Averange number of sells of a product with this category
-  function averangeNumberSellsOfAProductWithThisCategory($category){
+  //Average number of sells of a product with this category
+  function averageNumberSellsOfAProductWithThisCategory($category){
     $numProducts = getNumberOfProductsWithThisCategory($category);
     $numSells = getNumberOfSellsWithThisCategory($category);
     if($numProducts == 0){
@@ -502,8 +502,8 @@
     return $elements[0]["sumNumberCooperationProductsDesigners"];
   }
 
-  //Averange number of products for which an artisan is collaborating for the production
-  function averangeNumberProductsForWhichArtisanCollaborating(){
+  //Average number of products for which an artisan is collaborating for the production
+  function averageNumberProductsForWhichArtisanCollaborating(){
     $n = getNumberOfArtisans();
     $d = sumNumberCooperationProductsArtisans();
     if($d == 0){
@@ -512,8 +512,8 @@
     return $n / $d;
   }
 
-  //Averange number of products for which a designer is collaborating for the production
-  function averangeNumberProductsForWhichDesignerCollaborating(){
+  //Average number of products for which a designer is collaborating for the production
+  function averageNumberProductsForWhichDesignerCollaborating(){
     $n = getNumberOfDesigners();
     $d = sumNumberCooperationProductsDesigners();
     if($d == 0){
@@ -522,8 +522,8 @@
     return $n / $d;
   }
 
-  //Averange number of products for which an artisan or a designer is collaborating for the production
-  function averangeNumberProductsForWhichArtisanDesignerCollaborating(){
+  //Average number of products for which an artisan or a designer is collaborating for the production
+  function averageNumberProductsForWhichArtisanDesignerCollaborating(){
     $n = getNumberOfArtisans() + getNumberOfDesigners();
     $d = sumNumberCooperationProductsArtisans() + sumNumberCooperationProductsDesigners();
     if($d == 0){
@@ -770,8 +770,8 @@
     return $elements[0]["sumNumberCooperationProjectsDesigners"];
   }
 
-  //Averange number of projects for which an artisan is collaborating for the production
-  function averangeNumberProjectsForWhichArtisanCollaborating(){
+  //Average number of projects for which an artisan is collaborating for the production
+  function averageNumberProjectsForWhichArtisanCollaborating(){
     $n = getNumberOfArtisans();
     $d = sumNumberCooperationProjectsArtisans();
     if($d == 0){
@@ -780,8 +780,8 @@
     return $n / $d;
   }
 
-  //Averange number of projects for which a designer is collaborating for the production
-  function averangeNumberProjectsForWhichDesignerCollaborating(){
+  //Average number of projects for which a designer is collaborating for the production
+  function averageNumberProjectsForWhichDesignerCollaborating(){
     $n = getNumberOfDesigners();
     $d = sumNumberCooperationProjectsDesigners();
     if($d == 0){
@@ -790,8 +790,8 @@
     return $n / $d;
   }
 
-  //Averange number of projects for which an artisan or a designer is collaborating for the production
-  function averangeNumberProjectsForWhichArtisanDesignerCollaborating(){
+  //Average number of projects for which an artisan or a designer is collaborating for the production
+  function averageNumberProjectsForWhichArtisanDesignerCollaborating(){
     $n = getNumberOfArtisans() + getNumberOfDesigners();
     $d = sumNumberCooperationProjectsArtisans() + sumNumberCooperationProjectsDesigners();
     if($d == 0){

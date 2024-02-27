@@ -276,7 +276,7 @@
       }
       //Reviews
       addTitle(translate("Reviews"));
-      addParagraph(translate("Averange stars")." ".avgReviewsThisProduct($_GET["id"]));
+      addParagraph(translate("Average stars")." ".avgReviewsThisProduct($_GET["id"]));
       if(hasThisUserPurchasedThisItem($_SESSION["userId"],$_GET["id"])){
         addButtonLink(translate("Write a review"),"./writeReview.php?id=".urlencode($_GET["id"]));
       }

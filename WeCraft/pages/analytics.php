@@ -73,9 +73,9 @@
     addParagraph(translate("Cooperations for the production of a product with at least a designer"));
     addBarChart("numberCooperationsProductsWithDesigner",translate("Cooperations for the production of a product with at least a designer or not"),[translate("Yesx"),translate("Nox")],[numberCooperationsProductWithADesigner(),numberCooperationsProductWithoutADesigner()]);
 
-    //Averange number of product for which an artisan or a designer is collaborating for the production
-    addParagraph(translate("Averange number of product for which an artisan or a designer is collaborating for the production"));
-    addBarChart("averangeNumCollabProdForUsers",translate("Averange number of product for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProductsForWhichArtisanCollaborating(),averangeNumberProductsForWhichDesignerCollaborating(),averangeNumberProductsForWhichArtisanDesignerCollaborating()],false);
+    //Average number of product for which an artisan or a designer is collaborating for the production
+    addParagraph(translate("Average number of product for which an artisan or a designer is collaborating for the production"));
+    addBarChart("averageNumCollabProdForUsers",translate("Average number of product for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averageNumberProductsForWhichArtisanCollaborating(),averageNumberProductsForWhichDesignerCollaborating(),averageNumberProductsForWhichArtisanDesignerCollaborating()],false);
 
     //Collaboration production product score in years
     addParagraph(translate("Collaboration production product score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
@@ -108,9 +108,9 @@
     addParagraph(translate("Number of cooperations for projects with a certain number of collaborators"));
     addBarChart("numberCooperationsProjectsWithNumCollaborators",translate("Number of cooperations for projects with a certain number of collaborators"),["1","2","3","4","5+"],[numberCooperationsForProjectsWithACertainNumberOfCollaborations(1),numberCooperationsForProjectsWithACertainNumberOfCollaborations(2),numberCooperationsForProjectsWithACertainNumberOfCollaborations(3),numberCooperationsForProjectsWithACertainNumberOfCollaborations(4),numberCooperationsForProjectsWithAtLeastACertainNumberOfCollaborations(5)]);
 
-    //Averange number of projects for which an artisan or a designer is collaborating for the production
-    addParagraph(translate("Averange number of projects for which an artisan or a designer is collaborating for the production"));
-    addBarChart("averangeNumCollabProjForUsers",translate("Averange number of projects for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averangeNumberProjectsForWhichArtisanCollaborating(),averangeNumberProjectsForWhichDesignerCollaborating(),averangeNumberProjectsForWhichArtisanDesignerCollaborating()],false);
+    //Average number of projects for which an artisan or a designer is collaborating for the production
+    addParagraph(translate("Average number of projects for which an artisan or a designer is collaborating for the production"));
+    addBarChart("averageNumCollabProjForUsers",translate("Average number of projects for which an artisan or a designer is collaborating for the production"),[translate("Artisans"),translate("Designers"),translate("Artisans and designers")],[averageNumberProjectsForWhichArtisanCollaborating(),averageNumberProjectsForWhichDesignerCollaborating(),averageNumberProjectsForWhichArtisanDesignerCollaborating()],false);
 
     //Collaboration production project score in years
     addParagraph(translate("Collaboration production project score in years")." (".translate("each time an action to add a person is performed it counts as one point").")");
